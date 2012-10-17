@@ -24,4 +24,5 @@ public interface Tree {
 	
 	String getType();
 
+	ModifiableTree copy();
 }

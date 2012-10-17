@@ -18,16 +18,32 @@ public class DoubleTree implements ModifiableTree {
 		this.type = type;
 		this.data = null;
 	}
-	
+
 	public DoubleTree(String name, String type, ModifiableTree... children) {
-		this.children = Arrays.copyOf(children, children.length);
 		this.name = name;
 		this.type = type;
 		this.data = null;
-		for(ModifiableTree t : children)
-			t.setParent(this);
+		if(children.length > 0) {
+			this.children = Arrays.copyOf(children, children.length);
+			for(ModifiableTree t : children)
+				t.setParent(this);
+		}
 	}
 
+	public DoubleTree(String name, String type, Tree... children) {
+		this.name = name;
+		this.type = type;
+		this.data = null;
+		if(children.length > 0) {
+			this.children = new Tree[children.length];
+			int i = 0;
+			for(Tree t : children) {
+				ModifiableTree copy = t.copy();
+				copy.setParent(this);
+				this.children[i++] = copy;
+			}
+		}
+	}
 	public DoubleTree(IValue data, ModifiableTree parent) {
 		parent.addChild(this);
 		this.parent = parent;
@@ -35,13 +51,19 @@ public class DoubleTree implements ModifiableTree {
 		this.type = null;
 		this.data = data;
 	}
-	
+
 	public DoubleTree(IValue data) {
 		this.name = null;
 		this.type = null;
 		this.data = data;
 	}
 
+	private DoubleTree(String name, String type, IValue data) {
+		this.name = name;
+		this.type = type;
+		this.data = data;
+	}
+	
 	@Override
 	public Tree getParent() {
 		return parent;
@@ -52,13 +74,13 @@ public class DoubleTree implements ModifiableTree {
 		if(i == 0)
 			return parent;
 		else if(i <= children.length)
-			return children[i+1];
+			return children[i-1];
 		else throw new ChildNotFoundError();
 	}
 
 	@Override
 	public int numChildren() {
-		return children.length;
+		return children == null ? 0 : children.length;
 	}
 
 	@Override
@@ -108,5 +130,47 @@ public class DoubleTree implements ModifiableTree {
 	@Override
 	public Tree freeze() {
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		if(name != null) {
+			s.append(name);
+			s.append("(");
+			if(children != null) {
+				String comma = "";
+				for(Tree t : children) {
+					s.append(comma);
+					s.append(t.toString());
+					comma = ",";
+				}
+			}
+			else {
+				s.append("()");
+			}
+			s.append(")");
+		}
+		else if(data !=  null) {
+			s.append(data.toString());
+		}
+
+		return s.toString();
+	}
+
+	@Override
+	public ModifiableTree copy() {
+		DoubleTree tree = new DoubleTree(name, type, data);
+		if(children != null) {
+		tree.children = new Tree[children.length];
+		int i = 0;
+		for(Tree child : children) {
+			ModifiableTree copy = child.copy();
+			copy.setParent(tree);
+			tree.children[i++] = copy;
+		}
+		}
+		tree.parent = parent;
+		return tree;
 	}
 }
