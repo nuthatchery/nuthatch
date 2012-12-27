@@ -45,7 +45,7 @@ public class TreeTest {
 	 */
 	@Test
 	public final void test3() {
-		Tree foo2 = bar.getChild(1);
+		Tree foo2 = bar.getBranch(1);
 		assertNull(foo2.getData());
 		assertEquals(bar, foo2.getParent());
 		assertEquals(0, foo2.numChildren());
@@ -71,7 +71,7 @@ public class TreeTest {
 	 */
 	@Test
 	public final void test5() {
-		Tree foo2 = baz.getChild(1);
+		Tree foo2 = baz.getBranch(1);
 		assertNull(foo2.getData());
 		assertEquals(baz, foo2.getParent());
 		assertEquals(0, foo2.numChildren());
@@ -84,7 +84,7 @@ public class TreeTest {
 	 */
 	@Test
 	public final void test6() {
-		Tree bar2 = baz.getChild(2);
+		Tree bar2 = baz.getBranch(2);
 		assertNull(bar2.getData());
 		assertEquals(baz, bar2.getParent());
 		assertEquals(1, bar2.numChildren());

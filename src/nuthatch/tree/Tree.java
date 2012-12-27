@@ -8,7 +8,9 @@ public interface Tree {
 	@Nullable
 	Tree getParent();
 	
-	Tree getChild(int i) throws ChildNotFoundError;
+	Tree getBranch(int i) throws BranchNotFoundError;
+
+	int getBranch(Tree node) throws BranchNotFoundError;
 	
 	int numChildren();
 	
@@ -25,4 +27,7 @@ public interface Tree {
 	String getType();
 
 	ModifiableTree copy();
+
+	boolean isParent(int i);
+
 }
