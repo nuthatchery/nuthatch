@@ -5,6 +5,10 @@ import org.eclipse.imp.pdb.facts.IValue;
 import nullness.Nullable;
 
 public interface Tree {
+	public static final int FIRST = 1;
+	public static final int LAST = -1;
+	public static final int PARENT = 0;
+	
 	@Nullable
 	Tree getParent();
 	

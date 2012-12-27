@@ -1,45 +1,41 @@
 package nuthatch.engine.impl;
 
+import nuthatch.engine.Engine;
+import nuthatch.engine.Strategy;
 import nuthatch.engine.Transform;
 import nuthatch.tree.Tree;
 
-public abstract class AbstractStrategicEngine {
+public class StrategicEngine implements Engine {
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
 	
 	private final Tree top;
-	private Tree root;
+	private final Tree root;
 	private Tree current;
-	private Transform transform;
+	private final Strategy strategy;
 	private int from = 0;
 	
-	public AbstractStrategicEngine(Tree tree, Transform transform) {
+	public StrategicEngine(Tree tree, Strategy strat) {
 		this.root = tree;
 		this.current = null;
-		this.transform = transform;
+		this.strategy = strat;
 		this.top = null;
 	}
 	
-	protected AbstractStrategicEngine(Tree tree, Tree top, Transform transform) {
+	protected StrategicEngine(Tree tree, Tree top, Strategy strat) {
 		this.root = tree;
 		this.current = null;
-		this.transform = transform;
+		this.strategy = strat;
 		this.top = top;
 	}
 
-	protected abstract AbstractStrategicEngine clone(Tree tree, Tree top);
-	
-	public int visit() {
-		current = null;
-		return 0;
-	}
-	
+	@Override
 	public void engage() {
 		current = root;
 		try {
 		while(current != top) {
-			int go = visit();
+			int go = strategy.visit(this);
 			go(go);
 		}
 		}
@@ -47,10 +43,7 @@ public abstract class AbstractStrategicEngine {
 		}
 	}
 	
-	public void transform() {
-		transform.apply(current);
-	}
-
+	@Override
 	public void transform(Transform t) {
 		t.apply(current);
 	}
@@ -72,10 +65,12 @@ public abstract class AbstractStrategicEngine {
 		}
 	}
 	
+	@Override
 	public int from() {
 		return from;
 	}
 	
+	@Override
 	public boolean from(int i) {
 		if(i == last)
 			return from == current.numChildren();
@@ -83,20 +78,22 @@ public abstract class AbstractStrategicEngine {
 			return from == i;
 	}
 	
-	protected boolean isLeaf() {
+	@Override
+	public boolean isLeaf() {
 		return current.isLeaf();
 	}
 
+	@Override
 	public void split() {
-		AbstractStrategicEngine children[] = new AbstractStrategicEngine[current.numChildren()];
+		StrategicEngine children[] = new StrategicEngine[current.numChildren()];
 
 		int i = 0;
 		for(Tree child : current.children()) {
-			children[i++] = clone(child, current);
+			children[i++] = clone(child, top, strategy);
 		}
 	}
 	
-	protected Transform getTransform() {
-		return transform;
+	protected StrategicEngine clone(Tree newRoot, Tree newTop, Strategy strat) {
+		return new StrategicEngine(newRoot, newTop, strat);
 	}
 }
