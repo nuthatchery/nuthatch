@@ -16,12 +16,15 @@ public class InorderStrategy extends AbstractStrategy {
 
 	@Override
 	public int visit(Engine e) {
-		if(e.isLeaf() || e.from(FIRST))
+		if(e.isLeaf() || e.from(FIRST)) {
 			e.transform(mid);
-		else if(e.from(PARENT))
+		}
+		else if(e.from(PARENT)) {
 			e.transform(pre);
-		else if(e.from(LAST))
+		}
+		else if(e.from(LAST)) {
 			e.transform(post);
+		}
 		return e.from() + 1;
 	}
 }

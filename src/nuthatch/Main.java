@@ -103,7 +103,7 @@ public class Main {
 			public Tree apply(Engine e) {
 				if(e.from(Tree.PARENT)) {
 					if(!e.isRoot()) {
-					System.out.println("\\down{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.currentTree().getNodeId() + "}");
+						System.out.println("\\down{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.currentTree().getNodeId() + "}");
 					}
 				}
 				else {

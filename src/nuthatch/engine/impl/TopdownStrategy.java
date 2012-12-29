@@ -1,7 +1,6 @@
 package nuthatch.engine.impl;
 
 import nuthatch.engine.Engine;
-import nuthatch.engine.Strategy;
 import nuthatch.engine.Transform;
 
 public class TopdownStrategy extends AbstractStrategy {
@@ -13,8 +12,9 @@ public class TopdownStrategy extends AbstractStrategy {
 
 	@Override
 	public int visit(Engine e) {
-		if(e.from(PARENT))
+		if(e.from(PARENT)) {
 			e.transform(transform);
+		}
 		return e.from() + 1;
 	}
 }

@@ -4,20 +4,6 @@ import nuthatch.tree.Tree;
 
 public interface Engine {
 	/**
-	 * Start executing the engine.
-	 */
-	void engage();
-
-	/**
-	 * Apply a transform at the current tree node.
-	 * 
-	 * @param t
-	 *            The transform. It should return a replacement tree if desired,
-	 *            or null if no change should occur.
-	 */
-	void transform(Transform t);
-
-	/**
 	 * Return the tree node at the current position.
 	 * 
 	 * The returned tree may not support navigating in the parent direction;
@@ -33,6 +19,11 @@ public interface Engine {
 	 * @return Current depth, where root has depth 0
 	 */
 	int depth();
+
+	/**
+	 * Start executing the engine.
+	 */
+	void engage();
 
 	/**
 	 * Return the direction we came from.
@@ -57,15 +48,24 @@ public interface Engine {
 	boolean isLeaf();
 
 	/**
+	 * Check if current node is root.
+	 * 
+	 * @return True if current node has no parent
+	 */
+	boolean isRoot();
+
+	/**
 	 * Split execution into one engine per child, operating in parallel.
 	 * 
 	 */
 	void split();
 
 	/**
-	 * Check if current node is root.
+	 * Apply a transform at the current tree node.
 	 * 
-	 * @return True if current node has no parent
+	 * @param t
+	 *            The transform. It should return a replacement tree if desired,
+	 *            or null if no change should occur.
 	 */
-	boolean isRoot();
+	void transform(Transform t);
 }

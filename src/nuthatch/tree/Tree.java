@@ -1,8 +1,8 @@
 package nuthatch.tree;
 
-import org.eclipse.imp.pdb.facts.IValue;
-
 import nullness.Nullable;
+
+import org.eclipse.imp.pdb.facts.IValue;
 
 public interface Tree {
 	/**
@@ -19,13 +19,18 @@ public interface Tree {
 	public static final int PARENT = 0;
 
 	/**
-	 * Get parent of this tree node.
+	 * Iterate over the children of this node.
 	 * 
-	 * @return The parent node, or null if the parent is unavailable or doesn't
-	 *         exist
+	 * @return An iterable over the children
 	 */
-	@Nullable
-	Tree getParent();
+	Iterable<Tree> children();
+
+	/**
+	 * Return a modifiable copy of this tree.
+	 * 
+	 * @return A copy of the tree, rooted at this node
+	 */
+	ModifiableTree copy();
 
 	/**
 	 * Get the tree node at a branch.
@@ -50,35 +55,6 @@ public interface Tree {
 	int getBranch(Tree node) throws BranchNotFoundError;
 
 	/**
-	 * Get the number of children of this node.
-	 * 
-	 * @return The number of children
-	 */
-	int numChildren();
-
-	/**
-	 * Iterate over the children of this node.
-	 * 
-	 * @return An iterable over the children
-	 */
-	Iterable<Tree> children();
-
-	/**
-	 * Check if this node is a leaf.
-	 * 
-	 * @return True if this node has no children
-	 */
-	boolean isLeaf();
-
-	/**
-	 * Check if this node is root.
-	 * 
-	 * @return True if this node has no parent, and the tree implementation
-	 *         tracks parents
-	 */
-	boolean isRoot();
-
-	/**
 	 * Get the data stored at this node.
 	 * 
 	 * @return The data value
@@ -93,13 +69,6 @@ public interface Tree {
 	String getName();
 
 	/**
-	 * Get the type of this node.
-	 * 
-	 * @return The type
-	 */
-	String getType();
-
-	/**
 	 * Get a hopefully unique string identifier for this node.
 	 * 
 	 * The identifier is likely to be unique, but you can't rely on this.
@@ -109,11 +78,34 @@ public interface Tree {
 	String getNodeId();
 
 	/**
-	 * Return a modifiable copy of this tree.
+	 * Get parent of this tree node.
 	 * 
-	 * @return A copy of the tree, rooted at this node
+	 * @return The parent node, or null if the parent is unavailable or doesn't
+	 *         exist
 	 */
-	ModifiableTree copy();
+	@Nullable
+	Tree getParent();
+
+	/**
+	 * Get the type of this node.
+	 * 
+	 * @return The type
+	 */
+	String getType();
+
+	/**
+	 * Check if the tree implementation tracks parents.
+	 * 
+	 * @return True if this tree has information about parents
+	 */
+	boolean hasParentLinks();
+
+	/**
+	 * Check if this node is a leaf.
+	 * 
+	 * @return True if this node has no children
+	 */
+	boolean isLeaf();
 
 	/**
 	 * Check if the branch number identifies the parent.
@@ -125,9 +117,17 @@ public interface Tree {
 	boolean isParent(int i);
 
 	/**
-	 * Check if the tree implementation tracks parents.
+	 * Check if this node is root.
 	 * 
-	 * @return True if this tree has information about parents
+	 * @return True if this node has no parent, and the tree implementation
+	 *         tracks parents
 	 */
-	boolean hasParentLinks();
+	boolean isRoot();
+
+	/**
+	 * Get the number of children of this node.
+	 * 
+	 * @return The number of children
+	 */
+	int numChildren();
 }

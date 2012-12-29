@@ -27,13 +27,65 @@ public class ConstructorConverter {
 			ModifiableTree tree = cons.accept(new IValueVisitor<ModifiableTree>() {
 
 				@Override
-				public ModifiableTree visitString(IString o) {
+				public ModifiableTree visitBoolean(IBool boolValue)
+						throws VisitorException {
+					return new DoubleTree(boolValue);
+				}
+
+				@Override
+				public ModifiableTree visitConstructor(IConstructor o)
+						throws VisitorException {
+					Type type = o.getType();
+					ModifiableTree[] children = new ModifiableTree[o.arity()];
+					int i = 0;
+					for(IValue child : o) {
+						children[i++] = child.accept(this);
+					}
+					return new DoubleTree(o.getName(), type.toString(), children);
+				}
+
+				@Override
+				public ModifiableTree visitDateTime(IDateTime o)
+						throws VisitorException {
 					return new DoubleTree(o);
 				}
 
 				@Override
-				public ModifiableTree visitReal(IReal o) {
+				public ModifiableTree visitExternal(IExternalValue externalValue)
+						throws VisitorException {
+					return new DoubleTree(externalValue);
+				}
+
+				@Override
+				public ModifiableTree visitInteger(IInteger o) {
 					return new DoubleTree(o);
+				}
+
+				@Override
+				public ModifiableTree visitList(IList o) {
+					return new DoubleTree(o);
+				}
+
+				@Override
+				public ModifiableTree visitListRelation(IListRelation o)
+						throws VisitorException {
+					return new DoubleTree(o);
+				}
+
+				@Override
+				public ModifiableTree visitMap(IMap o) throws VisitorException {
+					return new DoubleTree(o);
+				}
+
+				@Override
+				public ModifiableTree visitNode(INode o) throws VisitorException {
+					Type type = o.getType();
+					ModifiableTree[] children = new ModifiableTree[o.arity()];
+					int i = 0;
+					for(IValue child : o) {
+						children[i++] = child.accept(this);
+					}
+					return new DoubleTree(o.getName(), type.toString(), children);
 				}
 
 				@Override
@@ -42,7 +94,7 @@ public class ConstructorConverter {
 				}
 
 				@Override
-				public ModifiableTree visitList(IList o) {
+				public ModifiableTree visitReal(IReal o) {
 					return new DoubleTree(o);
 				}
 
@@ -63,75 +115,26 @@ public class ConstructorConverter {
 				}
 
 				@Override
+				public ModifiableTree visitString(IString o) {
+					return new DoubleTree(o);
+				}
+
+				@Override
 				public ModifiableTree visitTuple(ITuple o) throws VisitorException {
 					Type type = o.getType();
 					ModifiableTree[] children = new ModifiableTree[o.arity()];
 					int i = 0;
-					for(IValue child : o)
+					for(IValue child : o) {
 						children[i++] = child.accept(this);
+					}
 					return new DoubleTree("", type.toString(), children);
-				}
-
-				@Override
-				public ModifiableTree visitNode(INode o) throws VisitorException {
-					Type type = o.getType();
-					ModifiableTree[] children = new ModifiableTree[o.arity()];
-					int i = 0;
-					for(IValue child : o)
-						children[i++] = child.accept(this);
-					return new DoubleTree(o.getName(), type.toString(), children);
-				}
-
-				@Override
-				public ModifiableTree visitConstructor(IConstructor o)
-						throws VisitorException {
-					Type type = o.getType();
-					ModifiableTree[] children = new ModifiableTree[o.arity()];
-					int i = 0;
-					for(IValue child : o)
-						children[i++] = child.accept(this);
-					return new DoubleTree(o.getName(), type.toString(), children);
-				}
-
-				@Override
-				public ModifiableTree visitInteger(IInteger o) {
-					return new DoubleTree(o);
-				}
-
-				@Override
-				public ModifiableTree visitMap(IMap o) throws VisitorException {
-					return new DoubleTree(o);
-				}
-
-				@Override
-				public ModifiableTree visitBoolean(IBool boolValue)
-						throws VisitorException {
-					return new DoubleTree(boolValue);
-				}
-
-				@Override
-				public ModifiableTree visitExternal(IExternalValue externalValue)
-						throws VisitorException {
-					return new DoubleTree(externalValue);
-				}
-
-				@Override
-				public ModifiableTree visitDateTime(IDateTime o)
-						throws VisitorException {
-					return new DoubleTree(o);
-				}
-
-				@Override
-				public ModifiableTree visitListRelation(IListRelation o)
-						throws VisitorException {
-					return new DoubleTree(o);
 				}});
 			return tree.freeze();
 		} catch (VisitorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 }

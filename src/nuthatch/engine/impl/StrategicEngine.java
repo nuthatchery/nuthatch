@@ -9,21 +9,21 @@ public class StrategicEngine implements Engine {
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
-	
+
 	private final Tree top;
 	private final Tree root;
 	private Tree current;
 	private final Strategy strategy;
 	private int from = 0;
 	private int depth = -1;
-	
+
 	public StrategicEngine(Tree tree, Strategy strat) {
 		this.root = tree;
 		this.current = null;
 		this.strategy = strat;
 		this.top = null;
 	}
-	
+
 	protected StrategicEngine(Tree tree, Tree top, Strategy strat) {
 		this.root = tree;
 		this.current = null;
@@ -32,63 +32,44 @@ public class StrategicEngine implements Engine {
 	}
 
 	@Override
-	public void engage() {
-		current = root;
-		depth = 0;
-		try {
-		while(current != top) {
-			int go = strategy.visit(this);
-			go(go);
-		}
-		}
-		catch(ReachedTop e) {
-		}
-	}
-	
-	@Override
-	public void transform(Transform t) {
-		t.apply(this);
-	}
-	
-	@Override
 	public Tree currentTree() {
 		return current;
 	}
 
-	private void go(int i) {
-		Tree old = current;
-		if(i == last)
-			i = current.numChildren();
-		if(i == parent)
-			depth--;
-		else
-			depth++;
-		current = current.getBranch(i);
-		if(current == null) {
-			from = 0;
-			throw new ReachedTop();
+	@Override
+	public int depth() {
+		return depth;
+	}
+
+	@Override
+	public void engage() {
+		current = root;
+		depth = 0;
+		try {
+			while(current != top) {
+				int go = strategy.visit(this);
+				go(go);
+			}
 		}
-		else if(old.isParent(i)) {
-			from = current.getBranch(old); 
-		}
-		else {
-			from = 0;
+		catch(ReachedTop e) {
 		}
 	}
-	
+
 	@Override
 	public int from() {
 		return from;
 	}
-	
+
 	@Override
 	public boolean from(int i) {
-		if(i == last)
+		if(i == last) {
 			return from == current.numChildren();
-		else
+		}
+		else {
 			return from == i;
+		}
 	}
-	
+
 	@Override
 	public boolean isLeaf() {
 		return current.isLeaf();
@@ -98,7 +79,7 @@ public class StrategicEngine implements Engine {
 	public boolean isRoot() {
 		return current == root;
 	}
-	
+
 	@Override
 	public void split() {
 		StrategicEngine children[] = new StrategicEngine[current.numChildren()];
@@ -108,13 +89,37 @@ public class StrategicEngine implements Engine {
 			children[i++] = clone(child, top, strategy);
 		}
 	}
-	
-	protected StrategicEngine clone(Tree newRoot, Tree newTop, Strategy strat) {
-		return new StrategicEngine(newRoot, newTop, strat);
-	}
 
 	@Override
-	public int depth() {
-		return depth;
+	public void transform(Transform t) {
+		t.apply(this);
+	}
+
+	private void go(int i) {
+		Tree old = current;
+		if(i == last) {
+			i = current.numChildren();
+		}
+		if(i == parent) {
+			depth--;
+		}
+		else {
+			depth++;
+		}
+		current = current.getBranch(i);
+		if(current == null) {
+			from = 0;
+			throw new ReachedTop();
+		}
+		else if(old.isParent(i)) {
+			from = current.getBranch(old);
+		}
+		else {
+			from = 0;
+		}
+	}
+
+	protected StrategicEngine clone(Tree newRoot, Tree newTop, Strategy strat) {
+		return new StrategicEngine(newRoot, newTop, strat);
 	}
 }

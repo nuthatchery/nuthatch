@@ -1,9 +1,7 @@
 package nuthatch.tree.tests;
 
 import static org.junit.Assert.*;
-
 import nuthatch.tree.DoubleTree;
-import nuthatch.tree.ModifiableTree;
 import nuthatch.tree.Tree;
 
 import org.junit.Test;
@@ -12,8 +10,8 @@ public class TreeTest {
 	Tree foo = new DoubleTree("foo", "");
 	Tree bar = new DoubleTree("bar", "", foo);
 	Tree baz = new DoubleTree("baz", "", foo, bar);
-	
-	
+
+
 	/**
 	 * Properties of foo
 	 */
@@ -39,7 +37,7 @@ public class TreeTest {
 		assertFalse(bar.isLeaf());
 		assertTrue(bar.isRoot());
 	}
-	
+
 	/**
 	 * Properties of foo as bar's child
 	 */
@@ -65,7 +63,7 @@ public class TreeTest {
 		assertFalse(baz.isLeaf());
 		assertTrue(baz.isRoot());
 	}
-	
+
 	/**
 	 * Properties of foo as baz's child
 	 */
