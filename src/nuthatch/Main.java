@@ -103,11 +103,11 @@ public class Main {
 			public Tree apply(Engine e) {
 				if(e.from(Tree.PARENT)) {
 					if(!e.isRoot()) {
-					System.out.println("\\down{" + e.getCurrent().getBranch(e.from()).getNodeId() + "}{" + e.getCurrent().getNodeId() + "}");
+					System.out.println("\\down{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.currentTree().getNodeId() + "}");
 					}
 				}
 				else {
-					System.out.println("\\up{" + e.getCurrent().getBranch(e.from()).getNodeId() + "}{" + e.getCurrent().getNodeId() + "}");
+					System.out.println("\\up{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.currentTree().getNodeId() + "}");
 				}
 				return null;
 			}})).engage();

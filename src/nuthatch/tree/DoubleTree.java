@@ -193,4 +193,9 @@ public class DoubleTree implements ModifiableTree {
 		return Integer.toHexString(super.hashCode());
 	}
 
+	@Override
+	public boolean hasParentLinks() {
+		return true;
+	}
+
 }

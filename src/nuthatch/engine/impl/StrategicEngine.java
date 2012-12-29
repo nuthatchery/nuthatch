@@ -15,6 +15,7 @@ public class StrategicEngine implements Engine {
 	private Tree current;
 	private final Strategy strategy;
 	private int from = 0;
+	private int depth = -1;
 	
 	public StrategicEngine(Tree tree, Strategy strat) {
 		this.root = tree;
@@ -33,6 +34,7 @@ public class StrategicEngine implements Engine {
 	@Override
 	public void engage() {
 		current = root;
+		depth = 0;
 		try {
 		while(current != top) {
 			int go = strategy.visit(this);
@@ -49,7 +51,7 @@ public class StrategicEngine implements Engine {
 	}
 	
 	@Override
-	public Tree getCurrent() {
+	public Tree currentTree() {
 		return current;
 	}
 
@@ -57,6 +59,10 @@ public class StrategicEngine implements Engine {
 		Tree old = current;
 		if(i == last)
 			i = current.numChildren();
+		if(i == parent)
+			depth--;
+		else
+			depth++;
 		current = current.getBranch(i);
 		if(current == null) {
 			from = 0;
@@ -105,5 +111,10 @@ public class StrategicEngine implements Engine {
 	
 	protected StrategicEngine clone(Tree newRoot, Tree newTop, Strategy strat) {
 		return new StrategicEngine(newRoot, newTop, strat);
+	}
+
+	@Override
+	public int depth() {
+		return depth;
 	}
 }
