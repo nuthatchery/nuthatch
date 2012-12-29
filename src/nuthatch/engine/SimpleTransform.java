@@ -9,6 +9,7 @@ public abstract class SimpleTransform implements Transform {
 		return apply(engine.currentTree());
 	}
 
+
 	/**
 	 * Apply the transformation.
 	 * 

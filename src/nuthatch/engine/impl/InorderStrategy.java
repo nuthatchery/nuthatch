@@ -8,11 +8,13 @@ public class InorderStrategy extends AbstractStrategy {
 	private final Transform mid;
 	private final Transform post;
 
+
 	public InorderStrategy(Transform pre, Transform mid, Transform post) {
 		this.pre = pre;
 		this.mid = mid;
 		this.post = post;
 	}
+
 
 	@Override
 	public int visit(Engine e) {

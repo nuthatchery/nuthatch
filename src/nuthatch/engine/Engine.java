@@ -13,6 +13,7 @@ public interface Engine {
 	 */
 	Tree currentTree();
 
+
 	/**
 	 * Return the depth of the tree at the current position.
 	 * 
@@ -20,10 +21,12 @@ public interface Engine {
 	 */
 	int depth();
 
+
 	/**
 	 * Start executing the engine.
 	 */
 	void engage();
+
 
 	/**
 	 * Return the direction we came from.
@@ -32,13 +35,16 @@ public interface Engine {
 	 */
 	int from();
 
+
 	/**
 	 * Check where we came from.
 	 * 
-	 * @param i A direction
+	 * @param i
+	 *            A direction
 	 * @return True if we entered the current node from direction i
 	 */
 	boolean from(int i);
+
 
 	/**
 	 * Check if current node is a leaf.
@@ -47,6 +53,7 @@ public interface Engine {
 	 */
 	boolean isLeaf();
 
+
 	/**
 	 * Check if current node is root.
 	 * 
@@ -54,11 +61,13 @@ public interface Engine {
 	 */
 	boolean isRoot();
 
+
 	/**
 	 * Split execution into one engine per child, operating in parallel.
 	 * 
 	 */
 	void split();
+
 
 	/**
 	 * Apply a transform at the current tree node.

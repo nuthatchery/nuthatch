@@ -18,6 +18,7 @@ public interface Tree {
 	 */
 	public static final int PARENT = 0;
 
+
 	/**
 	 * Iterate over the children of this node.
 	 * 
@@ -25,12 +26,14 @@ public interface Tree {
 	 */
 	Iterable<Tree> children();
 
+
 	/**
 	 * Return a modifiable copy of this tree.
 	 * 
 	 * @return A copy of the tree, rooted at this node
 	 */
 	ModifiableTree copy();
+
 
 	/**
 	 * Get the tree node at a branch.
@@ -43,6 +46,7 @@ public interface Tree {
 	 */
 	Tree getBranch(int i) throws BranchNotFoundError;
 
+
 	/**
 	 * Get the branch number of a connected node.
 	 * 
@@ -54,6 +58,7 @@ public interface Tree {
 	 */
 	int getBranch(Tree node) throws BranchNotFoundError;
 
+
 	/**
 	 * Get the data stored at this node.
 	 * 
@@ -61,12 +66,14 @@ public interface Tree {
 	 */
 	IValue getData();
 
+
 	/**
 	 * Get the (constructor) name of this node.
 	 * 
 	 * @return The name
 	 */
 	String getName();
+
 
 	/**
 	 * Get a hopefully unique string identifier for this node.
@@ -77,6 +84,7 @@ public interface Tree {
 	 */
 	String getNodeId();
 
+
 	/**
 	 * Get parent of this tree node.
 	 * 
@@ -86,12 +94,14 @@ public interface Tree {
 	@Nullable
 	Tree getParent();
 
+
 	/**
 	 * Get the type of this node.
 	 * 
 	 * @return The type
 	 */
 	String getType();
+
 
 	/**
 	 * Check if the tree implementation tracks parents.
@@ -100,12 +110,14 @@ public interface Tree {
 	 */
 	boolean hasParentLinks();
 
+
 	/**
 	 * Check if this node is a leaf.
 	 * 
 	 * @return True if this node has no children
 	 */
 	boolean isLeaf();
+
 
 	/**
 	 * Check if the branch number identifies the parent.
@@ -116,6 +128,7 @@ public interface Tree {
 	 */
 	boolean isParent(int i);
 
+
 	/**
 	 * Check if this node is root.
 	 * 
@@ -123,6 +136,7 @@ public interface Tree {
 	 *         tracks parents
 	 */
 	boolean isRoot();
+
 
 	/**
 	 * Get the number of children of this node.

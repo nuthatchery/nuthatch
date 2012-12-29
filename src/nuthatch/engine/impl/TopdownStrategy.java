@@ -6,9 +6,11 @@ import nuthatch.engine.Transform;
 public class TopdownStrategy extends AbstractStrategy {
 	private final Transform transform;
 
+
 	public TopdownStrategy(Transform transform) {
 		this.transform = transform;
 	}
+
 
 	@Override
 	public int visit(Engine e) {

@@ -9,12 +9,14 @@ public class VisitStrategy extends AbstractStrategy {
 	private final Transform afterChild;
 	private final Transform post;
 
+
 	public VisitStrategy(Transform pre, Transform post, Transform beforeChild, Transform afterChild) {
 		this.pre = pre;
 		this.post = post;
 		this.beforeChild = beforeChild;
 		this.afterChild = afterChild;
 	}
+
 
 	@Override
 	public int visit(Engine e) {

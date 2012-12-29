@@ -41,48 +41,43 @@ public class Main {
 			public Tree apply(Tree tree) {
 				System.out.print("(");
 				return null;
-			}},
-			t,
-			new SimpleTransform() {
+			}
+		}, t, new SimpleTransform() {
 
-				@Override
-				public Tree apply(Tree tree) {
-					System.out.print(")");
-					return null;
-				}});
+			@Override
+			public Tree apply(Tree tree) {
+				System.out.print(")");
+				return null;
+			}
+		});
 		System.out.print("InOrder: ");
 		new StrategicEngine(tree, inorder).engage();
 		System.out.println();
 
-
-		Strategy toTikz = new VisitStrategy(
-				new SimpleTransform() {
-					@Override
-					public Tree apply(Tree tree) {
-						System.out.println("node (" + tree.getNodeId() + ") {" + tree.getName() + "} [->]");
-						return null;
-					}
-				},
-				new SimpleTransform() {
-					@Override
-					public Tree apply(Tree tree) {
-						return null;
-					}
-				},
-				new SimpleTransform() {
-					@Override
-					public Tree apply(Tree tree) {
-						System.out.println("child{");
-						return null;
-					}
-				},
-				new SimpleTransform() {
-					@Override
-					public Tree apply(Tree tree) {
-						System.out.println("}");
-						return null;
-					}
-				});
+		Strategy toTikz = new VisitStrategy(new SimpleTransform() {
+			@Override
+			public Tree apply(Tree tree) {
+				System.out.println("node (" + tree.getNodeId() + ") {" + tree.getName() + "} [->]");
+				return null;
+			}
+		}, new SimpleTransform() {
+			@Override
+			public Tree apply(Tree tree) {
+				return null;
+			}
+		}, new SimpleTransform() {
+			@Override
+			public Tree apply(Tree tree) {
+				System.out.println("child{");
+				return null;
+			}
+		}, new SimpleTransform() {
+			@Override
+			public Tree apply(Tree tree) {
+				System.out.println("}");
+				return null;
+			}
+		});
 		System.out.println("\\documentclass{minimal}");
 		System.out.println("\\usepackage[a4paper,margin=1cm,landscape]{geometry}");
 		System.out.println("\\usepackage{tikz}");
@@ -110,7 +105,8 @@ public class Main {
 					System.out.println("\\up{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.currentTree().getNodeId() + "}");
 				}
 				return null;
-			}})).engage();
+			}
+		})).engage();
 
 		System.out.println("\\end{tikzpicture}");
 		System.out.println("\\end{center}");

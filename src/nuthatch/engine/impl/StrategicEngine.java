@@ -17,12 +17,14 @@ public class StrategicEngine implements Engine {
 	private int from = 0;
 	private int depth = -1;
 
+
 	public StrategicEngine(Tree tree, Strategy strat) {
 		this.root = tree;
 		this.current = null;
 		this.strategy = strat;
 		this.top = null;
 	}
+
 
 	protected StrategicEngine(Tree tree, Tree top, Strategy strat) {
 		this.root = tree;
@@ -31,15 +33,18 @@ public class StrategicEngine implements Engine {
 		this.top = top;
 	}
 
+
 	@Override
 	public Tree currentTree() {
 		return current;
 	}
 
+
 	@Override
 	public int depth() {
 		return depth;
 	}
+
 
 	@Override
 	public void engage() {
@@ -55,10 +60,12 @@ public class StrategicEngine implements Engine {
 		}
 	}
 
+
 	@Override
 	public int from() {
 		return from;
 	}
+
 
 	@Override
 	public boolean from(int i) {
@@ -70,15 +77,18 @@ public class StrategicEngine implements Engine {
 		}
 	}
 
+
 	@Override
 	public boolean isLeaf() {
 		return current.isLeaf();
 	}
 
+
 	@Override
 	public boolean isRoot() {
 		return current == root;
 	}
+
 
 	@Override
 	public void split() {
@@ -90,10 +100,12 @@ public class StrategicEngine implements Engine {
 		}
 	}
 
+
 	@Override
 	public void transform(Transform t) {
 		t.apply(this);
 	}
+
 
 	private void go(int i) {
 		Tree old = current;
@@ -118,6 +130,7 @@ public class StrategicEngine implements Engine {
 			from = 0;
 		}
 	}
+
 
 	protected StrategicEngine clone(Tree newRoot, Tree newTop, Strategy strat) {
 		return new StrategicEngine(newRoot, newTop, strat);

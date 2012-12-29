@@ -25,6 +25,7 @@ public class TreeTest {
 		assertTrue(foo.isRoot());
 	}
 
+
 	/**
 	 * Properties of bar
 	 */
@@ -37,6 +38,7 @@ public class TreeTest {
 		assertFalse(bar.isLeaf());
 		assertTrue(bar.isRoot());
 	}
+
 
 	/**
 	 * Properties of foo as bar's child
@@ -51,6 +53,7 @@ public class TreeTest {
 		assertFalse(foo2.isRoot());
 	}
 
+
 	/**
 	 * Properties of baz
 	 */
@@ -64,6 +67,7 @@ public class TreeTest {
 		assertTrue(baz.isRoot());
 	}
 
+
 	/**
 	 * Properties of foo as baz's child
 	 */
@@ -76,6 +80,7 @@ public class TreeTest {
 		assertTrue(foo2.isLeaf());
 		assertFalse(foo2.isRoot());
 	}
+
 
 	/**
 	 * Properties of bar as baz's child
