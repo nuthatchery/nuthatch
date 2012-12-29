@@ -1,7 +1,8 @@
-package nuthatch.engine.impl;
+package nuthatch.library.strategies;
 
 import nuthatch.engine.Engine;
-import nuthatch.engine.Transform;
+import nuthatch.strategy.AbstractStrategy;
+import nuthatch.strategy.Transform;
 
 public class BottomupStrategy extends AbstractStrategy {
 	private final Transform transform;

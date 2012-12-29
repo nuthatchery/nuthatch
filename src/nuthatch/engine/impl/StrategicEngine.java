@@ -1,8 +1,9 @@
 package nuthatch.engine.impl;
 
 import nuthatch.engine.Engine;
-import nuthatch.engine.Strategy;
-import nuthatch.engine.Transform;
+import nuthatch.engine.errors.ReachedTop;
+import nuthatch.strategy.Strategy;
+import nuthatch.strategy.Transform;
 import nuthatch.tree.Tree;
 
 public class StrategicEngine implements Engine {

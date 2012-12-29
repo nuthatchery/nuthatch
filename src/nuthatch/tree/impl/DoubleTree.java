@@ -1,6 +1,10 @@
-package nuthatch.tree;
+package nuthatch.tree.impl;
 
 import java.util.Arrays;
+
+import nuthatch.tree.ModifiableTree;
+import nuthatch.tree.Tree;
+import nuthatch.tree.errors.BranchNotFoundError;
 
 import org.eclipse.imp.pdb.facts.IValue;
 

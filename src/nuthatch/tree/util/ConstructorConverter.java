@@ -1,4 +1,8 @@
-package nuthatch.tree;
+package nuthatch.tree.util;
+
+import nuthatch.tree.ModifiableTree;
+import nuthatch.tree.Tree;
+import nuthatch.tree.impl.DoubleTree;
 
 import org.eclipse.imp.pdb.facts.IBool;
 import org.eclipse.imp.pdb.facts.IConstructor;

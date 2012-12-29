@@ -1,4 +1,4 @@
-package nuthatch.tree;
+package nuthatch.tree.errors;
 
 public class BranchNotFoundError extends RuntimeException {
 

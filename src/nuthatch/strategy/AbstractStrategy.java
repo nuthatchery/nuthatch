@@ -1,6 +1,5 @@
-package nuthatch.engine.impl;
+package nuthatch.strategy;
 
-import nuthatch.engine.Strategy;
 import nuthatch.tree.Tree;
 
 public abstract class AbstractStrategy implements Strategy {

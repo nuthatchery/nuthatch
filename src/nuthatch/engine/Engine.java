@@ -1,5 +1,6 @@
 package nuthatch.engine;
 
+import nuthatch.strategy.Transform;
 import nuthatch.tree.Tree;
 
 public interface Engine {

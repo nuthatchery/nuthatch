@@ -1,16 +1,16 @@
 package nuthatch;
 
 import nuthatch.engine.Engine;
-import nuthatch.engine.SimpleTransform;
-import nuthatch.engine.Strategy;
-import nuthatch.engine.Transform;
-import nuthatch.engine.impl.BottomupStrategy;
-import nuthatch.engine.impl.InorderStrategy;
 import nuthatch.engine.impl.StrategicEngine;
-import nuthatch.engine.impl.TopdownStrategy;
-import nuthatch.engine.impl.VisitStrategy;
-import nuthatch.tree.DoubleTree;
+import nuthatch.library.strategies.BottomupStrategy;
+import nuthatch.library.strategies.InorderStrategy;
+import nuthatch.library.strategies.TopdownStrategy;
+import nuthatch.library.strategies.VisitStrategy;
+import nuthatch.strategy.SimpleTransform;
+import nuthatch.strategy.Strategy;
+import nuthatch.strategy.Transform;
 import nuthatch.tree.Tree;
+import nuthatch.tree.impl.DoubleTree;
 
 public class Main {
 	public static void main(String[] args) {

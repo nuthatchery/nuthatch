@@ -1,6 +1,7 @@
 package nuthatch.tree;
 
 import nullness.Nullable;
+import nuthatch.tree.errors.BranchNotFoundError;
 
 import org.eclipse.imp.pdb.facts.IValue;
 

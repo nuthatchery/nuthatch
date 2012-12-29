@@ -1,4 +1,6 @@
-package nuthatch.engine;
+package nuthatch.strategy;
+
+import nuthatch.engine.Engine;
 
 public interface Strategy {
 	/**

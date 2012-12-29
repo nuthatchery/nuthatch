@@ -1,8 +1,8 @@
 package nuthatch.tree.tests;
 
 import static org.junit.Assert.*;
-import nuthatch.tree.DoubleTree;
 import nuthatch.tree.Tree;
+import nuthatch.tree.impl.DoubleTree;
 
 import org.junit.Test;
 
