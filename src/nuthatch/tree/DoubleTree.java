@@ -187,4 +187,10 @@ public class DoubleTree implements ModifiableTree {
 		return i == 0 || i == branches.length;
 	}
 
+
+	@Override
+	public String getNodeId() {
+		return Integer.toHexString(super.hashCode());
+	}
+
 }

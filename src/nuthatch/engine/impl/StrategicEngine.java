@@ -45,7 +45,12 @@ public class StrategicEngine implements Engine {
 	
 	@Override
 	public void transform(Transform t) {
-		t.apply(current);
+		t.apply(this);
+	}
+	
+	@Override
+	public Tree getCurrent() {
+		return current;
 	}
 
 	private void go(int i) {
@@ -83,6 +88,11 @@ public class StrategicEngine implements Engine {
 		return current.isLeaf();
 	}
 
+	@Override
+	public boolean isRoot() {
+		return current == root;
+	}
+	
 	@Override
 	public void split() {
 		StrategicEngine children[] = new StrategicEngine[current.numChildren()];

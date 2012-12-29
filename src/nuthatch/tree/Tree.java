@@ -30,6 +30,8 @@ public interface Tree {
 	
 	String getType();
 
+	String getNodeId();
+	
 	ModifiableTree copy();
 
 	boolean isParent(int i);

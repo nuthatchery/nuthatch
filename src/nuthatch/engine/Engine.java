@@ -1,10 +1,13 @@
 package nuthatch.engine;
 
+import nuthatch.tree.Tree;
+
 public interface Engine {
 	void engage();
 	
 	void transform(Transform t);
 
+	Tree getCurrent();
 
 	int from();
 	
@@ -13,4 +16,6 @@ public interface Engine {
 	boolean isLeaf();
 
 	void split();
+
+	boolean isRoot();
 }
