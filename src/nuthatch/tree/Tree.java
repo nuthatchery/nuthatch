@@ -44,6 +44,7 @@ public interface Tree {
 	 * @return The tree node found at that branch
 	 * @throws BranchNotFoundError
 	 *             If no such branch was found
+	 * @see {@link #hasBranch(int)}
 	 */
 	Tree getBranch(int i) throws BranchNotFoundError;
 
@@ -102,6 +103,14 @@ public interface Tree {
 	 * @return The type
 	 */
 	String getType();
+
+	/**
+	 * Check if the given branch exists.
+	 * 
+	 * @param i The branch number
+	 * @return True if getBranch(i) will succeed
+	 */
+	boolean hasBranch(int i);
 
 
 	/**

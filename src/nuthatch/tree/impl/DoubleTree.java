@@ -117,6 +117,8 @@ public class DoubleTree implements ModifiableTree {
 
 	@Override
 	public Tree getBranch(int i) throws BranchNotFoundError {
+		if(i < 0)
+			i += branches.length;
 		if(i < branches.length) {
 			return branches[i];
 		}
@@ -232,6 +234,12 @@ public class DoubleTree implements ModifiableTree {
 		}
 
 		return s.toString();
+	}
+
+
+	@Override
+	public boolean hasBranch(int i) {
+		return i >= -branches.length && i <= branches.length;
 	}
 
 }
