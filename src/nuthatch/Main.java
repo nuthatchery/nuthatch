@@ -1,11 +1,15 @@
 package nuthatch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import nuthatch.engine.Engine;
 import nuthatch.engine.impl.StrategicEngine;
 import nuthatch.library.strategies.BottomupStrategy;
 import nuthatch.library.strategies.InorderStrategy;
 import nuthatch.library.strategies.TopdownStrategy;
 import nuthatch.library.strategies.VisitStrategy;
+import nuthatch.strategy.Before;
 import nuthatch.strategy.SimpleTransform;
 import nuthatch.strategy.Strategy;
 import nuthatch.strategy.Transform;
@@ -57,7 +61,7 @@ public class Main {
 		Strategy toTikz = new VisitStrategy(new SimpleTransform() {
 			@Override
 			public Tree apply(Tree tree) {
-				System.out.println("node (" + tree.getNodeId() + ") {" + tree.getName() + "} [->]");
+				System.out.println("node[treenode] (" + tree.getNodeId() + ") {" + tree.getName() + "} [->]");
 				return null;
 			}
 		}, new SimpleTransform() {
@@ -86,28 +90,49 @@ public class Main {
 		System.out.println("\\begin{document}");
 		System.out.println("\\begin{center}");
 		System.out.println("\\begin{tikzpicture}[");
-		System.out.println("    every node/.style={circle, draw=gray, fill=white, circular drop shadow,text centered, anchor=north, text=black},");
 		System.out.println("    level distance=0.5cm, growth parent anchor=south");
 		System.out.println("]");
 		System.out.print("\\");
 		new StrategicEngine(tree, toTikz).engage();
 		System.out.println(";");
 
-		new StrategicEngine(tree, new TopdownStrategy(new Transform() {
+		final List<String> visits = new ArrayList<String>();
+		SimpleTransform traceVisit = new SimpleTransform() {
+
 			@Override
-			public Tree apply(Engine e) {
+			public Tree apply(Tree tree) {
+				visits.add(tree.getNodeId());
+				return null;
+			}
+		};
+		new StrategicEngine(tree, new Before(new InorderStrategy(traceVisit, traceVisit, traceVisit)) {
+			@Override
+			public int visitBefore(Engine e) {
+				Tree prev = e.currentTree().getBranch(e.from());
+				int branch = 1;
+				if(prev != null)
+					branch = prev.getBranch(e.currentTree());
 				if(e.from(Tree.PARENT)) {
 					if(!e.isRoot()) {
-						System.out.println("\\down{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.currentTree().getNodeId() + "}");
+						System.out.println("\\down{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + branch + "}{" + e.currentTree().getNodeId() + "}");
 					}
 				}
 				else {
-					System.out.println("\\up{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.currentTree().getNodeId() + "}");
+					System.out.println("\\up{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.from() + "}{" + e.currentTree().getNodeId() + "}");
 				}
-				return null;
+				return PROCEED;
 			}
-		})).engage();
+		}).engage();
+		if(!visits.isEmpty()) {
+			int i = 0;
+			String last = visits.get(i++);
+			while(i < visits.size()) {
+				String current = visits.get(i++);
+				System.out.println("\\visit{" + last + "}{" + current + "}");
+				last = current;
+			}
 
+		}
 		System.out.println("\\end{tikzpicture}");
 		System.out.println("\\end{center}");
 		System.out.println("\\end{document}");

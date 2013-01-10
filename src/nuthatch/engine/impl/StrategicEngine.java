@@ -130,6 +130,7 @@ public class StrategicEngine implements Engine {
 		else {
 			from = 0;
 		}
+
 	}
 
 
