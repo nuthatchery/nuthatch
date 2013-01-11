@@ -1,4 +1,4 @@
-package nuthatch.tree.tests;
+package nuthatch.test.plain;
 
 import static org.junit.Assert.*;
 import nuthatch.tree.Tree;
