@@ -28,25 +28,20 @@ public interface Environment extends Iterable<String> {
 	/**
 	 * Begin a transaction.
 	 * 
-	 * @return An environment ready to receive new bindings
 	 */
-	Environment begin();
+	void begin();
 
 
 	/**
 	 * Rollback all bindings entered since the last begin().
-	 * 
-	 * @return An environment with recent bindings removed
 	 */
-	Environment rollback();
+	void rollback();
 
 
 	/**
 	 * Commit all bindings entered since the last begin().
-	 * 
-	 * @return An environment with recent bindings committed
 	 */
-	Environment commit();
+	void commit();
 
 
 	/**
@@ -77,4 +72,16 @@ public interface Environment extends Iterable<String> {
 	 */
 	@Override
 	Iterator<String> iterator();
+
+
+	/**
+	 * @return True if no variables are bound in any scope
+	 */
+	boolean isEmpty();
+
+
+	/**
+	 * @return True if no variables are bound in current scope
+	 */
+	boolean isEmptyScope();
 }

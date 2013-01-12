@@ -1,8 +1,10 @@
 package nuthatch.pattern.impl;
 
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import nuthatch.pattern.Environment;
@@ -15,6 +17,7 @@ import nuthatch.tree.Tree;
 public class LayeredEnvironment implements Environment {
 	private final LayeredEnvironment chain;
 	private Map<String, Tree> map;
+	private List<Map<String, Tree>> stack;
 	private int childCount;
 
 
@@ -61,39 +64,33 @@ public class LayeredEnvironment implements Environment {
 
 
 	@Override
-	public Environment begin() {
+	public void begin() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		return enterScope();
+		push();
 	}
 
 
 	@Override
-	public Environment rollback() {
+	public void rollback() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		return exitScope();
+		map = pop();
 	}
 
 
 	@Override
-	public Environment commit() {
+	public void commit() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		childCount = -1;
-
-		chain.childCount--;
-		if(chain.childCount != 0) {
-			throw new ConcurrentModificationException("Tried to change an environment that has children");
-		}
-		chain.map.putAll(map);
-		return chain;
+		Map<String, Tree> pop = pop();
+		map.putAll(pop);
 	}
 
 
@@ -109,10 +106,16 @@ public class LayeredEnvironment implements Environment {
 				return env.map.get(var);
 			}
 			else {
+				if(env.stack != null) {
+					for(Map<String, Tree> m : env.stack) {
+						if(m.containsKey(var)) {
+							return m.get(var);
+						}
+					}
+				}
 				env = env.chain;
 			}
 		}
-
 		return null;
 	}
 
@@ -139,4 +142,70 @@ public class LayeredEnvironment implements Environment {
 		throw new UnsupportedOperationException();
 	}
 
+
+	protected void push() {
+		if(stack == null) {
+			stack = new ArrayList<Map<String, Tree>>();
+		}
+		stack.add(map);
+		map = new HashMap<String, Tree>();
+	}
+
+
+	protected Map<String, Tree> pop() {
+		if(stack == null) {
+			throw new RuntimeException("Trying to end a transaction before any was started");
+		}
+		else if(stack.isEmpty()) {
+			throw new RuntimeException("Trying to end a transaction while none were active");
+		}
+		else {
+			return stack.remove(stack.size() - 1);
+		}
+
+	}
+
+
+	@Override
+	public boolean isEmpty() {
+		if(childCount < 0) {
+			throw new RuntimeException("This environment has been abandoned!");
+		}
+
+		LayeredEnvironment env = this;
+		while(env != null) {
+			if(!env.map.isEmpty()) {
+				return false;
+			}
+			else {
+				if(env.stack != null) {
+					for(Map<String, Tree> m : env.stack) {
+						if(!m.isEmpty()) {
+							return false;
+						}
+					}
+				}
+				env = env.chain;
+			}
+		}
+		return true;
+	}
+
+
+	@Override
+	public boolean isEmptyScope() {
+		if(!map.isEmpty()) {
+			return false;
+		}
+		else {
+			if(stack != null) {
+				for(Map<String, Tree> m : stack) {
+					if(!m.isEmpty()) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
 }

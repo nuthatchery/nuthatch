@@ -79,14 +79,14 @@ public class EnvTest {
 	@Test
 	public final void transPutGetRollback() {
 		Environment env = EnvironmentFactory.env();
-		env = env.begin();
+		env.begin();
 		env.put("foo", foo);
 		env.put("bar", bar);
 
 		assertEquals(foo, env.get("foo"));
 		assertEquals(bar, env.get("bar"));
 		assertNull(env.get("baz"));
-		env = env.rollback();
+		env.rollback();
 		assertNull(env.get("foo"));
 		assertNull(env.get("bar"));
 		assertNull(env.get("baz"));
@@ -96,14 +96,14 @@ public class EnvTest {
 	@Test
 	public final void transPutGetCommit() {
 		Environment env = EnvironmentFactory.env();
-		env = env.begin();
+		env.begin();
 		env.put("foo", foo);
 		env.put("bar", bar);
 
 		assertEquals(foo, env.get("foo"));
 		assertEquals(bar, env.get("bar"));
 		assertNull(env.get("baz"));
-		env = env.commit();
+		env.commit();
 		assertEquals(foo, env.get("foo"));
 		assertEquals(bar, env.get("bar"));
 		assertNull(env.get("baz"));

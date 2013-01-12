@@ -2,7 +2,7 @@ package nuthatch.pattern;
 
 import nuthatch.tree.Tree;
 
-public interface Pattern extends Tree {
+public interface Pattern {
 
 	/**
 	 * Match pattern against tree.
