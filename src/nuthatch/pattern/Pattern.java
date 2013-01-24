@@ -1,8 +1,8 @@
 package nuthatch.pattern;
 
-import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
 
-public interface Pattern {
+public interface Pattern<Value, Type> {
 
 	/**
 	 * Match pattern against tree.
@@ -20,5 +20,5 @@ public interface Pattern {
 	 *            An environment
 	 * @return true if the match succeeded
 	 */
-	boolean match(Tree tree, Environment env);
+	boolean match(TreeCursor<Value, Type> tree, Environment env);
 }

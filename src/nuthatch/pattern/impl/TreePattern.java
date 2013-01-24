@@ -3,8 +3,9 @@ package nuthatch.pattern.impl;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
 
-public class TreePattern implements Pattern {
+public class TreePattern<Value, Type> implements Pattern<Value, Type> {
 
 	private final Tree pattern;
 
@@ -19,7 +20,7 @@ public class TreePattern implements Pattern {
 
 
 	@Override
-	public boolean match(Tree tree, Environment env) {
+	public boolean match(TreeCursor<Value, Type> tree, Environment env) {
 		return pattern.equals(tree);
 	}
 

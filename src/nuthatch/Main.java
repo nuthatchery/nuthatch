@@ -14,11 +14,11 @@ import nuthatch.strategy.SimpleTransform;
 import nuthatch.strategy.Strategy;
 import nuthatch.strategy.Transform;
 import nuthatch.tree.Tree;
-import nuthatch.tree.impl.DoubleTree;
+import nuthatch.tree.impl.StandardTree;
 
 public class Main {
 	public static void main(String[] args) {
-		Tree tree = new DoubleTree("+", "", new DoubleTree("5", ""), new DoubleTree("*", "", new DoubleTree("+", "", new DoubleTree("7", ""), new DoubleTree("3", "")), new DoubleTree("4", "")));
+		Tree<String, String> tree = new StandardTree("+", "", new StandardTree("5", ""), new StandardTree("*", "", new StandardTree("+", "", new StandardTree("7", ""), new StandardTree("3", "")), new StandardTree("4", "")));
 
 		System.out.println(tree);
 
@@ -31,12 +31,12 @@ public class Main {
 		};
 		TopdownStrategy topDown = new TopdownStrategy(t);
 		System.out.print("TopDown: ");
-		new StrategicEngine(tree, topDown).engage();
+		new StrategicEngine<String, String>(tree, topDown).engage();
 		System.out.println();
 
 		BottomupStrategy bottomup = new BottomupStrategy(t);
 		System.out.print("BottomUp: ");
-		new StrategicEngine(tree, bottomup).engage();
+		new StrategicEngine<String, String>(tree, bottomup).engage();
 		System.out.println();
 
 		InorderStrategy inorder = new InorderStrategy(new SimpleTransform() {
@@ -55,7 +55,7 @@ public class Main {
 			}
 		});
 		System.out.print("InOrder: ");
-		new StrategicEngine(tree, inorder).engage();
+		new StrategicEngine<String, String>(tree, inorder).engage();
 		System.out.println();
 
 		Strategy toTikz = new VisitStrategy(new SimpleTransform() {
@@ -93,7 +93,7 @@ public class Main {
 		System.out.println("    level distance=0.5cm, growth parent anchor=south");
 		System.out.println("]");
 		System.out.print("\\");
-		new StrategicEngine(tree, toTikz).engage();
+		new StrategicEngine<String, String>(tree, toTikz).engage();
 		System.out.println(";");
 
 		final List<String> visits = new ArrayList<String>();
@@ -105,20 +105,18 @@ public class Main {
 				return null;
 			}
 		};
-		new StrategicEngine(tree, new Before(new InorderStrategy(traceVisit, traceVisit, traceVisit)) {
+		new StrategicEngine<String, String>(tree, new Before(new InorderStrategy(traceVisit, traceVisit, traceVisit)) {
 			@Override
 			public int visitBefore(Engine e) {
-				Tree prev = e.currentTree().getBranch(e.from());
-				int branch = 1;
-				if(prev != null)
-					branch = prev.getBranch(e.currentTree());
+				Tree<String, String> prev = e.getTreeAtBranch(e.from());
+				int branch = e.getFromBranch();
 				if(e.from(Tree.PARENT)) {
 					if(!e.isRoot()) {
-						System.out.println("\\down{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + branch + "}{" + e.currentTree().getNodeId() + "}");
+						System.out.println("\\down{" + prev.getNodeId() + "}{" + branch + "}{" + e.getNodeId() + "}");
 					}
 				}
 				else {
-					System.out.println("\\up{" + e.currentTree().getBranch(e.from()).getNodeId() + "}{" + e.from() + "}{" + e.currentTree().getNodeId() + "}");
+					System.out.println("\\up{" + prev.getNodeId() + "}{" + e.from() + "}{" + e.getNodeId() + "}");
 				}
 				return PROCEED;
 			}

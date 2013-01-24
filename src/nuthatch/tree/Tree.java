@@ -3,9 +3,7 @@ package nuthatch.tree;
 import nullness.Nullable;
 import nuthatch.tree.errors.BranchNotFoundError;
 
-import org.eclipse.imp.pdb.facts.IValue;
-
-public interface Tree {
+public interface Tree<Value, Type> {
 	/**
 	 * Branch number of the first child.
 	 */
@@ -25,7 +23,7 @@ public interface Tree {
 	 * 
 	 * @return An iterable over the children
 	 */
-	Iterable<Tree> children();
+	Iterable<Tree<Value, Type>> children();
 
 
 	/**
@@ -33,7 +31,7 @@ public interface Tree {
 	 * 
 	 * @return A copy of the tree, rooted at this node
 	 */
-	ModifiableTree copy();
+	ModifiableTree<Value, Type> copy();
 
 
 	/**
@@ -46,7 +44,7 @@ public interface Tree {
 	 *             If no such branch was found
 	 * @see {@link #hasBranch(int)}
 	 */
-	Tree getBranch(int i) throws BranchNotFoundError;
+	Tree<Value, Type> getBranch(int i) throws BranchNotFoundError;
 
 
 	/**
@@ -58,7 +56,7 @@ public interface Tree {
 	 * @throws BranchNotFoundError
 	 *             If no such node is connected to the this node
 	 */
-	int getBranch(Tree node) throws BranchNotFoundError;
+	int getBranch(Tree<Value, Type> node) throws BranchNotFoundError;
 
 
 	/**
@@ -66,7 +64,7 @@ public interface Tree {
 	 * 
 	 * @return The data value
 	 */
-	IValue getData();
+	Value getData();
 
 
 	/**
@@ -94,7 +92,7 @@ public interface Tree {
 	 *         exist
 	 */
 	@Nullable
-	Tree getParent();
+	Tree<Value, Type> getParent();
 
 
 	/**
@@ -102,12 +100,14 @@ public interface Tree {
 	 * 
 	 * @return The type
 	 */
-	String getType();
+	Type getType();
+
 
 	/**
 	 * Check if the given branch exists.
 	 * 
-	 * @param i The branch number
+	 * @param i
+	 *            The branch number
 	 * @return True if getBranch(i) will succeed
 	 */
 	boolean hasBranch(int i);

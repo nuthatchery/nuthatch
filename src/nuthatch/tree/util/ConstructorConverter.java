@@ -2,7 +2,7 @@ package nuthatch.tree.util;
 
 import nuthatch.tree.ModifiableTree;
 import nuthatch.tree.Tree;
-import nuthatch.tree.impl.DoubleTree;
+import nuthatch.tree.impl.StandardTree;
 
 import org.eclipse.imp.pdb.facts.IBool;
 import org.eclipse.imp.pdb.facts.IConstructor;
@@ -32,7 +32,7 @@ public class ConstructorConverter {
 
 				@Override
 				public ModifiableTree visitBoolean(IBool boolValue) throws VisitorException {
-					return new DoubleTree(boolValue);
+					return new StandardTree(boolValue);
 				}
 
 
@@ -44,43 +44,43 @@ public class ConstructorConverter {
 					for(IValue child : o) {
 						children[i++] = child.accept(this);
 					}
-					return new DoubleTree(o.getName(), type.toString(), children);
+					return new StandardTree(o.getName(), type.toString(), children);
 				}
 
 
 				@Override
 				public ModifiableTree visitDateTime(IDateTime o) throws VisitorException {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitExternal(IExternalValue externalValue) throws VisitorException {
-					return new DoubleTree(externalValue);
+					return new StandardTree(externalValue);
 				}
 
 
 				@Override
 				public ModifiableTree visitInteger(IInteger o) {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitList(IList o) {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitListRelation(IListRelation o) throws VisitorException {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitMap(IMap o) throws VisitorException {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
@@ -92,43 +92,43 @@ public class ConstructorConverter {
 					for(IValue child : o) {
 						children[i++] = child.accept(this);
 					}
-					return new DoubleTree(o.getName(), type.toString(), children);
+					return new StandardTree(o.getName(), type.toString(), children);
 				}
 
 
 				@Override
 				public ModifiableTree visitRational(IRational o) {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitReal(IReal o) {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitRelation(IRelation o) {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitSet(ISet o) {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitSourceLocation(ISourceLocation o) throws VisitorException {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
 				@Override
 				public ModifiableTree visitString(IString o) {
-					return new DoubleTree(o);
+					return new StandardTree(o);
 				}
 
 
@@ -140,7 +140,7 @@ public class ConstructorConverter {
 					for(IValue child : o) {
 						children[i++] = child.accept(this);
 					}
-					return new DoubleTree("", type.toString(), children);
+					return new StandardTree("", type.toString(), children);
 				}
 			});
 			return tree.freeze();

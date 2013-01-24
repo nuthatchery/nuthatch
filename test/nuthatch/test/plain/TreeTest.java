@@ -1,15 +1,15 @@
 package nuthatch.test.plain;
 
 import static org.junit.Assert.*;
-import nuthatch.tree.Tree;
-import nuthatch.tree.impl.DoubleTree;
+import nuthatch.tree.TreeCursor;
+import nuthatch.tree.impl.StandardTree;
 
 import org.junit.Test;
 
 public class TreeTest {
-	Tree foo = new DoubleTree("foo", "");
-	Tree bar = new DoubleTree("bar", "", foo);
-	Tree baz = new DoubleTree("baz", "", foo, bar);
+	TreeCursor<String, String> foo = new StandardTree<String, String>("foo", "").makeCursor();
+	TreeCursor<String, String> bar = new StandardTree<String, String>("bar", "", foo.getCurrentTree()).makeCursor();
+	TreeCursor<String, String> baz = new StandardTree<String, String>("baz", "", foo.getCurrentTree(), bar.getCurrentTree()).makeCursor();
 
 
 	/**
@@ -19,10 +19,10 @@ public class TreeTest {
 	public final void test1() {
 		assertEquals("foo", foo.getName());
 		assertNull(foo.getData());
-		assertNull(foo.getParent());
+		assertFalse(foo.hasBranch(0));
 		assertEquals(0, foo.numChildren());
-		assertTrue(foo.isLeaf());
-		assertTrue(foo.isRoot());
+		assertTrue(foo.isAtLeaf());
+		assertTrue(foo.isAtRoot());
 	}
 
 
@@ -33,10 +33,10 @@ public class TreeTest {
 	public final void test2() {
 		assertEquals("bar", bar.getName());
 		assertNull(bar.getData());
-		assertNull(bar.getParent());
+		assertFalse(bar.hasBranch(0));
 		assertEquals(1, bar.numChildren());
-		assertFalse(bar.isLeaf());
-		assertTrue(bar.isRoot());
+		assertFalse(bar.isAtLeaf());
+		assertTrue(bar.isAtRoot());
 	}
 
 
@@ -45,12 +45,12 @@ public class TreeTest {
 	 */
 	@Test
 	public final void test3() {
-		Tree foo2 = bar.getBranch(1);
+		TreeCursor<String, String> foo2 = bar.copy().go(1);
 		assertNull(foo2.getData());
-		assertEquals(bar, foo2.getParent());
+		assertEquals(bar.getCurrentTree(), foo2.getTreeAtBranch(0));
 		assertEquals(0, foo2.numChildren());
-		assertTrue(foo2.isLeaf());
-		assertFalse(foo2.isRoot());
+		assertTrue(foo2.isAtLeaf());
+		assertFalse(foo2.isAtRoot());
 	}
 
 
@@ -61,10 +61,10 @@ public class TreeTest {
 	public final void test4() {
 		assertEquals("baz", baz.getName());
 		assertNull(baz.getData());
-		assertNull(baz.getParent());
+		assertFalse(baz.hasBranch(0));
 		assertEquals(2, baz.numChildren());
-		assertFalse(baz.isLeaf());
-		assertTrue(baz.isRoot());
+		assertFalse(baz.isAtLeaf());
+		assertTrue(baz.isAtRoot());
 	}
 
 
@@ -73,12 +73,12 @@ public class TreeTest {
 	 */
 	@Test
 	public final void test5() {
-		Tree foo2 = baz.getBranch(1);
+		TreeCursor<String, String> foo2 = baz.copy().go(1);
 		assertNull(foo2.getData());
-		assertEquals(baz, foo2.getParent());
+		assertEquals(baz.getCurrentTree(), foo2.getTreeAtBranch(0));
 		assertEquals(0, foo2.numChildren());
-		assertTrue(foo2.isLeaf());
-		assertFalse(foo2.isRoot());
+		assertTrue(foo2.isAtLeaf());
+		assertFalse(foo2.isAtRoot());
 	}
 
 
@@ -87,11 +87,11 @@ public class TreeTest {
 	 */
 	@Test
 	public final void test6() {
-		Tree bar2 = baz.getBranch(2);
+		TreeCursor<String, String> bar2 = baz.copy().go(2);
 		assertNull(bar2.getData());
-		assertEquals(baz, bar2.getParent());
+		assertEquals(baz.getCurrentTree(), bar2.getTreeAtBranch(0));
 		assertEquals(1, bar2.numChildren());
-		assertFalse(bar2.isLeaf());
-		assertFalse(bar2.isRoot());
+		assertFalse(bar2.isAtLeaf());
+		assertFalse(bar2.isAtRoot());
 	}
 }

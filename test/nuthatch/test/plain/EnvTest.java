@@ -4,25 +4,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
-import nuthatch.tree.Tree;
-import nuthatch.tree.impl.DoubleTree;
+import nuthatch.tree.TreeCursor;
+import nuthatch.tree.impl.StandardTree;
 
 import org.junit.Test;
 
 public class EnvTest {
-	Tree foo = new DoubleTree("foo", "");
-	Tree bar = new DoubleTree("bar", "", foo);
-	Tree baz = new DoubleTree("baz", "", foo, bar);
+	TreeCursor<String, String> foo = new StandardTree<String, String>("foo", "").makeCursor();
+	TreeCursor<String, String> bar = new StandardTree<String, String>("bar", "", foo.getCurrentTree()).makeCursor();
+	TreeCursor<String, String> baz = new StandardTree<String, String>("baz", "", foo.getCurrentTree(), bar.getCurrentTree()).makeCursor();
 
 
 	@Test
 	public final void unscopedPutGet() {
 		Environment env = EnvironmentFactory.env();
-		env.put("foo", foo);
-		env.put("bar", bar);
+		env.put("foo", foo.getCurrentTree());
+		env.put("bar", bar.getCurrentTree());
 
-		assertEquals(foo, env.get("foo"));
-		assertEquals(bar, env.get("bar"));
+		assertEquals(foo.getCurrentTree(), env.get("foo"));
+		assertEquals(bar.getCurrentTree(), env.get("bar"));
 		assertNull(env.get("baz"));
 	}
 
@@ -31,11 +31,11 @@ public class EnvTest {
 	public final void scopedPutGet() {
 		Environment env = EnvironmentFactory.env();
 		env = env.enterScope();
-		env.put("foo", foo);
-		env.put("bar", bar);
+		env.put("foo", foo.getCurrentTree());
+		env.put("bar", bar.getCurrentTree());
 
-		assertEquals(foo, env.get("foo"));
-		assertEquals(bar, env.get("bar"));
+		assertEquals(foo.getCurrentTree(), env.get("foo"));
+		assertEquals(bar.getCurrentTree(), env.get("bar"));
 		assertNull(env.get("baz"));
 		env = env.exitScope();
 		assertNull(env.get("foo"));
@@ -48,24 +48,24 @@ public class EnvTest {
 	public final void doubleScopedPutGet() {
 		Environment env = EnvironmentFactory.env();
 		env = env.enterScope();
-		env.put("foo", foo);
-		env.put("bar", bar);
+		env.put("foo", foo.getCurrentTree());
+		env.put("bar", bar.getCurrentTree());
 
-		assertEquals(foo, env.get("foo"));
-		assertEquals(bar, env.get("bar"));
+		assertEquals(foo.getCurrentTree(), env.get("foo"));
+		assertEquals(bar.getCurrentTree(), env.get("bar"));
 		assertNull(env.get("baz"));
 
 		env = env.enterScope();
-		env.put("baz", baz);
+		env.put("baz", baz.getCurrentTree());
 
-		assertEquals(foo, env.get("foo"));
-		assertEquals(bar, env.get("bar"));
-		assertEquals(baz, env.get("baz"));
+		assertEquals(foo.getCurrentTree(), env.get("foo"));
+		assertEquals(bar.getCurrentTree(), env.get("bar"));
+		assertEquals(baz.getCurrentTree(), env.get("baz"));
 
 		env = env.exitScope();
 
-		assertEquals(foo, env.get("foo"));
-		assertEquals(bar, env.get("bar"));
+		assertEquals(foo.getCurrentTree(), env.get("foo"));
+		assertEquals(bar.getCurrentTree(), env.get("bar"));
 		assertNull(env.get("baz"));
 
 		env = env.exitScope();
@@ -80,11 +80,11 @@ public class EnvTest {
 	public final void transPutGetRollback() {
 		Environment env = EnvironmentFactory.env();
 		env.begin();
-		env.put("foo", foo);
-		env.put("bar", bar);
+		env.put("foo", foo.getCurrentTree());
+		env.put("bar", bar.getCurrentTree());
 
-		assertEquals(foo, env.get("foo"));
-		assertEquals(bar, env.get("bar"));
+		assertEquals(foo.getCurrentTree(), env.get("foo"));
+		assertEquals(bar.getCurrentTree(), env.get("bar"));
 		assertNull(env.get("baz"));
 		env.rollback();
 		assertNull(env.get("foo"));
@@ -97,15 +97,15 @@ public class EnvTest {
 	public final void transPutGetCommit() {
 		Environment env = EnvironmentFactory.env();
 		env.begin();
-		env.put("foo", foo);
-		env.put("bar", bar);
+		env.put("foo", foo.getCurrentTree());
+		env.put("bar", bar.getCurrentTree());
 
-		assertEquals(foo, env.get("foo"));
-		assertEquals(bar, env.get("bar"));
+		assertEquals(foo.getCurrentTree(), env.get("foo"));
+		assertEquals(bar.getCurrentTree(), env.get("bar"));
 		assertNull(env.get("baz"));
 		env.commit();
-		assertEquals(foo, env.get("foo"));
-		assertEquals(bar, env.get("bar"));
+		assertEquals(foo.getCurrentTree(), env.get("foo"));
+		assertEquals(bar.getCurrentTree(), env.get("bar"));
 		assertNull(env.get("baz"));
 	}
 

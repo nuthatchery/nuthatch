@@ -2,15 +2,15 @@ package nuthatch.pattern.impl;
 
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
-import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
 
-public class AndPattern implements Pattern {
+public class AndPattern<Value, Type> implements Pattern<Value, Type> {
 
-	private final Pattern a;
-	private final Pattern b;
+	private final Pattern<Value, Type> a;
+	private final Pattern<Value, Type> b;
 
 
-	public AndPattern(Pattern a, Pattern b) {
+	public AndPattern(Pattern<Value, Type> a, Pattern<Value, Type> b) {
 		if(a == null || b == null) {
 			throw new IllegalArgumentException("Patterns must not be null");
 		}
@@ -20,7 +20,7 @@ public class AndPattern implements Pattern {
 
 
 	@Override
-	public boolean match(Tree tree, Environment env) {
+	public boolean match(TreeCursor<Value, Type> tree, Environment env) {
 		return a.match(tree, env) && b.match(tree, env);
 	}
 

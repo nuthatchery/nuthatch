@@ -4,55 +4,53 @@ import nuthatch.engine.Engine;
 import nuthatch.engine.errors.ReachedTop;
 import nuthatch.strategy.Strategy;
 import nuthatch.strategy.Transform;
+import nuthatch.tree.Path;
 import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
+import nuthatch.tree.errors.BranchNotFoundError;
+import nuthatch.tree.impl.StandardTreeCursor;
 
-public class StrategicEngine implements Engine {
+public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
 
-	private final Tree top;
-	private final Tree root;
-	private Tree current;
+	private final TreeCursor<Value, Type> rootCursor;
+	private TreeCursor<Value, Type> current;
 	private final Strategy strategy;
-	private int from = 0;
-	private int depth = -1;
 
 
-	public StrategicEngine(Tree tree, Strategy strat) {
-		this.root = tree;
+	public StrategicEngine(TreeCursor<Value, Type> cursor, Strategy strat) {
+		this.rootCursor = cursor;
 		this.current = null;
 		this.strategy = strat;
-		this.top = null;
 	}
 
 
-	protected StrategicEngine(Tree tree, Tree top, Strategy strat) {
-		this.root = tree;
+	public StrategicEngine(Tree<Value, Type> tree, Strategy strat) {
+		this.rootCursor = new StandardTreeCursor<Value, Type>(tree);
 		this.current = null;
 		this.strategy = strat;
-		this.top = top;
 	}
 
 
 	@Override
-	public Tree currentTree() {
-		return current;
+	public Tree<Value, Type> currentTree() {
+		return current.getCurrentTree();
 	}
 
 
 	@Override
 	public int depth() {
-		return depth;
+		return current.getPath().size();
 	}
 
 
 	@Override
 	public void engage() {
-		current = root;
-		depth = 0;
+		current = rootCursor.copy();
 		try {
-			while(current != top) {
+			while(!current.isAtTop()) {
 				int go = strategy.visit(this);
 				go(go);
 			}
@@ -64,42 +62,43 @@ public class StrategicEngine implements Engine {
 
 	@Override
 	public int from() {
-		return from;
+		return current.getFromBranch();
 	}
 
 
 	@Override
 	public boolean from(int i) {
 		if(i == last) {
-			return from == current.numChildren();
+			return current.getFromBranch() == current.numChildren();
 		}
 		else {
-			return from == i;
+			return current.getFromBranch() == i;
 		}
 	}
 
 
 	@Override
 	public boolean isLeaf() {
-		return current.isLeaf();
+		return current.isAtLeaf();
 	}
 
 
 	@Override
 	public boolean isRoot() {
-		return current == root;
+		return current.isAtRoot();
 	}
 
 
 	@Override
 	public void split() {
-		StrategicEngine children[] = new StrategicEngine[current.numChildren()];
+		@SuppressWarnings("unchecked")
+		StrategicEngine<Value, Type> children[] = new StrategicEngine[current.numChildren()];
 
-		int i = 0;
+/*		int i = 0;
 		for(Tree child : current.children()) {
 			children[i++] = clone(child, top, strategy);
 		}
-	}
+*/	}
 
 
 	@Override
@@ -108,33 +107,118 @@ public class StrategicEngine implements Engine {
 	}
 
 
-	private void go(int i) {
-		Tree old = current;
-		if(i == last) {
-			i = current.numChildren();
-		}
-		if(i == parent) {
-			depth--;
-		}
-		else {
-			depth++;
-		}
-		current = current.getBranch(i);
-		if(current == null) {
-			from = 0;
-			throw new ReachedTop();
-		}
-		else if(old.isParent(i)) {
-			from = current.getBranch(old);
-		}
-		else {
-			from = 0;
-		}
-
+	@Override
+	public TreeCursor<Value, Type> copy() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
-	protected StrategicEngine clone(Tree newRoot, Tree newTop, Strategy strat) {
-		return new StrategicEngine(newRoot, newTop, strat);
+	@Override
+	public TreeCursor<Value, Type> getBranch(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Value getData() {
+		return current.getData();
+	}
+
+
+	@Override
+	public String getName() {
+		return current.getName();
+	}
+
+
+	@Override
+	public String getNodeId() {
+		return current.getNodeId();
+	}
+
+
+	@Override
+	public Tree<Value, Type> getCurrentTree() {
+		return current.getCurrentTree();
+	}
+
+
+	@Override
+	public Path getPath() {
+		return current.getPath();
+	}
+
+
+	@Override
+	public int getPathElement(int i) {
+		return current.getPathElement(i);
+	}
+
+
+	@Override
+	public int getLastPathElement() {
+		return current.getLastPathElement();
+	}
+
+
+	@Override
+	public int getFromBranch() {
+		return current.getFromBranch();
+	}
+
+
+	@Override
+	public Tree<Value, Type> getTreeAtBranch(int i) {
+		return current.getTreeAtBranch(i);
+	}
+
+
+	@Override
+	public Type getType() {
+		return current.getType();
+	}
+
+
+	@Override
+	public TreeCursor<Value, Type> go(int i) throws BranchNotFoundError {
+		return current.go(i);
+	}
+
+
+	@Override
+	public boolean hasBranch(int i) {
+		return current.hasBranch(i);
+	}
+
+
+	@Override
+	public boolean isAtLeaf() {
+		return current.isAtLeaf();
+	}
+
+
+	@Override
+	public boolean isAtRoot() {
+		return current.isAtRoot();
+	}
+
+
+	@Override
+	public boolean isAtTop() {
+		return current.isAtTop();
+	}
+
+
+	@Override
+	public boolean matches(Tree<Value, Type> tree) {
+		return current.matches(tree);
+	}
+
+
+	@Override
+	public int numChildren() {
+		return current.numChildren();
 	}
 }

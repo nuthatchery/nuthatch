@@ -2,19 +2,17 @@ package nuthatch.pattern.impl;
 
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
-import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
 
-import org.eclipse.imp.pdb.facts.IValue;
-
-public class NodePattern extends AbstractPattern {
+public class NodePattern<Value, Type> extends AbstractPattern<Value, Type> {
 
 	private final String name;
-	private final String type;
-	private final IValue data;
-	private final Pattern[] children;
+	private final Type type;
+	private final Value data;
+	private final Pattern<Value, Type>[] children;
 
 
-	public NodePattern(String name, String type, IValue data, Pattern[] children) {
+	public NodePattern(String name, Type type, Value data, Pattern<Value, Type>[] children) {
 		this.name = name;
 		this.type = type;
 		this.data = data;
@@ -28,18 +26,20 @@ public class NodePattern extends AbstractPattern {
 
 
 	@Override
-	public boolean doMatch(Tree tree, Environment env) {
+	public boolean doMatch(TreeCursor<Value, Type> tree, Environment env) {
 		if(name != null && !name.equals(tree.getName()))
 			return false;
 		if(type != null && !type.equals(tree.getType()))
 			return false;
-		if(data != null && !data.isEqual(tree.getData()))
+		if(data != null && !data.equals(tree.getData()))
 			return false;
 		if(children != null) {
 			if(tree.numChildren() != children.length)
 				return false;
 			for(int i = 0; i < children.length; i++) {
-				if(!children[i].match(tree.getBranch(i + 1), env))
+				TreeCursor<Value, Type> copy = tree.copy();
+				copy.go(i + 1);
+				if(!children[i].match(copy, env))
 					return false;
 			}
 		}

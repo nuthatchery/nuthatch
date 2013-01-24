@@ -2,8 +2,9 @@ package nuthatch.engine;
 
 import nuthatch.strategy.Transform;
 import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
 
-public interface Engine {
+public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
 	/**
 	 * Return the tree node at the current position.
 	 * 
@@ -12,7 +13,7 @@ public interface Engine {
 	 * 
 	 * @return Current tree node
 	 */
-	Tree currentTree();
+	Tree<Value, Type> currentTree();
 
 
 	/**

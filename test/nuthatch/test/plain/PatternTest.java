@@ -6,16 +6,16 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.PatternFactory;
-import nuthatch.tree.Tree;
-import nuthatch.tree.impl.DoubleTree;
+import nuthatch.tree.impl.StandardTree;
+import nuthatch.tree.impl.StandardTreeCursor;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class PatternTest {
-	Tree foo = new DoubleTree("foo", "");
-	Tree bar = new DoubleTree("bar", "", foo);
-	Tree baz = new DoubleTree("baz", "", foo, bar);
+	StandardTreeCursor<String, String> foo = new StandardTreeCursor<String, String>(new StandardTree<String, String>("foo", ""));
+	StandardTreeCursor<String, String> bar = new StandardTreeCursor<String, String>(new StandardTree<String, String>("bar", "", foo.getCurrentTree()));
+	StandardTreeCursor<String, String> baz = new StandardTreeCursor<String, String>(new StandardTree<String, String>("baz", "", foo.getCurrentTree(), bar.getCurrentTree()));
 	PatternFactory pf = PatternFactory.getInstance();
 	Environment env;
 
@@ -28,7 +28,7 @@ public class PatternTest {
 
 	@Test
 	public void matchName() {
-		Pattern pat = pf.nodeName("foo");
+		Pattern<String, String> pat = pf.nodeName("foo");
 
 		assertTrue(pat.match(foo, env));
 		assertFalse(pat.match(bar, env));
@@ -39,7 +39,7 @@ public class PatternTest {
 
 	@Test
 	public void matchType() {
-		Pattern pat = pf.nodeType("");
+		Pattern<String, String> pat = pf.nodeType("");
 
 		assertTrue(pat.match(foo, env));
 		assertTrue(pat.match(bar, env));
@@ -60,7 +60,7 @@ public class PatternTest {
 
 	@Test
 	public void matchOr() {
-		Pattern pat = pf.or(pf.nodeName("foo"), pf.nodeName("bar"));
+		Pattern<String, String> pat = pf.or(pf.nodeName("foo"), pf.nodeName("bar"));
 
 		assertTrue(pat.match(foo, env));
 		assertTrue(pat.match(bar, env));
@@ -72,7 +72,7 @@ public class PatternTest {
 
 	@Test
 	public void matchAnd() {
-		Pattern pat = pf.and(pf.nodeName("bar"), pf.children(pf.nodeName("foo")));
+		Pattern<String, String> pat = pf.and(pf.nodeName("bar"), pf.children(pf.nodeName("foo")));
 
 		assertFalse(pat.match(foo, env));
 		assertTrue(pat.match(bar, env));
