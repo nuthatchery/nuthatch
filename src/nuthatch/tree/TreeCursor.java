@@ -55,7 +55,7 @@ public interface TreeCursor<Value, Type> {
 	 * 
 	 * @return A string which identifies this node
 	 */
-	String getNodeId();
+	String getPathId();
 
 
 	Tree<Value, Type> getCurrentTree();
@@ -71,9 +71,6 @@ public interface TreeCursor<Value, Type> {
 
 
 	int getFromBranch();
-
-
-	Tree<Value, Type> getTreeAtBranch(int i);
 
 
 	/**

@@ -10,10 +10,10 @@ import nuthatch.library.strategies.InorderStrategy;
 import nuthatch.library.strategies.TopdownStrategy;
 import nuthatch.library.strategies.VisitStrategy;
 import nuthatch.strategy.Before;
-import nuthatch.strategy.SimpleTransform;
 import nuthatch.strategy.Strategy;
 import nuthatch.strategy.Transform;
 import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.StandardTree;
 
 public class Main {
@@ -22,10 +22,10 @@ public class Main {
 
 		System.out.println(tree);
 
-		Transform t = new SimpleTransform() {
+		Transform t = new Transform() {
 			@Override
-			public Tree apply(Tree tree) {
-				System.out.print(tree.getName() + " ");
+			public TreeCursor apply(Engine e) {
+				System.out.print(e.getName() + " ");
 				return null;
 			}
 		};
@@ -39,17 +39,17 @@ public class Main {
 		new StrategicEngine<String, String>(tree, bottomup).engage();
 		System.out.println();
 
-		InorderStrategy inorder = new InorderStrategy(new SimpleTransform() {
+		InorderStrategy inorder = new InorderStrategy(new Transform() {
 
 			@Override
-			public Tree apply(Tree tree) {
+			public TreeCursor apply(Engine e) {
 				System.out.print("(");
 				return null;
 			}
-		}, t, new SimpleTransform() {
+		}, t, new Transform() {
 
 			@Override
-			public Tree apply(Tree tree) {
+			public TreeCursor apply(Engine e) {
 				System.out.print(")");
 				return null;
 			}
@@ -58,26 +58,26 @@ public class Main {
 		new StrategicEngine<String, String>(tree, inorder).engage();
 		System.out.println();
 
-		Strategy toTikz = new VisitStrategy(new SimpleTransform() {
+		Strategy toTikz = new VisitStrategy(new Transform() {
 			@Override
-			public Tree apply(Tree tree) {
-				System.out.println("node[treenode] (" + tree.getNodeId() + ") {" + tree.getName() + "} [->]");
+			public TreeCursor apply(Engine tree) {
+				System.out.println("node[treenode] (" + tree.getPathId() + ") {" + tree.getName() + "} [->]");
 				return null;
 			}
-		}, new SimpleTransform() {
+		}, new Transform() {
 			@Override
-			public Tree apply(Tree tree) {
+			public TreeCursor apply(Engine tree) {
 				return null;
 			}
-		}, new SimpleTransform() {
+		}, new Transform() {
 			@Override
-			public Tree apply(Tree tree) {
+			public TreeCursor apply(Engine tree) {
 				System.out.println("child{");
 				return null;
 			}
-		}, new SimpleTransform() {
+		}, new Transform() {
 			@Override
-			public Tree apply(Tree tree) {
+			public TreeCursor apply(Engine tree) {
 				System.out.println("}");
 				return null;
 			}
@@ -97,26 +97,26 @@ public class Main {
 		System.out.println(";");
 
 		final List<String> visits = new ArrayList<String>();
-		SimpleTransform traceVisit = new SimpleTransform() {
+		Transform traceVisit = new Transform() {
 
 			@Override
-			public Tree apply(Tree tree) {
-				visits.add(tree.getNodeId());
+			public TreeCursor apply(Engine e) {
+				visits.add(e.getPathId());
 				return null;
 			}
 		};
 		new StrategicEngine<String, String>(tree, new Before(new InorderStrategy(traceVisit, traceVisit, traceVisit)) {
 			@Override
 			public int visitBefore(Engine e) {
-				Tree<String, String> prev = e.getTreeAtBranch(e.from());
+				TreeCursor<String, String> prev = e.getBranch(e.from());
 				int branch = e.getFromBranch();
 				if(e.from(Tree.PARENT)) {
 					if(!e.isRoot()) {
-						System.out.println("\\down{" + prev.getNodeId() + "}{" + branch + "}{" + e.getNodeId() + "}");
+						System.out.println("\\down{" + prev.getPathId() + "}{" + branch + "}{" + e.getPathId() + "}");
 					}
 				}
 				else {
-					System.out.println("\\up{" + prev.getNodeId() + "}{" + e.from() + "}{" + e.getNodeId() + "}");
+					System.out.println("\\up{" + prev.getPathId() + "}{" + e.from() + "}{" + e.getPathId() + "}");
 				}
 				return PROCEED;
 			}

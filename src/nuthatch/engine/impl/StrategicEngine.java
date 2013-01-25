@@ -109,15 +109,13 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 	@Override
 	public TreeCursor<Value, Type> copy() {
-		// TODO Auto-generated method stub
-		return null;
+		return current.copy();
 	}
 
 
 	@Override
 	public TreeCursor<Value, Type> getBranch(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return current.getBranch(i);
 	}
 
 
@@ -134,8 +132,8 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
-	public String getNodeId() {
-		return current.getNodeId();
+	public String getPathId() {
+		return current.getPathId();
 	}
 
 
@@ -166,12 +164,6 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	@Override
 	public int getFromBranch() {
 		return current.getFromBranch();
-	}
-
-
-	@Override
-	public Tree<Value, Type> getTreeAtBranch(int i) {
-		return current.getTreeAtBranch(i);
 	}
 
 

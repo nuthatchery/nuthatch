@@ -40,4 +40,16 @@ public class StandardPath extends ArrayList<Integer> implements Path {
 		return new StandardPath(this);
 	}
 
+
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder(size() * 2);
+		b.append("T");
+		for(Integer i : this) {
+			b.append(".");
+			b.append(i);
+		}
+		return b.toString();
+	}
+
 }

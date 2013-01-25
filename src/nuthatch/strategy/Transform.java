@@ -1,7 +1,7 @@
 package nuthatch.strategy;
 
 import nuthatch.engine.Engine;
-import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
 
 public interface Transform {
 	/**
@@ -12,5 +12,5 @@ public interface Transform {
 	 *            current tree node
 	 * @return A replacement subtree, or null if no change
 	 */
-	Tree apply(Engine engine);
+	TreeCursor apply(Engine engine);
 }

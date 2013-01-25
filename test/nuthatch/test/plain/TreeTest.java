@@ -47,7 +47,7 @@ public class TreeTest {
 	public final void test3() {
 		TreeCursor<String, String> foo2 = bar.copy().go(1);
 		assertNull(foo2.getData());
-		assertEquals(bar.getCurrentTree(), foo2.getTreeAtBranch(0));
+		assertEquals(bar.getCurrentTree(), foo2.getBranch(0).getCurrentTree());
 		assertEquals(0, foo2.numChildren());
 		assertTrue(foo2.isAtLeaf());
 		assertFalse(foo2.isAtRoot());
@@ -75,7 +75,7 @@ public class TreeTest {
 	public final void test5() {
 		TreeCursor<String, String> foo2 = baz.copy().go(1);
 		assertNull(foo2.getData());
-		assertEquals(baz.getCurrentTree(), foo2.getTreeAtBranch(0));
+		assertEquals(baz.getCurrentTree(), foo2.getBranch(0).getCurrentTree());
 		assertEquals(0, foo2.numChildren());
 		assertTrue(foo2.isAtLeaf());
 		assertFalse(foo2.isAtRoot());
@@ -89,7 +89,7 @@ public class TreeTest {
 	public final void test6() {
 		TreeCursor<String, String> bar2 = baz.copy().go(2);
 		assertNull(bar2.getData());
-		assertEquals(baz.getCurrentTree(), bar2.getTreeAtBranch(0));
+		assertEquals(baz.getCurrentTree(), bar2.getBranch(0).getCurrentTree());
 		assertEquals(1, bar2.numChildren());
 		assertFalse(bar2.isAtLeaf());
 		assertFalse(bar2.isAtRoot());
