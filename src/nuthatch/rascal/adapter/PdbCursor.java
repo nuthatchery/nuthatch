@@ -1,6 +1,7 @@
 package nuthatch.rascal.adapter;
 
 import nullness.Nullable;
+import nuthatch.engine.errors.TypeMismatch;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.AbstractTreeCursor;
 
@@ -18,15 +19,39 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		super(value);
 	}
 
-	protected PdbCursor(PdbCursor src) {
-		super(src);
+	protected PdbCursor(PdbCursor src, boolean fullTree) {
+		super(src, fullTree);
+	}
+
+	protected PdbCursor(PdbCursor src, IValue replacement) {
+		super(src, replacement);
+	}
+	
+	@Override
+	public TreeCursor<IValue, Type> copy() {
+		return new PdbCursor(this, true);
 	}
 
 	@Override
-	public TreeCursor<IValue, Type> copy() {
-		return new PdbCursor(this);
+	public TreeCursor<IValue, Type> copySubtree() {
+		return new PdbCursor(this, false);
 	}
 
+	@Override
+	public TreeCursor<IValue, Type> copyAndReplaceSubtree(
+			TreeCursor<IValue, Type> replacement) {
+		if(replacement instanceof PdbCursor) {
+			IValue repl = ((PdbCursor)replacement).getCurrent();
+			if(!repl.getType().isSubtypeOf(getCurrent().getType())) {
+				throw new TypeMismatch();
+			}
+			return new PdbCursor(this, repl);
+		}
+		else {
+			throw new UnsupportedOperationException("Replacing with different cursor type");
+		}
+	}
+	
 	@Override
 	public IValue getData() {
 		return getCurrent();
@@ -120,4 +145,20 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		}
 		return null;
 	}
+
+	@Override
+	protected IValue replaceChild(IValue node, IValue child, int i) {
+		if(node instanceof INode) {
+			return ((INode) node).set(i, child);
+		}
+		else if(node instanceof IList) {
+			return ((IList) node).put(i, child);
+		}
+		else if(node instanceof ITuple) {
+			return ((ITuple) node).set(i, child);
+		}
+		return null;
+	}
+
+
 }

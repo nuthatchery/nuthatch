@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nullness.Nullable;
+import nuthatch.engine.errors.TypeMismatch;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.AbstractTreeCursor;
 
@@ -29,13 +30,38 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		}
 	}
 
-	protected UptrCursor(UptrCursor src) {
-		super(src);
+	protected UptrCursor(UptrCursor src, boolean fullTree) {
+		super(src, fullTree);
 	}
+
+	protected UptrCursor(UptrCursor src, IConstructor replacement) {
+		super(src, replacement);
+	}
+
 
 	@Override
 	public TreeCursor<String, Type> copy() {
-		return new UptrCursor(this);
+		return new UptrCursor(this, true);
+	}
+
+	@Override
+	public TreeCursor<String, Type> copySubtree() {
+		return new UptrCursor(this, false);
+	}
+
+	@Override
+	public TreeCursor<String, Type> copyAndReplaceSubtree(
+			TreeCursor<String, Type> replacement) {
+		if(replacement instanceof UptrCursor) {
+			IConstructor repl = ((UptrCursor)replacement).getCurrent();
+			if(!repl.getType().isSubtypeOf(getCurrent().getType())) {
+				throw new TypeMismatch();
+			}
+			return new UptrCursor(this, repl);
+		}
+		else {
+			throw new UnsupportedOperationException("Replacing with different cursor type");
+		}
 	}
 
 	@Override
@@ -183,4 +209,11 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		}
 		return tree;
 	}
+
+	@Override
+	protected IConstructor replaceChild(IConstructor node, IConstructor child,
+			int i) {
+		return node.set(i, child);
+	}
+
 }
