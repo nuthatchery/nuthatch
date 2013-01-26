@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nuthatch.tree.Path;
-import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 
@@ -32,12 +31,6 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	@Override
 	public TreeCursor<Value, Type> getBranch(int i) {
 		return copy().go(i);
-	}
-
-
-	@Override
-	public Tree<Value, Type> getCurrentTree() {
-		throw new UnsupportedOperationException();
 	}
 
 
@@ -76,7 +69,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 			throw new BranchNotFoundError("" + i);
 		}
 
-		int n = numChildren();
+		int n = getNumChildren();
 		if(i == -1) {
 			i = n;
 		}
@@ -110,7 +103,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 	@Override
 	public boolean hasBranch(int i) {
-		int n = numChildren();
+		int n = getNumChildren();
 		if(i == 0 || i == n + 1) {
 			return !isAtRoot();
 		}
@@ -132,7 +125,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 	@Override
 	public boolean isAtLeaf() {
-		return numChildren() == 0;
+		return getNumChildren() == 0;
 	}
 
 

@@ -1,21 +1,9 @@
 package nuthatch.engine;
 
 import nuthatch.strategy.Transform;
-import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 
 public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
-	/**
-	 * Return the tree node at the current position.
-	 * 
-	 * The returned tree may not support navigating in the parent direction;
-	 * navigating towards the root should be done through the engine.
-	 * 
-	 * @return Current tree node
-	 */
-	Tree<Value, Type> currentTree();
-
-
 	/**
 	 * Return the depth of the tree at the current position.
 	 * 
@@ -78,5 +66,5 @@ public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
 	 *            The transform. It should return a replacement tree if desired,
 	 *            or null if no change should occur.
 	 */
-	void transform(Transform t);
+	void transform(Transform<Value, Type> t);
 }

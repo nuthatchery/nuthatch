@@ -19,7 +19,7 @@ public class NotPattern<Value, Type> implements Pattern<Value, Type> {
 
 
 	@Override
-	public boolean match(TreeCursor<Value, Type> tree, Environment env) {
+	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
 		env.begin();
 		boolean result = !a.match(tree, env);
 		env.rollback();

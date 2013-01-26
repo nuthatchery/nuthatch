@@ -2,7 +2,7 @@ package nuthatch.strategy;
 
 import nuthatch.engine.Engine;
 
-public interface Strategy {
+public interface Strategy<Value, Type> {
 	/**
 	 * Visit a new node.
 	 * 
@@ -16,5 +16,5 @@ public interface Strategy {
 	 *            The engine
 	 * @return The direction of the next node to visit
 	 */
-	int visit(Engine eng);
+	int visit(Engine<Value, Type> eng);
 }

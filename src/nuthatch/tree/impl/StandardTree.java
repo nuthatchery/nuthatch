@@ -23,7 +23,8 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 
 
 	@SuppressWarnings("unchecked")
-	public StandardTree(String name, Type type, Tree... children) {
+	@SafeVarargs
+	public StandardTree(String name, Type type, Tree<Value, Type>... children) {
 		this.name = name;
 		this.type = type;
 		this.data = null;

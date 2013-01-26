@@ -6,18 +6,21 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.PatternFactory;
+import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.StandardTree;
-import nuthatch.tree.impl.StandardTreeCursor;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class PatternTest {
-	StandardTreeCursor<String, String> foo = new StandardTreeCursor<String, String>(new StandardTree<String, String>("foo", ""));
-	StandardTreeCursor<String, String> bar = new StandardTreeCursor<String, String>(new StandardTree<String, String>("bar", "", foo.getCurrentTree()));
-	StandardTreeCursor<String, String> baz = new StandardTreeCursor<String, String>(new StandardTree<String, String>("baz", "", foo.getCurrentTree(), bar.getCurrentTree()));
-	PatternFactory pf = PatternFactory.getInstance();
-	Environment env;
+	StandardTree<String, String> fooTree = new StandardTree<String, String>("foo", "");
+	StandardTree<String, String> barTree = new StandardTree<String, String>("bar", "", fooTree);
+	StandardTree<String, String> bazTree = new StandardTree<String, String>("baz", "", fooTree, barTree);
+	TreeCursor<String, String> foo = fooTree.makeCursor();
+	TreeCursor<String, String> bar = barTree.makeCursor();
+	TreeCursor<String, String> baz = bazTree.makeCursor();
+	PatternFactory<String, String> pf = PatternFactory.getInstance(String.class, String.class);
+	Environment<TreeCursor<String, String>> env;
 
 
 	@Before

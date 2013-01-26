@@ -2,7 +2,6 @@ package nuthatch.pattern.impl;
 
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
-import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 
 public class VarPattern<Value, Type> implements Pattern<Value, Type> {
@@ -21,16 +20,16 @@ public class VarPattern<Value, Type> implements Pattern<Value, Type> {
 
 
 	@Override
-	public boolean match(TreeCursor<Value, Type> tree, Environment env) {
-		Tree binding = env.get(name);
+	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
+		TreeCursor<Value, Type> binding = env.get(name);
 		if(binding != null) {
-			return tree.matches(binding);
+			return tree.subtreeEquals(binding);
 		}
 		else if(type != null && !type.equals(tree.getType())) {
 			return false;
 		}
 		else {
-			env.put(name, tree.getCurrentTree());
+			env.put(name, tree.copy());
 		}
 		return true;
 	}

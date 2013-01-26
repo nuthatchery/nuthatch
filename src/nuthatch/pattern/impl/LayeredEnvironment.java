@@ -8,46 +8,45 @@ import java.util.List;
 import java.util.Map;
 
 import nuthatch.pattern.Environment;
-import nuthatch.tree.Tree;
 
 /**
  * This class is not thread safe.
  * 
  */
-public class LayeredEnvironment implements Environment {
-	private final LayeredEnvironment chain;
-	private Map<String, Tree> map;
-	private List<Map<String, Tree>> stack;
+public class LayeredEnvironment<T> implements Environment<T> {
+	private final LayeredEnvironment<T> chain;
+	private Map<String, T> map;
+	private List<Map<String, T>> stack;
 	private int childCount;
 
 
 	public LayeredEnvironment() {
 		chain = null;
 		childCount = 0;
-		map = new HashMap<String, Tree>();
+		map = new HashMap<String, T>();
 	}
 
 
-	protected LayeredEnvironment(LayeredEnvironment chain) {
+	protected LayeredEnvironment(LayeredEnvironment<T> chain) {
 		this.chain = chain;
 		chain.childCount++;
 		childCount = 0;
-		map = new HashMap<String, Tree>();
+		map = new HashMap<String, T>();
 	}
 
 
 	@Override
-	public Environment enterScope() {
+	public Environment<T> enterScope() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		return new LayeredEnvironment(this);
+		return new LayeredEnvironment<T>(this);
 	}
 
 
 	@Override
-	public Environment exitScope() {
+	public Environment<T> exitScope() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
@@ -89,25 +88,25 @@ public class LayeredEnvironment implements Environment {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		Map<String, Tree> pop = pop();
+		Map<String, T> pop = pop();
 		map.putAll(pop);
 	}
 
 
 	@Override
-	public Tree get(String var) {
+	public T get(String var) {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		LayeredEnvironment env = this;
+		LayeredEnvironment<T> env = this;
 		while(env != null) {
 			if(env.map.containsKey(var)) {
 				return env.map.get(var);
 			}
 			else {
 				if(env.stack != null) {
-					for(Map<String, Tree> m : env.stack) {
+					for(Map<String, T> m : env.stack) {
 						if(m.containsKey(var)) {
 							return m.get(var);
 						}
@@ -121,7 +120,7 @@ public class LayeredEnvironment implements Environment {
 
 
 	@Override
-	public void put(String var, Tree val) {
+	public void put(String var, T val) {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
@@ -145,14 +144,14 @@ public class LayeredEnvironment implements Environment {
 
 	protected void push() {
 		if(stack == null) {
-			stack = new ArrayList<Map<String, Tree>>();
+			stack = new ArrayList<Map<String, T>>();
 		}
 		stack.add(map);
-		map = new HashMap<String, Tree>();
+		map = new HashMap<String, T>();
 	}
 
 
-	protected Map<String, Tree> pop() {
+	protected Map<String, T> pop() {
 		if(stack == null) {
 			throw new RuntimeException("Trying to end a transaction before any was started");
 		}
@@ -172,14 +171,14 @@ public class LayeredEnvironment implements Environment {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		LayeredEnvironment env = this;
+		LayeredEnvironment<T> env = this;
 		while(env != null) {
 			if(!env.map.isEmpty()) {
 				return false;
 			}
 			else {
 				if(env.stack != null) {
-					for(Map<String, Tree> m : env.stack) {
+					for(Map<String, T> m : env.stack) {
 						if(!m.isEmpty()) {
 							return false;
 						}
@@ -199,7 +198,7 @@ public class LayeredEnvironment implements Environment {
 		}
 		else {
 			if(stack != null) {
-				for(Map<String, Tree> m : stack) {
+				for(Map<String, T> m : stack) {
 					if(!m.isEmpty()) {
 						return false;
 					}

@@ -40,13 +40,7 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 
 
 	@Override
-	public boolean matches(Tree<Value, Type> tree) {
-		return getCurrent().equals(tree);
-	}
-
-
-	@Override
-	public int numChildren() {
+	public int getNumChildren() {
 		return getCurrent().numChildren();
 	}
 
@@ -54,6 +48,35 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 	@Override
 	protected Tree<Value, Type> getChild(int i) {
 		return getCurrent().getBranch(i + 1);
+	}
+
+
+	@Override
+	public boolean hasData() {
+		return getData() != null;
+	}
+
+
+	@Override
+	public boolean hasName() {
+		return getName() != null;
+	}
+
+
+	@Override
+	public boolean subtreeEquals(TreeCursor<Value, Type> other) {
+		if(this == other) {
+			return true;
+		}
+		else if(other == null) {
+			return false;
+		}
+		else if(other instanceof StandardTreeCursor<?, ?>) {
+			return getCurrent().equals(((StandardTreeCursor<?, ?>) other).getCurrent());
+		}
+		else {
+			throw new UnsupportedOperationException("Equality only supported on StandardTreeCursor");
+		}
 	}
 
 }

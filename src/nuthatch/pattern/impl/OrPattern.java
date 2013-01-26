@@ -21,7 +21,7 @@ public class OrPattern<Value, Type> implements Pattern<Value, Type> {
 
 
 	@Override
-	public boolean match(TreeCursor<Value, Type> tree, Environment env) {
+	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
 		return a.match(tree, env) || b.match(tree, env);
 	}
 

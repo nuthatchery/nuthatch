@@ -17,26 +17,20 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 	private final TreeCursor<Value, Type> rootCursor;
 	private TreeCursor<Value, Type> current;
-	private final Strategy strategy;
+	private final Strategy<Value, Type> strategy;
 
 
-	public StrategicEngine(TreeCursor<Value, Type> cursor, Strategy strat) {
+	public StrategicEngine(TreeCursor<Value, Type> cursor, Strategy<Value, Type> strat) {
 		this.rootCursor = cursor;
 		this.current = null;
 		this.strategy = strat;
 	}
 
 
-	public StrategicEngine(Tree<Value, Type> tree, Strategy strat) {
+	public StrategicEngine(Tree<Value, Type> tree, Strategy<Value, Type> strat) {
 		this.rootCursor = new StandardTreeCursor<Value, Type>(tree);
 		this.current = null;
 		this.strategy = strat;
-	}
-
-
-	@Override
-	public Tree<Value, Type> currentTree() {
-		return current.getCurrentTree();
 	}
 
 
@@ -69,7 +63,7 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	@Override
 	public boolean from(int i) {
 		if(i == last) {
-			return current.getFromBranch() == current.numChildren();
+			return current.getFromBranch() == current.getNumChildren();
 		}
 		else {
 			return current.getFromBranch() == i;
@@ -92,7 +86,7 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	@Override
 	public void split() {
 		@SuppressWarnings("unchecked")
-		StrategicEngine<Value, Type> children[] = new StrategicEngine[current.numChildren()];
+		StrategicEngine<Value, Type> children[] = new StrategicEngine[current.getNumChildren()];
 
 /*		int i = 0;
 		for(Tree child : current.children()) {
@@ -102,7 +96,7 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
-	public void transform(Transform t) {
+	public void transform(Transform<Value, Type> t) {
 		t.apply(this);
 	}
 
@@ -134,12 +128,6 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	@Override
 	public String getPathId() {
 		return current.getPathId();
-	}
-
-
-	@Override
-	public Tree<Value, Type> getCurrentTree() {
-		return current.getCurrentTree();
 	}
 
 
@@ -204,13 +192,25 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
-	public boolean matches(Tree<Value, Type> tree) {
-		return current.matches(tree);
+	public int getNumChildren() {
+		return current.getNumChildren();
 	}
 
 
 	@Override
-	public int numChildren() {
-		return current.numChildren();
+	public boolean hasData() {
+		return current.hasData();
+	}
+
+
+	@Override
+	public boolean hasName() {
+		return current.hasName();
+	}
+
+
+	@Override
+	public boolean subtreeEquals(TreeCursor<Value, Type> other) {
+		return current.subtreeEquals(other);
 	}
 }

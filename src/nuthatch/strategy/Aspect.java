@@ -2,24 +2,24 @@ package nuthatch.strategy;
 
 import nuthatch.engine.Engine;
 
-public abstract class Aspect implements Strategy {
-	public final int PROCEED = Integer.MIN_VALUE;
-	private final Strategy strategy;
+public abstract class Aspect<Value, Type> implements Strategy<Value, Type> {
+	public static final int PROCEED = Integer.MIN_VALUE;
+	private final Strategy<Value, Type> strategy;
 
 
-	public abstract int visitBefore(Engine eng);
+	public abstract int visitBefore(Engine<Value, Type> eng);
 
 
-	public abstract int visitAfter(Engine eng);
+	public abstract int visitAfter(Engine<Value, Type> eng);
 
 
-	public Aspect(Strategy s) {
+	public Aspect(Strategy<Value, Type> s) {
 		strategy = s;
 	}
 
 
 	@Override
-	public int visit(Engine eng) {
+	public int visit(Engine<Value, Type> eng) {
 		int goBefore = visitBefore(eng);
 		if(goBefore == PROCEED) {
 			int go = strategy.visit(eng);

@@ -2,9 +2,7 @@ package nuthatch.pattern;
 
 import java.util.Iterator;
 
-import nuthatch.tree.Tree;
-
-public interface Environment extends Iterable<String> {
+public interface Environment<T> extends Iterable<String> {
 	/**
 	 * Enter a new scope.
 	 * 
@@ -12,7 +10,7 @@ public interface Environment extends Iterable<String> {
 	 * 
 	 * @return An environment with the empty scope at the top.
 	 */
-	Environment enterScope();
+	Environment<T> enterScope();
 
 
 	/**
@@ -22,7 +20,7 @@ public interface Environment extends Iterable<String> {
 	 * 
 	 * @return An environment with tall the top-level bindings discarded
 	 */
-	Environment exitScope();
+	Environment<T> exitScope();
 
 
 	/**
@@ -51,7 +49,7 @@ public interface Environment extends Iterable<String> {
 	 *            Name of the variable
 	 * @return The value, or null if not found
 	 */
-	Tree get(String var);
+	T get(String var);
 
 
 	/**
@@ -59,10 +57,10 @@ public interface Environment extends Iterable<String> {
 	 * 
 	 * @param var
 	 *            Name of the variable
-	 * @param val
+	 * @param value
 	 *            The value
 	 */
-	void put(String var, Tree val);
+	void put(String var, T value);
 
 
 	/**

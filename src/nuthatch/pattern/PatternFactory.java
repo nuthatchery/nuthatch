@@ -6,82 +6,94 @@ import nuthatch.pattern.impl.NotPattern;
 import nuthatch.pattern.impl.OrPattern;
 import nuthatch.pattern.impl.TreePattern;
 import nuthatch.pattern.impl.VarPattern;
-import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
 
-import org.eclipse.imp.pdb.facts.IValue;
-
-public class PatternFactory {
+public class PatternFactory<Value, Type> {
+	@SuppressWarnings("rawtypes")
 	private static PatternFactory instance;
 
 
-	public static PatternFactory getInstance() {
+	/**
+	 * Get an instance of the pattern factory.
+	 * 
+	 * @param valueClass
+	 *            Value type, for correct return type
+	 * @param typeClass
+	 *            Type type, for correct return type
+	 * @return The pattern factory
+	 */
+	@SuppressWarnings({ "rawtypes", "cast" })
+	public static <Value, Type> PatternFactory<Value, Type> getInstance(Class<Value> valueClass, Class<Type> typeClass) {
 		if(instance == null)
 			instance = new PatternFactory();
-		return instance;
+		return (PatternFactory<Value, Type>) instance;
 	}
 
 
-	public Pattern nodeName(String name) {
+	public Pattern<Value, Type> nodeName(String name) {
 		return node(name, null, null);
 	}
 
 
-	public Pattern nodeType(String type) {
+	public Pattern<Value, Type> nodeType(Type type) {
 		return node(null, type, null);
 	}
 
 
-	public Pattern nodeData(IValue data) {
+	public Pattern<Value, Type> nodeData(Value data) {
 		return node(null, null, data);
 	}
 
 
-	public Pattern children(Pattern... children) {
+	@SafeVarargs
+	public final Pattern<Value, Type> children(Pattern<Value, Type>... children) {
 		return nodeWithChildren(null, null, null, children);
 	}
 
 
-	public Pattern node(String name, String type, IValue data) {
-		return new NodePattern(name, type, data, null);
+	public Pattern<Value, Type> node(String name, Type type, Value data) {
+		return new NodePattern<Value, Type>(name, type, data, null);
 	}
 
 
-	public Pattern nodeWithChildren(String name, Pattern... children) {
-		return new NodePattern(name, null, null, children);
+	@SafeVarargs
+	public final Pattern<Value, Type> nodeWithChildren(String name, Pattern<Value, Type>... children) {
+		return new NodePattern<Value, Type>(name, null, null, children);
 	}
 
 
-	public Pattern nodeWithChildren(String name, String type, IValue data, Pattern... children) {
-		return new NodePattern(name, type, data, children);
+	@SafeVarargs
+	public final Pattern<Value, Type> nodeWithChildren(String name, Type type, Value data, Pattern<Value, Type>... children) {
+		return new NodePattern<Value, Type>(name, type, data, children);
 	}
 
 
-	public Pattern tree(Tree tree) {
-		return new TreePattern(tree);
+	public Pattern<Value, Type> tree(TreeCursor<Value, Type> tree) {
+		return new TreePattern<Value, Type>(tree);
 	}
 
 
-	public Pattern and(Pattern a, Pattern b) {
-		return new AndPattern(a, b);
+	public Pattern<Value, Type> and(Pattern<Value, Type> a, Pattern<Value, Type> b) {
+		return new AndPattern<Value, Type>(a, b);
 	}
 
 
-	public Pattern or(Pattern a, Pattern b) {
-		return new OrPattern(a, b);
+	public Pattern<Value, Type> or(Pattern<Value, Type> a, Pattern<Value, Type> b) {
+		return new OrPattern<Value, Type>(a, b);
 	}
 
 
-	public Pattern not(Pattern a) {
-		return new NotPattern(a);
+	public Pattern<Value, Type> not(Pattern<Value, Type> a) {
+		return new NotPattern<Value, Type>(a);
 	}
 
 
-	public Pattern var(String name) {
-		return new VarPattern(name, null);
+	public Pattern<Value, Type> var(String name) {
+		return new VarPattern<Value, Type>(name, null);
 	}
 
 
-	public Pattern var(String name, Pattern p) {
-		return new AndPattern(p, new VarPattern(name, null));
+	public Pattern<Value, Type> var(String name, Pattern<Value, Type> p) {
+		return new AndPattern<Value, Type>(p, new VarPattern<Value, Type>(name, null));
 	}
 }

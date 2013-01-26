@@ -28,7 +28,17 @@ public interface TreeCursor<Value, Type> {
 	TreeCursor<Value, Type> copy();
 
 
-	TreeCursor<Value, Type> getBranch(int i);
+	/**
+	 * Make a new tree cursor, positioned at the node at branch i.
+	 * 
+	 * The return value is the same as that from go(i).copy(), but the effect is
+	 * different.
+	 * 
+	 * @param i
+	 *            The branch index.
+	 * @return A new tree cursor
+	 */
+	TreeCursor<Value, Type> getBranch(int i) throws BranchNotFoundError;
 
 
 	/**
@@ -45,6 +55,7 @@ public interface TreeCursor<Value, Type> {
 	 * 
 	 * @return The name
 	 */
+	@Nullable
 	String getName();
 
 
@@ -58,18 +69,38 @@ public interface TreeCursor<Value, Type> {
 	String getPathId();
 
 
-	Tree<Value, Type> getCurrentTree();
-
-
+	/**
+	 * Get the path from the root to the current node.
+	 * 
+	 * @return A path
+	 */
 	Path getPath();
 
 
+	/**
+	 * Get a path element.
+	 * 
+	 * This may be faster than calling getPath().
+	 * 
+	 * @param i
+	 * @return getPath().getElement(i)
+	 */
 	int getPathElement(int i);
 
 
+	/**
+	 * Get the last element of the path.
+	 * 
+	 * @return getPath().getElement(getPath().size()-1)
+	 */
 	int getLastPathElement();
 
 
+	/**
+	 * Get the branch this node was entered from.
+	 * 
+	 * @return Number of the branch back to the previous node
+	 */
 	int getFromBranch();
 
 
@@ -86,7 +117,7 @@ public interface TreeCursor<Value, Type> {
 	 * 
 	 * @param i
 	 *            The branch direction
-	 * @return this
+	 * @return this, for method chaining
 	 * @throws BranchNotFoundError
 	 *             If no such branch was found
 	 * @see {@link #hasBranch(int)}
@@ -105,6 +136,22 @@ public interface TreeCursor<Value, Type> {
 
 
 	/**
+	 * Check if this node has data associated with it.
+	 * 
+	 * @return True if getData() != null
+	 */
+	boolean hasData();
+
+
+	/**
+	 * Check if this node has a name associated with it.
+	 * 
+	 * @return True if getName() != null
+	 */
+	boolean hasName();
+
+
+	/**
 	 * Check if this node is a leaf.
 	 * 
 	 * @return True if this node has no children
@@ -115,16 +162,30 @@ public interface TreeCursor<Value, Type> {
 	/**
 	 * Check if this node is root.
 	 * 
-	 * @return True if this node has no parent, and the tree implementation
-	 *         tracks parents
+	 * @return True if this node has no parent
 	 */
 	boolean isAtRoot();
 
 
+	/**
+	 * Check if we are outside the tree.
+	 * 
+	 * @return True if we are at the top, past the root node
+	 */
 	boolean isAtTop();
 
 
-	boolean matches(Tree<Value, Type> tree);
+	/**
+	 * Equality on subtrees rooted at the current node.
+	 * 
+	 * @param other
+	 *            The other cursor, or null
+	 * @return True if the subtrees rooted at this and the other node are equal
+	 * @throws UnsupportedOperationException
+	 *             if other is of a different type, and the implementation only
+	 *             supports comparison with the same type
+	 */
+	boolean subtreeEquals(@Nullable TreeCursor<Value, Type> other);
 
 
 	/**
@@ -132,5 +193,5 @@ public interface TreeCursor<Value, Type> {
 	 * 
 	 * @return The number of children
 	 */
-	int numChildren();
+	int getNumChildren();
 }

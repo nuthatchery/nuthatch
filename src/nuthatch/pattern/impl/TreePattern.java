@@ -2,15 +2,14 @@ package nuthatch.pattern.impl;
 
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
-import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 
 public class TreePattern<Value, Type> implements Pattern<Value, Type> {
 
-	private final Tree pattern;
+	private final TreeCursor<Value, Type> pattern;
 
 
-	public TreePattern(Tree tree) {
+	public TreePattern(TreeCursor<Value, Type> tree) {
 		if(tree == null) {
 			throw new IllegalArgumentException("Tree must not be null");
 		}
@@ -20,7 +19,7 @@ public class TreePattern<Value, Type> implements Pattern<Value, Type> {
 
 
 	@Override
-	public boolean match(TreeCursor<Value, Type> tree, Environment env) {
+	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
 		return pattern.equals(tree);
 	}
 
