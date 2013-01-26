@@ -29,6 +29,31 @@ public interface TreeCursor<Value, Type> {
 
 
 	/**
+	 * Make a copy of this cursor rooted at the current node, tracking the same
+	 * tree.
+	 * 
+	 * The new cursor will be attached to the same tree, but its own position
+	 * and root
+	 * 
+	 * @return A copy of this cursor rooted at the current node
+	 */
+	TreeCursor<Value, Type> copySubtree();
+
+
+	/**
+	 * Make a copy of this cursor, replacing the subtree rooted at the current
+	 * node
+	 * with the replacement.
+	 * 
+	 * The new cursor may or may not share tree data with the old cursor and
+	 * replacement.
+	 * 
+	 * @return A copy of this cursor, with the current subtree replaced
+	 */
+	TreeCursor<Value, Type> copyAndReplaceSubtree(TreeCursor<Value, Type> replacement);
+
+
+	/**
 	 * Make a new tree cursor, positioned at the node at branch i.
 	 * 
 	 * The return value is the same as that from go(i).copy(), but the effect is
@@ -194,4 +219,10 @@ public interface TreeCursor<Value, Type> {
 	 *             supports comparison with the same type
 	 */
 	boolean subtreeEquals(@Nullable TreeCursor<Value, Type> other);
+
+
+	/**
+	 * @return Result of toString() on current subtree
+	 */
+	String treeToString();
 }

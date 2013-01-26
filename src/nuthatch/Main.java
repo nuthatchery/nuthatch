@@ -20,8 +20,6 @@ public class Main {
 	public static void main(String[] args) {
 		Tree<String, String> tree = new StandardTree("+", "", new StandardTree("5", ""), new StandardTree("*", "", new StandardTree("+", "", new StandardTree("7", ""), new StandardTree("3", "")), new StandardTree("4", "")));
 
-		System.out.println(tree);
-
 		Transform t = new Transform() {
 			@Override
 			public TreeCursor apply(Engine e) {
@@ -134,5 +132,36 @@ public class Main {
 		System.out.println("\\end{tikzpicture}");
 		System.out.println("\\end{center}");
 		System.out.println("\\end{document}");
+
+		System.out.println(tree);
+
+		Transform<String, String> u = new Transform<String, String>() {
+			@Override
+			public TreeCursor<String, String> apply(Engine<String, String> e) {
+				if(e.hasName()) {
+					String name = e.getName();
+					if(!name.matches("^[0-9]+$")) {
+						int a = Integer.valueOf(e.getBranch(1).getName());
+						int b = Integer.valueOf(e.getBranch(2).getName());
+
+						switch(name) {
+						case "+":
+							return new StandardTree<String, String>(String.valueOf(a + b), "").makeCursor();
+						case "*":
+							return new StandardTree<String, String>(String.valueOf(a + b), "").makeCursor();
+						}
+					}
+					return null;
+				}
+				else
+					return null;
+			}
+		};
+		Strategy<String, String> replace = new BottomupStrategy<>(u);
+		System.out.print("TopDownReplace: ");
+		StrategicEngine<String, String> engine = new StrategicEngine<String, String>(tree, replace);
+		engine.engage();
+		System.out.println(engine.treeToString());
+
 	}
 }

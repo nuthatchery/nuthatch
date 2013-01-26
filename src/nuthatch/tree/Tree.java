@@ -154,4 +154,7 @@ public interface Tree<Value, Type> {
 	 * @return The number of children
 	 */
 	int numChildren();
+
+
+	Tree<Value, Type> replaceChild(Tree<Value, Type> child, int childIndex);
 }

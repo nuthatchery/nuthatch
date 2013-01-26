@@ -4,13 +4,13 @@ import nuthatch.engine.Engine;
 import nuthatch.strategy.AbstractStrategy;
 import nuthatch.strategy.Transform;
 
-public class InorderStrategy extends AbstractStrategy {
-	private final Transform pre;
-	private final Transform mid;
-	private final Transform post;
+public class InorderStrategy<Value, Type> extends AbstractStrategy<Value, Type> {
+	private final Transform<Value, Type> pre;
+	private final Transform<Value, Type> mid;
+	private final Transform<Value, Type> post;
 
 
-	public InorderStrategy(Transform pre, Transform mid, Transform post) {
+	public InorderStrategy(Transform<Value, Type> pre, Transform<Value, Type> mid, Transform<Value, Type> post) {
 		this.pre = pre;
 		this.mid = mid;
 		this.post = post;
@@ -18,15 +18,15 @@ public class InorderStrategy extends AbstractStrategy {
 
 
 	@Override
-	public int visit(Engine e) {
+	public int visit(Engine<Value, Type> e) {
 		if(e.isLeaf() || e.from(FIRST)) {
-			e.transform(mid);
+			applyTransform(mid, e);
 		}
 		else if(e.from(PARENT)) {
-			e.transform(pre);
+			applyTransform(pre, e);
 		}
 		else if(e.from(LAST)) {
-			e.transform(post);
+			applyTransform(post, e);
 		}
 		return e.from() + 1;
 	}

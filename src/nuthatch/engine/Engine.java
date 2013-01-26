@@ -1,6 +1,6 @@
 package nuthatch.engine;
 
-import nuthatch.strategy.Transform;
+import nuthatch.engine.errors.TypeMismatch;
 import nuthatch.tree.TreeCursor;
 
 public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
@@ -53,18 +53,22 @@ public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
 
 
 	/**
+	 * Replace current node.
+	 * 
+	 * The current node and its children are replace by the subtree identified
+	 * by the supplied tree cursor.
+	 * 
+	 * @param tree
+	 *            Replacement subtree
+	 * @throws TypeMismatch
+	 *             if the replacement tree is of an incompatible type
+	 */
+	void replace(TreeCursor<Value, Type> tree) throws TypeMismatch;
+
+
+	/**
 	 * Split execution into one engine per child, operating in parallel.
 	 * 
 	 */
 	void split();
-
-
-	/**
-	 * Apply a transform at the current tree node.
-	 * 
-	 * @param t
-	 *            The transform. It should return a replacement tree if desired,
-	 *            or null if no change should occur.
-	 */
-	void transform(Transform<Value, Type> t);
 }

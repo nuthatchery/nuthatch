@@ -4,14 +4,14 @@ import nuthatch.engine.Engine;
 import nuthatch.strategy.AbstractStrategy;
 import nuthatch.strategy.Transform;
 
-public class VisitStrategy extends AbstractStrategy {
-	private final Transform pre;
-	private final Transform beforeChild;
-	private final Transform afterChild;
-	private final Transform post;
+public class VisitStrategy<Value, Type> extends AbstractStrategy<Value, Type> {
+	private final Transform<Value, Type> pre;
+	private final Transform<Value, Type> beforeChild;
+	private final Transform<Value, Type> afterChild;
+	private final Transform<Value, Type> post;
 
 
-	public VisitStrategy(Transform pre, Transform post, Transform beforeChild, Transform afterChild) {
+	public VisitStrategy(Transform<Value, Type> pre, Transform<Value, Type> post, Transform<Value, Type> beforeChild, Transform<Value, Type> afterChild) {
 		this.pre = pre;
 		this.post = post;
 		this.beforeChild = beforeChild;
@@ -20,22 +20,22 @@ public class VisitStrategy extends AbstractStrategy {
 
 
 	@Override
-	public int visit(Engine e) {
+	public int visit(Engine<Value, Type> e) {
 		if(e.isLeaf()) {
-			e.transform(pre);
-			e.transform(post);
+			applyTransform(pre, e);
+			applyTransform(post, e);
 		}
 		else if(e.from(PARENT)) {
-			e.transform(pre);
-			e.transform(beforeChild);
+			applyTransform(pre, e);
+			applyTransform(beforeChild, e);
 		}
 		else if(e.from(LAST)) {
-			e.transform(afterChild);
-			e.transform(post);
+			applyTransform(afterChild, e);
+			applyTransform(post, e);
 		}
 		else {
-			e.transform(afterChild);
-			e.transform(beforeChild);
+			applyTransform(afterChild, e);
+			applyTransform(beforeChild, e);
 		}
 
 		return e.from() + 1;

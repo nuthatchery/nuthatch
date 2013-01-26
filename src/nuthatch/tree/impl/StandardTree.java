@@ -49,6 +49,14 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 	}
 
 
+	private StandardTree(String name, Type type, Value data, Tree<Value, Type>[] children) {
+		this.name = name;
+		this.type = type;
+		this.data = data;
+		this.children = children;
+	}
+
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addChild(Tree<Value, Type> tree) {
@@ -199,6 +207,14 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 		else {
 			return children.length;
 		}
+	}
+
+
+	@Override
+	public Tree<Value, Type> replaceChild(Tree<Value, Type> child, int childIndex) {
+		Tree<Value, Type>[] newChildren = children.clone();
+		newChildren[childIndex] = child;
+		return new StandardTree<Value, Type>(name, type, data, newChildren);
 	}
 
 

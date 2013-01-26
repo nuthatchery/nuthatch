@@ -10,14 +10,36 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 	}
 
 
-	private StandardTreeCursor(StandardTreeCursor<Value, Type> src) {
-		super(src);
+	private StandardTreeCursor(StandardTreeCursor<Value, Type> src, boolean fullTree) {
+		super(src, fullTree);
+	}
+
+
+	private StandardTreeCursor(StandardTreeCursor<Value, Type> src, Tree<Value, Type> replacement) {
+		super(src, replacement);
 	}
 
 
 	@Override
 	public TreeCursor<Value, Type> copy() {
-		return new StandardTreeCursor<Value, Type>(this);
+		return new StandardTreeCursor<Value, Type>(this, true);
+	}
+
+
+	@Override
+	public TreeCursor<Value, Type> copySubtree() {
+		return new StandardTreeCursor<Value, Type>(this, false);
+	}
+
+
+	@Override
+	public TreeCursor<Value, Type> copyAndReplaceSubtree(TreeCursor<Value, Type> replacement) {
+		if(replacement instanceof StandardTreeCursor) {
+			return new StandardTreeCursor<>(this, ((StandardTreeCursor<Value, Type>) replacement).getCurrent());
+		}
+		else {
+			throw new UnsupportedOperationException("Replacing with different cursor type");
+		}
 	}
 
 
@@ -77,6 +99,24 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 	@Override
 	protected Tree<Value, Type> getChild(int i) {
 		return getCurrent().getBranch(i + 1);
+	}
+
+
+	@Override
+	protected Tree<Value, Type> replaceChild(Tree<Value, Type> node, Tree<Value, Type> child, int i) {
+		int n = node.numChildren();
+		@SuppressWarnings("unchecked")
+		Tree<Value, Type> children[] = new Tree[n];
+		int j = 0;
+		for(Tree<Value, Type> c : node.children()) {
+			if(i == j) {
+				children[j++] = child;
+			}
+			else {
+				children[j++] = c;
+			}
+		}
+		return new StandardTree<Value, Type>(node.getName(), node.getType(), children);
 	}
 
 }

@@ -3,11 +3,11 @@ package nuthatch.engine.impl;
 import nuthatch.engine.Engine;
 import nuthatch.engine.errors.ReachedTop;
 import nuthatch.strategy.Strategy;
-import nuthatch.strategy.Transform;
 import nuthatch.tree.Path;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
+import nuthatch.tree.impl.StandardPath;
 import nuthatch.tree.impl.StandardTreeCursor;
 
 public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
@@ -16,14 +16,24 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	protected static final int last = -1;
 
 	private final TreeCursor<Value, Type> rootCursor;
+	/**
+	 * The current cursor. This will include at least a complete subtree at the
+	 * current node, and
+	 * up to replaceDepth (relative to original).
+	 * 
+	 * If replaceDepth == -1, then current == original
+	 */
 	private TreeCursor<Value, Type> current;
 	private final Strategy<Value, Type> strategy;
 
+	private final Path path;
+
 
 	public StrategicEngine(Tree<Value, Type> tree, Strategy<Value, Type> strat) {
-		this.rootCursor = new StandardTreeCursor<Value, Type>(tree);
+		this.rootCursor = new StandardTreeCursor<>(tree);
 		this.current = null;
 		this.strategy = strat;
+		this.path = new StandardPath();
 	}
 
 
@@ -31,18 +41,32 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 		this.rootCursor = cursor;
 		this.current = null;
 		this.strategy = strat;
+		this.path = new StandardPath();
 	}
 
 
 	@Override
 	public TreeCursor<Value, Type> copy() {
+		// TODO: needs to patch current and original
 		return current.copy();
 	}
 
 
 	@Override
+	public TreeCursor<Value, Type> copySubtree() {
+		return current.copySubtree();
+	}
+
+
+	@Override
+	public TreeCursor<Value, Type> copyAndReplaceSubtree(TreeCursor<Value, Type> replacement) {
+		return current.copyAndReplaceSubtree(replacement);
+	}
+
+
+	@Override
 	public int depth() {
-		return current.getPath().size();
+		return path.size();
 	}
 
 
@@ -115,19 +139,19 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 	@Override
 	public Path getPath() {
-		return current.getPath();
+		return path.copy();
 	}
 
 
 	@Override
 	public int getPathElement(int i) {
-		return current.getPathElement(i);
+		return path.getElement(i);
 	}
 
 
 	@Override
 	public String getPathId() {
-		return current.getPathId();
+		return path.toString();
 	}
 
 
@@ -139,7 +163,8 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 	@Override
 	public TreeCursor<Value, Type> go(int i) throws BranchNotFoundError {
-		return current.go(i);
+		current.go(i);
+		return this;
 	}
 
 
@@ -210,7 +235,25 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
-	public void transform(Transform<Value, Type> t) {
-		t.apply(this);
+	public void replace(TreeCursor<Value, Type> tree) {
+		current = current.copyAndReplaceSubtree(tree);
 	}
+
+
+	private boolean dataInvariant() {
+
+		return true;
+	}
+
+
+	@Override
+	public String treeToString() {
+		if(current != null) {
+			return current.treeToString();
+		}
+		else {
+			return "<top>";
+		}
+	}
+
 }
