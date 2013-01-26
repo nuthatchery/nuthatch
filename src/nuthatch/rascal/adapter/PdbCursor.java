@@ -1,5 +1,6 @@
 package nuthatch.rascal.adapter;
 
+import nullness.Nullable;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.AbstractTreeCursor;
@@ -60,13 +61,7 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 	}
 
 	@Override
-	public boolean matches(Tree<IValue, Type> tree) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int numChildren() {
+	public int getNumChildren() {
 		IValue value = getCurrent();
 		if(value instanceof INode) {
 			return ((INode) value).arity();
@@ -99,5 +94,30 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		}
 		return null;
 	}
-	
+
+	@Override
+	public boolean hasData() {
+		return true;
+	}
+
+	@Override
+	public boolean hasName() {
+		return getName() != null;
+	}
+
+	@Override
+	public boolean subtreeEquals(@Nullable TreeCursor<IValue, Type> other) {
+		if(this == other) {
+			return true;
+		}
+		else if(other == null) {
+			return false;
+		}
+		else if(other instanceof PdbCursor) {
+			return getCurrent().isEqual(((PdbCursor) other).getCurrent());
+		}
+		else {
+			throw new UnsupportedOperationException("Equality only supported on PdbCursor");
+		}
+	}
 }

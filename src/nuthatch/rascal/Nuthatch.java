@@ -4,9 +4,11 @@ import nuthatch.engine.Engine;
 import nuthatch.engine.impl.StrategicEngine;
 import nuthatch.library.strategies.TopdownStrategy;
 import nuthatch.rascal.adapter.PdbCursor;
+import nuthatch.rascal.adapter.UptrCursor;
 import nuthatch.strategy.Transform;
 import nuthatch.tree.TreeCursor;
 
+import org.eclipse.imp.pdb.facts.IConstructor;
 import org.eclipse.imp.pdb.facts.INode;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
@@ -43,4 +45,27 @@ public class Nuthatch {
 	
 		return vf.node("foo");
 	}
+
+	public IConstructor engage(IConstructor tree, final IEvaluatorContext ctx) {
+		Transform t = new Transform() {
+			@Override
+			public TreeCursor apply(Engine e) {
+				String name = e.getName();
+				if(name != null)
+					ctx.getStdOut().print(name + " ");
+				else
+					ctx.getStdOut().print(e.getData().toString());
+				return null;
+			}
+		};
+		TopdownStrategy topDown = new TopdownStrategy(t);
+		Engine<String, Type> e = new StrategicEngine<String, Type>(new UptrCursor(tree), topDown);
+		e.engage();
+
+		ctx.getStdOut().println();
+		ctx.getStdOut().flush();
+	
+		return tree;
+	}
+	
 }

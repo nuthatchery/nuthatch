@@ -14,18 +14,18 @@ layout LAYOUTLIST
 syntax Program = Expr;
 
 syntax Expr
-	= VAR
-	| INT
+	= Var: VAR
+	| Int: INT
 	| "(" Expr ")"
-	| VAR "(" Expr ")"
-	> left Expr "*" Expr
+	| App: VAR "(" Expr ")"
+	> left Mul: Expr "*" Expr
 	> left (
-		Expr "+" Expr
-	  | Expr "-" Expr
+		Add: Expr "+" Expr
+	  | Sub: Expr "-" Expr
 	)
-	> "let" VAR "=" Expr "in" Expr
-	| "let" VAR "(" VAR ")" "=" Expr "in" Expr
-	| "if" Expr "then" Expr "else" Expr 
+	> Let: "let" VAR "=" Expr "in" Expr
+	| LetFun: "let" VAR "(" VAR ")" "=" Expr "in" Expr
+	| If: "if" Expr "then" Expr "else" Expr 
 	;
 
 data Exception = Error(str message, loc location);
