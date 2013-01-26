@@ -1,9 +1,9 @@
 package nuthatch.rascal.adapter;
 
 import nullness.Nullable;
-import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.AbstractTreeCursor;
+
 import org.eclipse.imp.pdb.facts.IList;
 import org.eclipse.imp.pdb.facts.IMap;
 import org.eclipse.imp.pdb.facts.INode;
@@ -17,7 +17,7 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 	public PdbCursor(IValue value) {
 		super(value);
 	}
-	
+
 	protected PdbCursor(PdbCursor src) {
 		super(src);
 	}
@@ -56,11 +56,6 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 	}
 
 	@Override
-	public Type getType() {
-		return getCurrent().getType();
-	}
-
-	@Override
 	public int getNumChildren() {
 		IValue value = getCurrent();
 		if(value instanceof INode) {
@@ -81,18 +76,8 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 	}
 
 	@Override
-	protected IValue getChild(int i) {
-		IValue value = getCurrent();
-		if(value instanceof INode) {
-			return ((INode) value).get(i);
-		}
-		else if(value instanceof IList) {
-			return ((IList) value).get(i);
-		}
-		else if(value instanceof ITuple) {
-			return ((ITuple) value).get(i);
-		}
-		return null;
+	public Type getType() {
+		return getCurrent().getType();
 	}
 
 	@Override
@@ -119,5 +104,20 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		else {
 			throw new UnsupportedOperationException("Equality only supported on PdbCursor");
 		}
+	}
+
+	@Override
+	protected IValue getChild(int i) {
+		IValue value = getCurrent();
+		if(value instanceof INode) {
+			return ((INode) value).get(i);
+		}
+		else if(value instanceof IList) {
+			return ((IList) value).get(i);
+		}
+		else if(value instanceof ITuple) {
+			return ((ITuple) value).get(i);
+		}
+		return null;
 	}
 }

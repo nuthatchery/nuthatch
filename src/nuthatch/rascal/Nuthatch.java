@@ -21,29 +21,7 @@ public class Nuthatch {
 
 	public Nuthatch(IValueFactory vf) {
 		this.vf = vf;
-		
-	}
-	
-	public INode engage(INode n, final IEvaluatorContext ctx) {
-		Transform t = new Transform() {
-			@Override
-			public TreeCursor apply(Engine e) {
-				String name = e.getName();
-				if(name != null)
-					ctx.getStdOut().print(e.getName() + " ");
-				else
-					ctx.getStdOut().print(e.getData().toString());
-				return null;
-			}
-		};
-		TopdownStrategy topDown = new TopdownStrategy(t);
-		Engine<IValue, Type> e = new StrategicEngine<IValue, Type>(new PdbCursor(n), topDown);
-		e.engage();
 
-		ctx.getStdOut().println();
-		ctx.getStdOut().flush();
-	
-		return vf.node("foo");
 	}
 
 	public IConstructor engage(IConstructor tree, final IEvaluatorContext ctx) {
@@ -51,10 +29,11 @@ public class Nuthatch {
 			@Override
 			public TreeCursor apply(Engine e) {
 				String name = e.getName();
-				if(name != null)
+				if(name != null) {
 					ctx.getStdOut().print(name + " ");
-				else
+				} else {
 					ctx.getStdOut().print(e.getData().toString());
+				}
 				return null;
 			}
 		};
@@ -64,8 +43,31 @@ public class Nuthatch {
 
 		ctx.getStdOut().println();
 		ctx.getStdOut().flush();
-	
+
 		return tree;
 	}
-	
+
+	public INode engage(INode n, final IEvaluatorContext ctx) {
+		Transform t = new Transform() {
+			@Override
+			public TreeCursor apply(Engine e) {
+				String name = e.getName();
+				if(name != null) {
+					ctx.getStdOut().print(e.getName() + " ");
+				} else {
+					ctx.getStdOut().print(e.getData().toString());
+				}
+				return null;
+			}
+		};
+		TopdownStrategy topDown = new TopdownStrategy(t);
+		Engine<IValue, Type> e = new StrategicEngine<IValue, Type>(new PdbCursor(n), topDown);
+		e.engage();
+
+		ctx.getStdOut().println();
+		ctx.getStdOut().flush();
+
+		return vf.node("foo");
+	}
+
 }
