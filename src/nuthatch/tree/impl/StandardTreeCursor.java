@@ -34,20 +34,14 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 
 
 	@Override
-	public Type getType() {
-		return getCurrent().getType();
-	}
-
-
-	@Override
 	public int getNumChildren() {
 		return getCurrent().numChildren();
 	}
 
 
 	@Override
-	protected Tree<Value, Type> getChild(int i) {
-		return getCurrent().getBranch(i + 1);
+	public Type getType() {
+		return getCurrent().getType();
 	}
 
 
@@ -77,6 +71,12 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 		else {
 			throw new UnsupportedOperationException("Equality only supported on StandardTreeCursor");
 		}
+	}
+
+
+	@Override
+	protected Tree<Value, Type> getChild(int i) {
+		return getCurrent().getBranch(i + 1);
 	}
 
 }

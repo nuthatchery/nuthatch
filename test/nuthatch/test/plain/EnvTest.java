@@ -19,35 +19,6 @@ public class EnvTest {
 
 
 	@Test
-	public final void unscopedPutGet() {
-		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
-		env.put("foo", foo);
-		env.put("bar", bar);
-
-		assertSubtreeEquals(foo, env.get("foo"));
-		assertSubtreeEquals(bar, env.get("bar"));
-		assertNull(env.get("baz"));
-	}
-
-
-	@Test
-	public final void scopedPutGet() {
-		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
-		env = env.enterScope();
-		env.put("foo", foo);
-		env.put("bar", bar);
-
-		assertSubtreeEquals(foo, env.get("foo"));
-		assertSubtreeEquals(bar, env.get("bar"));
-		assertNull(env.get("baz"));
-		env = env.exitScope();
-		assertNull(env.get("foo"));
-		assertNull(env.get("bar"));
-		assertNull(env.get("baz"));
-	}
-
-
-	@Test
 	public final void doubleScopedPutGet() {
 		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
 		env = env.enterScope();
@@ -80,16 +51,16 @@ public class EnvTest {
 
 
 	@Test
-	public final void transPutGetRollback() {
+	public final void scopedPutGet() {
 		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
-		env.begin();
+		env = env.enterScope();
 		env.put("foo", foo);
 		env.put("bar", bar);
 
 		assertSubtreeEquals(foo, env.get("foo"));
 		assertSubtreeEquals(bar, env.get("bar"));
 		assertNull(env.get("baz"));
-		env.rollback();
+		env = env.exitScope();
 		assertNull(env.get("foo"));
 		assertNull(env.get("bar"));
 		assertNull(env.get("baz"));
@@ -107,6 +78,35 @@ public class EnvTest {
 		assertSubtreeEquals(bar, env.get("bar"));
 		assertNull(env.get("baz"));
 		env.commit();
+		assertSubtreeEquals(foo, env.get("foo"));
+		assertSubtreeEquals(bar, env.get("bar"));
+		assertNull(env.get("baz"));
+	}
+
+
+	@Test
+	public final void transPutGetRollback() {
+		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
+		env.begin();
+		env.put("foo", foo);
+		env.put("bar", bar);
+
+		assertSubtreeEquals(foo, env.get("foo"));
+		assertSubtreeEquals(bar, env.get("bar"));
+		assertNull(env.get("baz"));
+		env.rollback();
+		assertNull(env.get("foo"));
+		assertNull(env.get("bar"));
+		assertNull(env.get("baz"));
+	}
+
+
+	@Test
+	public final void unscopedPutGet() {
+		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
+		env.put("foo", foo);
+		env.put("bar", bar);
+
 		assertSubtreeEquals(foo, env.get("foo"));
 		assertSubtreeEquals(bar, env.get("bar"));
 		assertNull(env.get("baz"));

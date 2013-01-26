@@ -13,35 +13,8 @@ public class PatternFactory<Value, Type> {
 	private static PatternFactory instance;
 
 
-	/**
-	 * Get an instance of the pattern factory.
-	 * 
-	 * @param valueClass
-	 *            Value type, for correct return type
-	 * @param typeClass
-	 *            Type type, for correct return type
-	 * @return The pattern factory
-	 */
-	@SuppressWarnings({ "rawtypes", "cast" })
-	public static <Value, Type> PatternFactory<Value, Type> getInstance(Class<Value> valueClass, Class<Type> typeClass) {
-		if(instance == null)
-			instance = new PatternFactory();
-		return (PatternFactory<Value, Type>) instance;
-	}
-
-
-	public Pattern<Value, Type> nodeName(String name) {
-		return node(name, null, null);
-	}
-
-
-	public Pattern<Value, Type> nodeType(Type type) {
-		return node(null, type, null);
-	}
-
-
-	public Pattern<Value, Type> nodeData(Value data) {
-		return node(null, null, data);
+	public Pattern<Value, Type> and(Pattern<Value, Type> a, Pattern<Value, Type> b) {
+		return new AndPattern<Value, Type>(a, b);
 	}
 
 
@@ -53,6 +26,21 @@ public class PatternFactory<Value, Type> {
 
 	public Pattern<Value, Type> node(String name, Type type, Value data) {
 		return new NodePattern<Value, Type>(name, type, data, null);
+	}
+
+
+	public Pattern<Value, Type> nodeData(Value data) {
+		return node(null, null, data);
+	}
+
+
+	public Pattern<Value, Type> nodeName(String name) {
+		return node(name, null, null);
+	}
+
+
+	public Pattern<Value, Type> nodeType(Type type) {
+		return node(null, type, null);
 	}
 
 
@@ -68,13 +56,8 @@ public class PatternFactory<Value, Type> {
 	}
 
 
-	public Pattern<Value, Type> tree(TreeCursor<Value, Type> tree) {
-		return new TreePattern<Value, Type>(tree);
-	}
-
-
-	public Pattern<Value, Type> and(Pattern<Value, Type> a, Pattern<Value, Type> b) {
-		return new AndPattern<Value, Type>(a, b);
+	public Pattern<Value, Type> not(Pattern<Value, Type> a) {
+		return new NotPattern<Value, Type>(a);
 	}
 
 
@@ -83,8 +66,8 @@ public class PatternFactory<Value, Type> {
 	}
 
 
-	public Pattern<Value, Type> not(Pattern<Value, Type> a) {
-		return new NotPattern<Value, Type>(a);
+	public Pattern<Value, Type> tree(TreeCursor<Value, Type> tree) {
+		return new TreePattern<Value, Type>(tree);
 	}
 
 
@@ -95,5 +78,23 @@ public class PatternFactory<Value, Type> {
 
 	public Pattern<Value, Type> var(String name, Pattern<Value, Type> p) {
 		return new AndPattern<Value, Type>(p, new VarPattern<Value, Type>(name, null));
+	}
+
+
+	/**
+	 * Get an instance of the pattern factory.
+	 * 
+	 * @param valueClass
+	 *            Value type, for correct return type
+	 * @param typeClass
+	 *            Type type, for correct return type
+	 * @return The pattern factory
+	 */
+	@SuppressWarnings({ "rawtypes", "cast" })
+	public static <Value, Type> PatternFactory<Value, Type> getInstance(Class<Value> valueClass, Class<Type> typeClass) {
+		if(instance == null) {
+			instance = new PatternFactory();
+		}
+		return (PatternFactory<Value, Type>) instance;
 	}
 }

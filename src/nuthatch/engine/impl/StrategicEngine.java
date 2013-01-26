@@ -20,6 +20,13 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	private final Strategy<Value, Type> strategy;
 
 
+	public StrategicEngine(Tree<Value, Type> tree, Strategy<Value, Type> strat) {
+		this.rootCursor = new StandardTreeCursor<Value, Type>(tree);
+		this.current = null;
+		this.strategy = strat;
+	}
+
+
 	public StrategicEngine(TreeCursor<Value, Type> cursor, Strategy<Value, Type> strat) {
 		this.rootCursor = cursor;
 		this.current = null;
@@ -27,10 +34,9 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	}
 
 
-	public StrategicEngine(Tree<Value, Type> tree, Strategy<Value, Type> strat) {
-		this.rootCursor = new StandardTreeCursor<Value, Type>(tree);
-		this.current = null;
-		this.strategy = strat;
+	@Override
+	public TreeCursor<Value, Type> copy() {
+		return current.copy();
 	}
 
 
@@ -72,42 +78,6 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
-	public boolean isLeaf() {
-		return current.isAtLeaf();
-	}
-
-
-	@Override
-	public boolean isRoot() {
-		return current.isAtRoot();
-	}
-
-
-	@Override
-	public void split() {
-		@SuppressWarnings("unchecked")
-		StrategicEngine<Value, Type> children[] = new StrategicEngine[current.getNumChildren()];
-
-/*		int i = 0;
-		for(Tree child : current.children()) {
-			children[i++] = clone(child, top, strategy);
-		}
-*/	}
-
-
-	@Override
-	public void transform(Transform<Value, Type> t) {
-		t.apply(this);
-	}
-
-
-	@Override
-	public TreeCursor<Value, Type> copy() {
-		return current.copy();
-	}
-
-
-	@Override
 	public TreeCursor<Value, Type> getBranch(int i) {
 		return current.getBranch(i);
 	}
@@ -120,14 +90,26 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
+	public int getFromBranch() {
+		return current.getFromBranch();
+	}
+
+
+	@Override
+	public int getLastPathElement() {
+		return current.getLastPathElement();
+	}
+
+
+	@Override
 	public String getName() {
 		return current.getName();
 	}
 
 
 	@Override
-	public String getPathId() {
-		return current.getPathId();
+	public int getNumChildren() {
+		return current.getNumChildren();
 	}
 
 
@@ -144,14 +126,8 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
-	public int getLastPathElement() {
-		return current.getLastPathElement();
-	}
-
-
-	@Override
-	public int getFromBranch() {
-		return current.getFromBranch();
+	public String getPathId() {
+		return current.getPathId();
 	}
 
 
@@ -174,6 +150,18 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
+	public boolean hasData() {
+		return current.hasData();
+	}
+
+
+	@Override
+	public boolean hasName() {
+		return current.hasName();
+	}
+
+
+	@Override
 	public boolean isAtLeaf() {
 		return current.isAtLeaf();
 	}
@@ -192,25 +180,37 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
-	public int getNumChildren() {
-		return current.getNumChildren();
+	public boolean isLeaf() {
+		return current.isAtLeaf();
 	}
 
 
 	@Override
-	public boolean hasData() {
-		return current.hasData();
+	public boolean isRoot() {
+		return current.isAtRoot();
 	}
 
 
 	@Override
-	public boolean hasName() {
-		return current.hasName();
-	}
+	public void split() {
+		@SuppressWarnings("unchecked")
+		StrategicEngine<Value, Type> children[] = new StrategicEngine[current.getNumChildren()];
+
+/*		int i = 0;
+		for(Tree child : current.children()) {
+			children[i++] = clone(child, top, strategy);
+		}
+ */	}
 
 
 	@Override
 	public boolean subtreeEquals(TreeCursor<Value, Type> other) {
 		return current.subtreeEquals(other);
+	}
+
+
+	@Override
+	public void transform(Transform<Value, Type> t) {
+		t.apply(this);
 	}
 }

@@ -14,28 +14,30 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 	private final Type type;
 
 
-	public StandardTree(Value data) {
-		this.name = null;
-		this.type = null;
-		this.data = data;
-		this.children = null;
-	}
-
-
 	@SuppressWarnings("unchecked")
 	@SafeVarargs
 	public StandardTree(String name, Type type, Tree<Value, Type>... children) {
 		this.name = name;
 		this.type = type;
 		this.data = null;
-		if(children.length > 0)
+		if(children.length > 0) {
 			this.children = new Tree[children.length];
-		else
+		}
+		else {
 			this.children = null;
+		}
 		for(int i = 0; i < children.length; i++) {
 			ModifiableTree<Value, Type> copy = children[i].copy();
 			this.children[i] = copy;
 		}
+	}
+
+
+	public StandardTree(Value data) {
+		this.name = null;
+		this.type = null;
+		this.data = data;
+		this.children = null;
 	}
 
 
@@ -150,6 +152,17 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 
 
 	@Override
+	public boolean hasBranch(int i) {
+		if(children != null) {
+			return i >= -1 && i <= children.length + 1;
+		}
+		else {
+			return i == 0;
+		}
+	}
+
+
+	@Override
 	public boolean hasParentLinks() {
 		return false;
 	}
@@ -173,12 +186,19 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 	}
 
 
+	public TreeCursor<Value, Type> makeCursor() {
+		return new StandardTreeCursor<Value, Type>(this);
+	}
+
+
 	@Override
 	public int numChildren() {
-		if(children == null)
+		if(children == null) {
 			return 0;
-		else
+		}
+		else {
 			return children.length;
+		}
 	}
 
 
@@ -208,22 +228,6 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 		}
 
 		return s.toString();
-	}
-
-
-	@Override
-	public boolean hasBranch(int i) {
-		if(children != null) {
-			return i >= -1 && i <= children.length + 1;
-		}
-		else {
-			return i == 0;
-		}
-	}
-
-
-	public TreeCursor<Value, Type> makeCursor() {
-		return new StandardTreeCursor<Value, Type>(this);
 	}
 
 }

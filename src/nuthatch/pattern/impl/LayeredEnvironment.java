@@ -36,6 +36,27 @@ public class LayeredEnvironment<T> implements Environment<T> {
 
 
 	@Override
+	public void begin() {
+		if(childCount < 0) {
+			throw new RuntimeException("This environment has been abandoned!");
+		}
+
+		push();
+	}
+
+
+	@Override
+	public void commit() {
+		if(childCount < 0) {
+			throw new RuntimeException("This environment has been abandoned!");
+		}
+
+		Map<String, T> pop = pop();
+		map.putAll(pop);
+	}
+
+
+	@Override
 	public Environment<T> enterScope() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
@@ -63,37 +84,6 @@ public class LayeredEnvironment<T> implements Environment<T> {
 
 
 	@Override
-	public void begin() {
-		if(childCount < 0) {
-			throw new RuntimeException("This environment has been abandoned!");
-		}
-
-		push();
-	}
-
-
-	@Override
-	public void rollback() {
-		if(childCount < 0) {
-			throw new RuntimeException("This environment has been abandoned!");
-		}
-
-		map = pop();
-	}
-
-
-	@Override
-	public void commit() {
-		if(childCount < 0) {
-			throw new RuntimeException("This environment has been abandoned!");
-		}
-
-		Map<String, T> pop = pop();
-		map.putAll(pop);
-	}
-
-
-	@Override
 	public T get(String var) {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
@@ -116,52 +106,6 @@ public class LayeredEnvironment<T> implements Environment<T> {
 			}
 		}
 		return null;
-	}
-
-
-	@Override
-	public void put(String var, T val) {
-		if(childCount < 0) {
-			throw new RuntimeException("This environment has been abandoned!");
-		}
-		else if(childCount > 0) {
-			throw new ConcurrentModificationException("Tried to change an environment that has children");
-		}
-
-		map.put(var, val);
-	}
-
-
-	@Override
-	public Iterator<String> iterator() {
-		if(childCount < 0) {
-			throw new RuntimeException("This environment has been abandoned!");
-		}
-
-		throw new UnsupportedOperationException();
-	}
-
-
-	protected void push() {
-		if(stack == null) {
-			stack = new ArrayList<Map<String, T>>();
-		}
-		stack.add(map);
-		map = new HashMap<String, T>();
-	}
-
-
-	protected Map<String, T> pop() {
-		if(stack == null) {
-			throw new RuntimeException("Trying to end a transaction before any was started");
-		}
-		else if(stack.isEmpty()) {
-			throw new RuntimeException("Trying to end a transaction while none were active");
-		}
-		else {
-			return stack.remove(stack.size() - 1);
-		}
-
 	}
 
 
@@ -206,5 +150,61 @@ public class LayeredEnvironment<T> implements Environment<T> {
 			}
 		}
 		return true;
+	}
+
+
+	@Override
+	public Iterator<String> iterator() {
+		if(childCount < 0) {
+			throw new RuntimeException("This environment has been abandoned!");
+		}
+
+		throw new UnsupportedOperationException();
+	}
+
+
+	@Override
+	public void put(String var, T val) {
+		if(childCount < 0) {
+			throw new RuntimeException("This environment has been abandoned!");
+		}
+		else if(childCount > 0) {
+			throw new ConcurrentModificationException("Tried to change an environment that has children");
+		}
+
+		map.put(var, val);
+	}
+
+
+	@Override
+	public void rollback() {
+		if(childCount < 0) {
+			throw new RuntimeException("This environment has been abandoned!");
+		}
+
+		map = pop();
+	}
+
+
+	protected Map<String, T> pop() {
+		if(stack == null) {
+			throw new RuntimeException("Trying to end a transaction before any was started");
+		}
+		else if(stack.isEmpty()) {
+			throw new RuntimeException("Trying to end a transaction while none were active");
+		}
+		else {
+			return stack.remove(stack.size() - 1);
+		}
+
+	}
+
+
+	protected void push() {
+		if(stack == null) {
+			stack = new ArrayList<Map<String, T>>();
+		}
+		stack.add(map);
+		map = new HashMap<String, T>();
 	}
 }

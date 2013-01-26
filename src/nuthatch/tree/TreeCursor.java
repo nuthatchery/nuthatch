@@ -51,6 +51,22 @@ public interface TreeCursor<Value, Type> {
 
 
 	/**
+	 * Get the branch this node was entered from.
+	 * 
+	 * @return Number of the branch back to the previous node
+	 */
+	int getFromBranch();
+
+
+	/**
+	 * Get the last element of the path.
+	 * 
+	 * @return getPath().getElement(getPath().size()-1)
+	 */
+	int getLastPathElement();
+
+
+	/**
 	 * Get the (constructor) name of this node.
 	 * 
 	 * @return The name
@@ -60,13 +76,11 @@ public interface TreeCursor<Value, Type> {
 
 
 	/**
-	 * Get a hopefully unique string identifier for this node.
+	 * Get the number of children of this node.
 	 * 
-	 * The identifier is likely to be unique, but you can't rely on this.
-	 * 
-	 * @return A string which identifies this node
+	 * @return The number of children
 	 */
-	String getPathId();
+	int getNumChildren();
 
 
 	/**
@@ -89,19 +103,13 @@ public interface TreeCursor<Value, Type> {
 
 
 	/**
-	 * Get the last element of the path.
+	 * Get a hopefully unique string identifier for this node.
 	 * 
-	 * @return getPath().getElement(getPath().size()-1)
-	 */
-	int getLastPathElement();
-
-
-	/**
-	 * Get the branch this node was entered from.
+	 * The identifier is likely to be unique, but you can't rely on this.
 	 * 
-	 * @return Number of the branch back to the previous node
+	 * @return A string which identifies this node
 	 */
-	int getFromBranch();
+	String getPathId();
 
 
 	/**
@@ -186,12 +194,4 @@ public interface TreeCursor<Value, Type> {
 	 *             supports comparison with the same type
 	 */
 	boolean subtreeEquals(@Nullable TreeCursor<Value, Type> other);
-
-
-	/**
-	 * Get the number of children of this node.
-	 * 
-	 * @return The number of children
-	 */
-	int getNumChildren();
 }

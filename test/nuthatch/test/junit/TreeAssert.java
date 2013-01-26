@@ -8,13 +8,13 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 public class TreeAssert {
-	public static <V, T> void assertSubtreeEquals(TreeCursor<V, T> a, TreeCursor<V, T> b) {
-		assertThat(a, isSubtreeEquals(b));
+	public static <V, T> void assertSubtreeEquals(String message, TreeCursor<V, T> a, TreeCursor<V, T> b) {
+		assertThat(message, a, isSubtreeEquals(b));
 	}
 
 
-	public static <V, T> void assertSubtreeEquals(String message, TreeCursor<V, T> a, TreeCursor<V, T> b) {
-		assertThat(message, a, isSubtreeEquals(b));
+	public static <V, T> void assertSubtreeEquals(TreeCursor<V, T> a, TreeCursor<V, T> b) {
+		assertThat(a, isSubtreeEquals(b));
 	}
 
 
@@ -32,20 +32,22 @@ public class TreeAssert {
 		}
 
 
-		@SuppressWarnings("unchecked")
-		@Override
-		public boolean matches(Object item) {
-			if(item instanceof TreeCursor)
-				return tree.subtreeEquals((TreeCursor<V, T>) item);
-			else
-				return false;
-		}
-
-
 		@Override
 		public void describeTo(Description description) {
 			// TODO Auto-generated method stub
 
+		}
+
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public boolean matches(Object item) {
+			if(item instanceof TreeCursor) {
+				return tree.subtreeEquals((TreeCursor<V, T>) item);
+			}
+			else {
+				return false;
+			}
 		}
 
 	}

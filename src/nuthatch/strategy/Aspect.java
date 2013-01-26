@@ -7,12 +7,6 @@ public abstract class Aspect<Value, Type> implements Strategy<Value, Type> {
 	private final Strategy<Value, Type> strategy;
 
 
-	public abstract int visitBefore(Engine<Value, Type> eng);
-
-
-	public abstract int visitAfter(Engine<Value, Type> eng);
-
-
 	public Aspect(Strategy<Value, Type> s) {
 		strategy = s;
 	}
@@ -35,5 +29,11 @@ public abstract class Aspect<Value, Type> implements Strategy<Value, Type> {
 			return goBefore;
 		}
 	}
+
+
+	public abstract int visitAfter(Engine<Value, Type> eng);
+
+
+	public abstract int visitBefore(Engine<Value, Type> eng);
 
 }

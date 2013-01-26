@@ -1,13 +1,16 @@
 package nuthatch.tree;
 
 public interface Path {
+	Path copy();
+
+
+	int getElement(int i);
+
+
 	int popElement();
 
 
 	void pushElement(int i);
-
-
-	int getElement(int i);
 
 
 	int size();
@@ -15,8 +18,5 @@ public interface Path {
 
 	@Override
 	String toString();
-
-
-	Path copy();
 
 }

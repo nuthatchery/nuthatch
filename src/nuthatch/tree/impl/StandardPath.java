@@ -18,14 +18,8 @@ public class StandardPath extends ArrayList<Integer> implements Path {
 
 
 	@Override
-	public int popElement() {
-		return remove(size() - 1);
-	}
-
-
-	@Override
-	public void pushElement(int i) {
-		add(i);
+	public Path copy() {
+		return new StandardPath(this);
 	}
 
 
@@ -36,8 +30,14 @@ public class StandardPath extends ArrayList<Integer> implements Path {
 
 
 	@Override
-	public Path copy() {
-		return new StandardPath(this);
+	public int popElement() {
+		return remove(size() - 1);
+	}
+
+
+	@Override
+	public void pushElement(int i) {
+		add(i);
 	}
 
 

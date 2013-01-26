@@ -4,6 +4,19 @@ import java.util.Iterator;
 
 public interface Environment<T> extends Iterable<String> {
 	/**
+	 * Begin a transaction.
+	 * 
+	 */
+	void begin();
+
+
+	/**
+	 * Commit all bindings entered since the last begin().
+	 */
+	void commit();
+
+
+	/**
 	 * Enter a new scope.
 	 * 
 	 * May return the same or a different object.
@@ -24,25 +37,6 @@ public interface Environment<T> extends Iterable<String> {
 
 
 	/**
-	 * Begin a transaction.
-	 * 
-	 */
-	void begin();
-
-
-	/**
-	 * Rollback all bindings entered since the last begin().
-	 */
-	void rollback();
-
-
-	/**
-	 * Commit all bindings entered since the last begin().
-	 */
-	void commit();
-
-
-	/**
 	 * Lookup a variable.
 	 * 
 	 * @param var
@@ -50,6 +44,27 @@ public interface Environment<T> extends Iterable<String> {
 	 * @return The value, or null if not found
 	 */
 	T get(String var);
+
+
+	/**
+	 * @return True if no variables are bound in any scope
+	 */
+	boolean isEmpty();
+
+
+	/**
+	 * @return True if no variables are bound in current scope
+	 */
+	boolean isEmptyScope();
+
+
+	/**
+	 * Iterate over all the variable names in the environment.
+	 * 
+	 * @see java.lang.Iterable#iterator()
+	 */
+	@Override
+	Iterator<String> iterator();
 
 
 	/**
@@ -64,22 +79,7 @@ public interface Environment<T> extends Iterable<String> {
 
 
 	/**
-	 * Iterate over all the variable names in the environment.
-	 * 
-	 * @see java.lang.Iterable#iterator()
+	 * Rollback all bindings entered since the last begin().
 	 */
-	@Override
-	Iterator<String> iterator();
-
-
-	/**
-	 * @return True if no variables are bound in any scope
-	 */
-	boolean isEmpty();
-
-
-	/**
-	 * @return True if no variables are bound in current scope
-	 */
-	boolean isEmptyScope();
+	void rollback();
 }

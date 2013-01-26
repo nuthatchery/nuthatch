@@ -23,9 +23,25 @@ public class PatternTest {
 	Environment<TreeCursor<String, String>> env;
 
 
-	@Before
-	public void setup() {
-		env = EnvironmentFactory.env();
+	@Test
+	public void matchAnd() {
+		Pattern<String, String> pat = pf.and(pf.nodeName("bar"), pf.children(pf.nodeName("foo")));
+
+		assertFalse(pat.match(foo, env));
+		assertTrue(pat.match(bar, env));
+		assertFalse(pat.match(baz, env));
+		assertTrue(env.isEmpty());
+
+	}
+
+
+	@Test
+	public void matchChildren() {
+		assertTrue(pf.children().match(foo, env));
+		assertTrue(pf.children(pf.nodeName("foo")).match(bar, env));
+		assertTrue(pf.children(pf.nodeName("foo"), pf.nodeWithChildren("bar", pf.nodeName("foo"))).match(baz, env));
+
+		assertTrue(env.isEmpty());
 	}
 
 
@@ -36,27 +52,6 @@ public class PatternTest {
 		assertTrue(pat.match(foo, env));
 		assertFalse(pat.match(bar, env));
 		assertFalse(pat.match(baz, env));
-		assertTrue(env.isEmpty());
-	}
-
-
-	@Test
-	public void matchType() {
-		Pattern<String, String> pat = pf.nodeType("");
-
-		assertTrue(pat.match(foo, env));
-		assertTrue(pat.match(bar, env));
-		assertTrue(pat.match(baz, env));
-		assertTrue(env.isEmpty());
-	}
-
-
-	@Test
-	public void matchChildren() {
-		assertTrue(pf.children().match(foo, env));
-		assertTrue(pf.children(pf.nodeName("foo")).match(bar, env));
-		assertTrue(pf.children(pf.nodeName("foo"), pf.nodeWithChildren("bar", pf.nodeName("foo"))).match(baz, env));
-
 		assertTrue(env.isEmpty());
 	}
 
@@ -74,13 +69,18 @@ public class PatternTest {
 
 
 	@Test
-	public void matchAnd() {
-		Pattern<String, String> pat = pf.and(pf.nodeName("bar"), pf.children(pf.nodeName("foo")));
+	public void matchType() {
+		Pattern<String, String> pat = pf.nodeType("");
 
-		assertFalse(pat.match(foo, env));
+		assertTrue(pat.match(foo, env));
 		assertTrue(pat.match(bar, env));
-		assertFalse(pat.match(baz, env));
+		assertTrue(pat.match(baz, env));
 		assertTrue(env.isEmpty());
+	}
 
+
+	@Before
+	public void setup() {
+		env = EnvironmentFactory.env();
 	}
 }

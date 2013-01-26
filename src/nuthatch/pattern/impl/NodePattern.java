@@ -27,20 +27,25 @@ public class NodePattern<Value, Type> extends AbstractPattern<Value, Type> {
 
 	@Override
 	public boolean doMatch(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
-		if(name != null && !name.equals(tree.getName()))
+		if(name != null && !name.equals(tree.getName())) {
 			return false;
-		if(type != null && !type.equals(tree.getType()))
+		}
+		if(type != null && !type.equals(tree.getType())) {
 			return false;
-		if(data != null && !data.equals(tree.getData()))
+		}
+		if(data != null && !data.equals(tree.getData())) {
 			return false;
+		}
 		if(children != null) {
-			if(tree.getNumChildren() != children.length)
+			if(tree.getNumChildren() != children.length) {
 				return false;
+			}
 			for(int i = 0; i < children.length; i++) {
 				TreeCursor<Value, Type> copy = tree.copy();
 				copy.go(i + 1);
-				if(!children[i].match(copy, env))
+				if(!children[i].match(copy, env)) {
 					return false;
+				}
 			}
 		}
 		return true;

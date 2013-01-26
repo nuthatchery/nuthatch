@@ -14,13 +14,6 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	private int from = 0;
 
 
-	protected AbstractTreeCursor(T tree) {
-		this.current = tree;
-		this.stack = new ArrayList<T>();
-		this.path = new StandardPath();
-	}
-
-
 	protected AbstractTreeCursor(AbstractTreeCursor<Value, Type, T> src) {
 		this.current = src.current;
 		this.stack = new ArrayList<T>(src.stack);
@@ -28,9 +21,22 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	}
 
 
+	protected AbstractTreeCursor(T tree) {
+		this.current = tree;
+		this.stack = new ArrayList<T>();
+		this.path = new StandardPath();
+	}
+
+
 	@Override
 	public TreeCursor<Value, Type> getBranch(int i) {
 		return copy().go(i);
+	}
+
+
+	@Override
+	public int getFromBranch() {
+		return from;
 	}
 
 
@@ -46,12 +52,6 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 
 	@Override
-	public String getPathId() {
-		return path.toString();
-	}
-
-
-	@Override
 	public Path getPath() {
 		return path.copy();
 	}
@@ -60,6 +60,12 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	@Override
 	public int getPathElement(int i) {
 		return path.getElement(i);
+	}
+
+
+	@Override
+	public String getPathId() {
+		return path.toString();
 	}
 
 
@@ -113,16 +119,6 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	}
 
 
-	/**
-	 * Return the child at index i.
-	 * 
-	 * @param i
-	 *            A zero-based child index
-	 * @return The child at i
-	 */
-	protected abstract T getChild(int i);
-
-
 	@Override
 	public boolean isAtLeaf() {
 		return getNumChildren() == 0;
@@ -141,10 +137,14 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	}
 
 
-	@Override
-	public int getFromBranch() {
-		return from;
-	}
+	/**
+	 * Return the child at index i.
+	 * 
+	 * @param i
+	 *            A zero-based child index
+	 * @return The child at i
+	 */
+	protected abstract T getChild(int i);
 
 
 	protected T getCurrent() {
