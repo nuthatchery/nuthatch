@@ -47,7 +47,6 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 	@Override
 	public TreeCursor<Value, Type> copy() {
-		// TODO: needs to patch current and original
 		return current.copy();
 	}
 
