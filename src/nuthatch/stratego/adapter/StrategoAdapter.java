@@ -80,8 +80,9 @@ public class StrategoAdapter {
 	public static IStrategoTerm parseFile(String inputFile, String startSymbol, String parseTable) throws FileNotFoundException, IOException, InvalidParseTableException, TokenExpectedException, BadTokenException, ParseException, SGLRException {
 		SGLR sglr = new SGLR(new TreeBuilder(new TermTreeFactory(
 					ptm.getFactory())), ptm.loadFromFile(parseTable));
-		Reader in = new FileReader(inputFile);
-		return (IStrategoTerm) sglr.parse(in, inputFile, startSymbol);
+		try(Reader in = new FileReader(inputFile)) {
+			return (IStrategoTerm) sglr.parse(in, inputFile, startSymbol);
+		}
 	}
 
 	/**
