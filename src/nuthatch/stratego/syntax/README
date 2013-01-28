@@ -1,0 +1,15 @@
+This directory contains the relevant syntax definitions necessary
+to parse Stratego term signature modules, such as those generated
+by the 'rtg2sig' tool.
+
+The syntax definitions are from Stratego/XT 0.17.
+
+You need the StrategoXT tool chain installed in order to compile
+the syntax definitions into a parse table. This is only necessary
+if you actually change the definitions, since a compiled parse table
+is included here.
+
+For more information about Stratego, visit
+
+    http://www.strategoxt.org/
+
