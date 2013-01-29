@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nuthatch.engine.Engine;
-import nuthatch.engine.impl.StrategicEngine;
+import nuthatch.engine.impl.SimpleEngine;
 import nuthatch.library.strategies.BottomupStrategy;
 import nuthatch.library.strategies.InorderStrategy;
 import nuthatch.library.strategies.TopdownStrategy;
@@ -29,12 +29,12 @@ public class Main {
 		};
 		TopdownStrategy topDown = new TopdownStrategy(t);
 		System.out.print("TopDown: ");
-		new StrategicEngine<String, String>(tree, topDown).engage();
+		new SimpleEngine<String, String>(tree, topDown).engage();
 		System.out.println();
 
 		BottomupStrategy bottomup = new BottomupStrategy(t);
 		System.out.print("BottomUp: ");
-		new StrategicEngine<String, String>(tree, bottomup).engage();
+		new SimpleEngine<String, String>(tree, bottomup).engage();
 		System.out.println();
 
 		InorderStrategy inorder = new InorderStrategy(new Transform() {
@@ -53,7 +53,7 @@ public class Main {
 			}
 		});
 		System.out.print("InOrder: ");
-		new StrategicEngine<String, String>(tree, inorder).engage();
+		new SimpleEngine<String, String>(tree, inorder).engage();
 		System.out.println();
 
 		Strategy toTikz = new VisitStrategy(new Transform() {
@@ -91,7 +91,7 @@ public class Main {
 		System.out.println("    level distance=0.5cm, growth parent anchor=south");
 		System.out.println("]");
 		System.out.print("\\");
-		new StrategicEngine<String, String>(tree, toTikz).engage();
+		new SimpleEngine<String, String>(tree, toTikz).engage();
 		System.out.println(";");
 
 		final List<String> visits = new ArrayList<String>();
@@ -103,7 +103,7 @@ public class Main {
 				return null;
 			}
 		};
-		new StrategicEngine<String, String>(tree, new Before(new InorderStrategy(traceVisit, traceVisit, traceVisit)) {
+		new SimpleEngine<String, String>(tree, new Before(new InorderStrategy(traceVisit, traceVisit, traceVisit)) {
 			@Override
 			public int visitBefore(Engine e) {
 				TreeCursor<String, String> prev = e.getBranch(e.from());
@@ -157,9 +157,9 @@ public class Main {
 					return null;
 			}
 		};
-		Strategy<String, String> replace = new BottomupStrategy<>(u);
+		Strategy<SimpleEngine<String, String>> replace = new BottomupStrategy<>(u);
 		System.out.print("TopDownReplace: ");
-		StrategicEngine<String, String> engine = new StrategicEngine<String, String>(tree, replace);
+		SimpleEngine<String, String> engine = new SimpleEngine<String, String>(tree, replace);
 		engine.engage();
 		System.out.println(engine.treeToString());
 

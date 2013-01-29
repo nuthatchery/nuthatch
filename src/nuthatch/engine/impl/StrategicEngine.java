@@ -12,7 +12,7 @@ import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.StandardPath;
 import nuthatch.tree.impl.StandardTreeCursor;
 
-public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
+public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Value, Type, E>> implements Engine<Value, Type> {
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
@@ -26,23 +26,23 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 	 * If replaceDepth == -1, then current == original
 	 */
 	private TreeCursor<Value, Type> current;
-	private final Strategy<Value, Type> strategy;
+	private final Strategy<StrategicEngine<Value, Type, E>> strategy;
 
 	private final Path path;
 
 
-	public StrategicEngine(Tree<Value, Type> tree, Strategy<Value, Type> strat) {
+	public StrategicEngine(Tree<Value, Type> tree, Strategy<E> strat) {
 		this.rootCursor = new StandardTreeCursor<>(tree);
 		this.current = null;
-		this.strategy = strat;
+		this.strategy = (Strategy<StrategicEngine<Value, Type, E>>) strat;
 		this.path = new StandardPath();
 	}
 
 
-	public StrategicEngine(TreeCursor<Value, Type> cursor, Strategy<Value, Type> strat) {
+	public StrategicEngine(TreeCursor<Value, Type> cursor, Strategy<E> strat) {
 		this.rootCursor = cursor;
 		this.current = null;
-		this.strategy = strat;
+		this.strategy = (Strategy<StrategicEngine<Value, Type, E>>) strat;
 		this.path = new StandardPath();
 	}
 
@@ -231,8 +231,8 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 	@Override
 	public void split() {
-		@SuppressWarnings("unchecked")
-		StrategicEngine<Value, Type> children[] = new StrategicEngine[current.getNumChildren()];
+		// @SuppressWarnings("unchecked")
+		// StrategicEngine<Value, Type> children[] = new StrategicEngine[current.getNumChildren()];
 
 /*		int i = 0;
 		for(Tree child : current.children()) {

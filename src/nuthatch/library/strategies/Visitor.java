@@ -1,9 +1,10 @@
 package nuthatch.library.strategies;
 
 import nuthatch.engine.Engine;
-import nuthatch.strategy.AbstractStrategy;
+import nuthatch.strategy.Strategy;
+import nuthatch.tree.Tree;
 
-public class Visitor<Value, Type> extends AbstractStrategy<Value, Type> {
+public class Visitor<E extends Engine<?, ?>> implements Strategy<E> {
 
 	/**
 	 * This method is called when a node is entered.
@@ -13,7 +14,7 @@ public class Visitor<Value, Type> extends AbstractStrategy<Value, Type> {
 	 * @param eng
 	 *            The engine
 	 */
-	public void onEntry(Engine<Value, Type> eng) {
+	public void onEntry(E eng) {
 	}
 
 
@@ -27,7 +28,7 @@ public class Visitor<Value, Type> extends AbstractStrategy<Value, Type> {
 	 * @param child
 	 *            The branch number of the child we are going to visit
 	 */
-	public void beforeChild(Engine<Value, Type> eng, int child) {
+	public void beforeChild(E eng, int child) {
 	}
 
 
@@ -41,7 +42,7 @@ public class Visitor<Value, Type> extends AbstractStrategy<Value, Type> {
 	 * @param child
 	 *            The branch number of the child we just visited
 	 */
-	public void afterChild(Engine<Value, Type> eng, int child) {
+	public void afterChild(E eng, int child) {
 	}
 
 
@@ -52,21 +53,21 @@ public class Visitor<Value, Type> extends AbstractStrategy<Value, Type> {
 	 * 
 	 * @param eng
 	 */
-	public void onExit(Engine<Value, Type> eng) {
+	public void onExit(E eng) {
 	}
 
 
 	@Override
-	public final int visit(Engine<Value, Type> eng) {
+	public final int visit(E eng) {
 		if(eng.isLeaf()) {
 			onEntry(eng);
 			onExit(eng);
 		}
-		else if(eng.from(PARENT)) {
+		else if(eng.from(Tree.PARENT)) {
 			onEntry(eng);
 			beforeChild(eng, eng.from() + 1);
 		}
-		else if(eng.from(LAST)) {
+		else if(eng.from(Tree.LAST)) {
 			afterChild(eng, eng.from());
 			onExit(eng);
 		}

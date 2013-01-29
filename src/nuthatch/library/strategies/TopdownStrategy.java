@@ -4,7 +4,7 @@ import nuthatch.engine.Engine;
 import nuthatch.strategy.AbstractStrategy;
 import nuthatch.strategy.Transform;
 
-public class TopdownStrategy<Value, Type> extends AbstractStrategy<Value, Type> {
+public class TopdownStrategy<Value, Type, E extends Engine<Value, Type>> extends AbstractStrategy<Value, Type, E> {
 	private final Transform<Value, Type> transform;
 
 
@@ -14,7 +14,7 @@ public class TopdownStrategy<Value, Type> extends AbstractStrategy<Value, Type> 
 
 
 	@Override
-	public int visit(Engine<Value, Type> e) {
+	public int visit(E e) {
 		if(e.from(PARENT)) {
 			applyTransform(transform, e);
 		}

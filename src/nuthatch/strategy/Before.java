@@ -2,15 +2,15 @@ package nuthatch.strategy;
 
 import nuthatch.engine.Engine;
 
-public abstract class Before<Value, Type> extends Aspect<Value, Type> {
+public abstract class Before<E extends Engine<?, ?>> extends Aspect<E> {
 
-	public Before(Strategy<Value, Type> s) {
+	public Before(Strategy<E> s) {
 		super(s);
 	}
 
 
 	@Override
-	public int visitAfter(Engine<Value, Type> eng) {
+	public int visitAfter(E eng) {
 		return PROCEED;
 	}
 
