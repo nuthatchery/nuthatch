@@ -44,7 +44,7 @@ public class StrategoSignatures {
 
 	private static ParseTable getSignaturesParseTable() throws IOException, InvalidParseTableException  {
 		if(signaturesParseTable == null) {
-			InputStream stream = StrategoSignatures.class.getResourceAsStream("Stratego-Signatures.tbl");
+			InputStream stream = StrategoSignatures.class.getResourceAsStream("sdf/Stratego-Signatures.tbl");
 			signaturesParseTable = StrategoAdapter.getParseTableManager().loadFromStream(stream);
 		}
 		
