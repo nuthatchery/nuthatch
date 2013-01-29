@@ -3,6 +3,8 @@ package nuthatch.stratego.adapter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 import nuthatch.tree.TreeCursor;
@@ -211,6 +213,28 @@ public class StrategoAdapter {
 		SGLR sglr = new SGLR(new TreeBuilder(new TermTreeFactory(
 					ptm.getFactory())), parseTable);
 		return (IStrategoTerm) sglr.parse(input, fileName, startSymbol);
+	}
+
+	/**
+	 * Parse a stream.
+	 * 
+	 * @param input The input stream
+	 * @param fileName The file name, for error reporting, or null
+	 * @param startSymbol The start symbol, or null
+	 * @param parseTable Path of the parse table
+	 * @return An imploded AST of the file
+	 * @throws FileNotFoundException if the parse table wasn't found
+	 * @throws IOException on error reading parse table
+	 * @throws InvalidParseTableException in case of an invalid parse table
+	 * @throws TokenExpectedException on parse error
+	 * @throws BadTokenException on parse error
+	 * @throws ParseException on parse error
+	 * @throws SGLRException on parse error
+	 */
+	public static IStrategoTerm parseStream(InputStream input, String fileName, String startSymbol, ParseTable parseTable) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException {
+		SGLR sglr = new SGLR(new TreeBuilder(new TermTreeFactory(
+					ptm.getFactory())), parseTable);
+		return (IStrategoTerm) sglr.parse(new InputStreamReader(input), fileName, startSymbol);
 	}
 
 }

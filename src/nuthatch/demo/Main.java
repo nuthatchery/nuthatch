@@ -40,7 +40,7 @@ public class Main {
 			TermCursor tree = StrategoAdapter.termToTree(term);
 			TermPatternFactory pf = TermPatternFactory.getInstance();
 			final Pattern<IStrategoTerm, Integer> idPat = pf.appl("Id", pf.string("foo"));
-
+			
 			Visitor<IStrategoTerm, Integer> visitor = new Visitor<IStrategoTerm, Integer>() {
 				@Override
 				public void onEntry(Engine<IStrategoTerm, Integer> e) {
@@ -84,6 +84,6 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		StrategoSignatures.sig2java(StrategoSignatures.parseSignatureFile("/home/anya/magnolia/workspace/java-front/syntax/src/Java-15.sig"));
+		StrategoSignatures.sig2java(StrategoSignatures.parseSignatureFile("/home/anya/magnolia/workspace/java-front/syntax/src/Java-15.sig"), "nuthatch.stratego.javafront", "Java15");
 	}
 }
