@@ -4,6 +4,8 @@ import nuthatch.engine.Engine;
 import nuthatch.engine.impl.StrategicEngine;
 import nuthatch.library.strategies.Visitor;
 import nuthatch.stratego.adapter.StrategoAdapter;
+import nuthatch.stratego.adapter.TermEngine;
+
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 /**
@@ -23,9 +25,9 @@ public class TermPrinter {
 	 */
 	public static String termToString(IStrategoTerm term) {
 		final StringBuilder builder = new StringBuilder();
-		Visitor<IStrategoTerm, Integer> visitor = new Visitor<IStrategoTerm, Integer>() {
+		Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
 			@Override
-			public void onEntry(Engine<IStrategoTerm, Integer> e) {
+			public void onEntry(TermEngine e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					builder.append("[");
 				}
@@ -45,7 +47,7 @@ public class TermPrinter {
 				}
 			}
 			@Override
-			public void onExit(Engine<IStrategoTerm, Integer> e) {
+			public void onExit(TermEngine e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					builder.append("]");
 				}
@@ -57,13 +59,13 @@ public class TermPrinter {
 				}
 			}
 			@Override
-			public void beforeChild(Engine<IStrategoTerm, Integer> e, int i) {
+			public void beforeChild(TermEngine e, int i) {
 				if(i != 1) {
 					builder.append(",");
 				}
 			}
 		};
-		Engine<IStrategoTerm, Integer> e = new StrategicEngine<IStrategoTerm, Integer>(StrategoAdapter.termToTree(term), visitor);
+		Engine<IStrategoTerm, Integer> e = new TermEngine(StrategoAdapter.termToTree(term), visitor);
 		long t0 = System.currentTimeMillis();
 		e.engage();
 		System.err.println("Engine finished in " + (System.currentTimeMillis()-t0) + "ms");

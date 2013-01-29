@@ -14,6 +14,7 @@ import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermCursor;
+import nuthatch.stratego.adapter.TermEngine;
 import nuthatch.stratego.pattern.TermPatternFactory;
 import static nuthatch.stratego.syntax.StrategoPatterns.*;
 import nuthatch.tree.TreeCursor;
@@ -61,9 +62,9 @@ public class StrategoSignatures {
 		final Pattern<IStrategoTerm, Integer> funTypePat = FunType(pf.var("params"), pf.var("retType"));
 		final Set<String> methods = new HashSet<String>(); 
 
-		Visitor<IStrategoTerm, Integer> visitor = new Visitor<IStrategoTerm, Integer>() {
+		Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
 			@Override
-			public void onEntry(Engine<IStrategoTerm, Integer> e) {
+			public void onEntry(TermEngine e) {
 				StringBuilder builder = new StringBuilder();
 				Environment<TreeCursor<IStrategoTerm, Integer>> env = EnvironmentFactory.env();
 				if(opDeclPat.match(e, env)) {
@@ -101,13 +102,13 @@ public class StrategoSignatures {
 				}
 			}
 			@Override
-			public void onExit(Engine<IStrategoTerm, Integer> e) {
+			public void onExit(TermEngine e) {
 			}
 			@Override
-			public void beforeChild(Engine<IStrategoTerm, Integer> e, int i) {
+			public void beforeChild(TermEngine e, int i) {
 			}
 		};
-		Engine<IStrategoTerm, Integer> e = new StrategicEngine<IStrategoTerm, Integer>(tree, visitor);
+		Engine<IStrategoTerm, Integer> e = new TermEngine(tree, visitor);
 		e.engage();
 
 		String[] array = methods.toArray(new String[methods.size()]);

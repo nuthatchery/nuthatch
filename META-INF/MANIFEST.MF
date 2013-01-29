@@ -4,5 +4,6 @@ Bundle-Name: nuthatch_stratego
 Bundle-SymbolicName: nuthatch_stratego
 Bundle-Version: 1.0.0
 Require-Bundle: org.spoofax.jsglr;bundle-version="0.3.0",
- org.spoofax.terms;bundle-version="1.0.0"
+ org.spoofax.terms;bundle-version="1.0.0",
+ nuthatch;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

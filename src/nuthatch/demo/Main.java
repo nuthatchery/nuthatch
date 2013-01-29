@@ -13,6 +13,7 @@ import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermCursor;
+import nuthatch.stratego.adapter.TermEngine;
 import nuthatch.stratego.pattern.TermPatternFactory;
 import nuthatch.stratego.syntax.StrategoSignatures;
 import nuthatch.strategy.Transform;
@@ -41,22 +42,16 @@ public class Main {
 			TermPatternFactory pf = TermPatternFactory.getInstance();
 			final Pattern<IStrategoTerm, Integer> idPat = pf.appl("Id", pf.string("foo"));
 			
-			Visitor<IStrategoTerm, Integer> visitor = new Visitor<IStrategoTerm, Integer>() {
+			Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
 				@Override
-				public void onEntry(Engine<IStrategoTerm, Integer> e) {
+				public void onEntry(TermEngine e) {
 					Environment<TreeCursor<IStrategoTerm, Integer>> env = EnvironmentFactory.env();
 					if(idPat.match(e, env)) {
 						System.out.println("match!");
 					}
 				}
-				@Override
-				public void onExit(Engine<IStrategoTerm, Integer> e) {
-				}
-				@Override
-				public void beforeChild(Engine<IStrategoTerm, Integer> e, int i) {
-				}
 			};
-			Engine<IStrategoTerm, Integer> e = new StrategicEngine<IStrategoTerm, Integer>(tree, visitor);
+			Engine<IStrategoTerm, Integer> e = new TermEngine(tree, visitor);
 			e.engage();
 			
 			
