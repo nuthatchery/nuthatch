@@ -19,7 +19,7 @@ Stratego-Signatures.def: $(SDFFILES)
 %.str: %.rtg
 	rtg2sig -i $< --module $* -o $@
 
-StrategoPatterns.java: Stratego-Signatures.str
+../StrategoPatterns.java: Stratego-Signatures.str
 	CLASSPATH=.:$$HOME/git/nuthatch-stratego/bin:$$HOME/git/nuthatch/bin:$$HOME/magnolia/workspace/org.spoofax.terms/bin/:$$HOME/magnolia/workspace/org.spoofax.jsglr/bin java nuthatch.util.Sig2Java -i $< -o $@ -p nuthatch.stratego.syntax
 
 clean:
