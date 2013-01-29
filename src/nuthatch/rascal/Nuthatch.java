@@ -1,7 +1,7 @@
 package nuthatch.rascal;
 
 import nuthatch.engine.Engine;
-import nuthatch.engine.impl.StrategicEngine;
+import nuthatch.engine.impl.SimpleEngine;
 import nuthatch.library.strategies.TopdownStrategy;
 import nuthatch.rascal.adapter.PdbCursor;
 import nuthatch.rascal.adapter.UptrCursor;
@@ -25,9 +25,9 @@ public class Nuthatch {
 	}
 
 	public IConstructor engage(IConstructor tree, final IEvaluatorContext ctx) {
-		Transform t = new Transform() {
+		Transform<String, Type> t = new Transform<String, Type>() {
 			@Override
-			public TreeCursor apply(Engine e) {
+			public TreeCursor<String, Type> apply(Engine<String, Type> e) {
 				String name = e.getName();
 				if(name != null) {
 					ctx.getStdOut().print(name + " ");
@@ -37,8 +37,8 @@ public class Nuthatch {
 				return null;
 			}
 		};
-		TopdownStrategy topDown = new TopdownStrategy(t);
-		Engine<String, Type> e = new StrategicEngine<String, Type>(new UptrCursor(tree), topDown);
+		TopdownStrategy<String, Type, SimpleEngine<String, Type>> topDown = new TopdownStrategy<String, Type, SimpleEngine<String, Type>>(t);
+		Engine<String, Type> e = new SimpleEngine<String, Type>(new UptrCursor(tree), topDown);
 		e.engage();
 
 		ctx.getStdOut().println();
@@ -48,9 +48,9 @@ public class Nuthatch {
 	}
 
 	public INode engage(INode n, final IEvaluatorContext ctx) {
-		Transform t = new Transform() {
+		Transform<IValue, Type> t = new Transform<IValue, Type>() {
 			@Override
-			public TreeCursor apply(Engine e) {
+			public TreeCursor<IValue, Type> apply(Engine<IValue, Type> e) {
 				String name = e.getName();
 				if(name != null) {
 					ctx.getStdOut().print(e.getName() + " ");
@@ -60,8 +60,8 @@ public class Nuthatch {
 				return null;
 			}
 		};
-		TopdownStrategy topDown = new TopdownStrategy(t);
-		Engine<IValue, Type> e = new StrategicEngine<IValue, Type>(new PdbCursor(n), topDown);
+		TopdownStrategy<IValue, Type, SimpleEngine<IValue, Type>> topDown = new TopdownStrategy<IValue, Type, SimpleEngine<IValue, Type>>(t);
+		Engine<IValue, Type> e = new SimpleEngine<IValue, Type>(new PdbCursor(n), topDown);
 		e.engage();
 
 		ctx.getStdOut().println();
