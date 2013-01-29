@@ -15,6 +15,7 @@ import nuthatch.pattern.Pattern;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermCursor;
 import nuthatch.stratego.pattern.TermPatternFactory;
+import static nuthatch.stratego.syntax.StrategoPatterns.*;
 import nuthatch.tree.TreeCursor;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -55,9 +56,9 @@ public class StrategoSignatures {
 		
 		TermPatternFactory pf = TermPatternFactory.getInstance();
 		
-		final Pattern<IStrategoTerm, Integer> opDeclPat = pf.appl("OpDecl", pf.var("name"), pf.var("def"));
-		final Pattern<IStrategoTerm, Integer> constTypePat = pf.appl("ConstType", pf.var("type"));
-		final Pattern<IStrategoTerm, Integer> funTypePat = pf.appl("FunType", pf.var("params"), pf.var("retType"));
+		final Pattern<IStrategoTerm, Integer> opDeclPat = OpDecl(pf.var("name"), pf.var("def"));
+		final Pattern<IStrategoTerm, Integer> constTypePat = ConstType(pf.var("type"));
+		final Pattern<IStrategoTerm, Integer> funTypePat = FunType(pf.var("params"), pf.var("retType"));
 		final Set<String> methods = new HashSet<String>(); 
 
 		Visitor<IStrategoTerm, Integer> visitor = new Visitor<IStrategoTerm, Integer>() {
@@ -75,7 +76,7 @@ public class StrategoSignatures {
 						;
 					}
 					else if(funTypePat.match(env.get("def"), env)) {
-						for(TreeCursor<IStrategoTerm, Integer> child : env.get("params")) {
+						for(@SuppressWarnings("unused") TreeCursor<IStrategoTerm, Integer> child : env.get("params")) {
 							if(numChildren > 0)
 								builder.append(", ");
 							builder.append("Pattern<IStrategoTerm, Integer> arg");
