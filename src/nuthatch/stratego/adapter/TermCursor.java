@@ -79,6 +79,7 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		return getCurrent() instanceof IStrategoNamed;
 	}
 
+
 	@Override
 	public boolean subtreeEquals(TreeCursor<IStrategoTerm, Integer> other) {
 		if(other instanceof TermCursor) {

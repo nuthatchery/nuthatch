@@ -14,6 +14,7 @@ import nuthatch.pattern.Pattern;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermCursor;
 import nuthatch.stratego.pattern.TermPatternFactory;
+import nuthatch.stratego.syntax.StrategoSignatures;
 import nuthatch.strategy.Transform;
 import nuthatch.tree.TreeCursor;
 
@@ -27,7 +28,7 @@ import org.spoofax.jsglr.shared.TokenExpectedException;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, InvalidParseTableException, SGLRException {
 		String inputFile = "";
 		String input = "package foo; public class Main { void f() throws Foo { throw new Foo(); } void g() { throw new Bar(); } }";
 		String parseTable = "/home/anya/magnolia/workspace/java-front/syntax/src/Java-15.tbl";
@@ -82,5 +83,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		StrategoSignatures.sig2java(StrategoSignatures.parseSignatureFile("/home/anya/magnolia/workspace/java-front/syntax/src/Java-15.sig"));
 	}
 }
