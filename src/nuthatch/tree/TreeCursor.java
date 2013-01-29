@@ -3,7 +3,7 @@ package nuthatch.tree;
 import nullness.Nullable;
 import nuthatch.tree.errors.BranchNotFoundError;
 
-public interface TreeCursor<Value, Type> {
+public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type>> {
 	/**
 	 * Branch number of the first child.
 	 */
@@ -182,6 +182,24 @@ public interface TreeCursor<Value, Type> {
 	 * @return True if getName() != null
 	 */
 	boolean hasName();
+
+
+	/**
+	 * Check if this node has the given name associated with it.
+	 * 
+	 * @return True if name.equals(getName())
+	 */
+	boolean hasName(String name);
+
+
+	/**
+	 * Check if this node has the given type
+	 * 
+	 * @param type
+	 *            A type
+	 * @return True if type.equals(getType())
+	 */
+	boolean hasType(Type type);
 
 
 	/**

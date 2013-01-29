@@ -1,6 +1,7 @@
 package nuthatch.tree.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import nuthatch.engine.errors.ReachedTop;
@@ -152,6 +153,18 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 
 	@Override
+	public boolean hasName(String name) {
+		return name.equals(getName());
+	}
+
+
+	@Override
+	public boolean hasType(Type type) {
+		return type.equals(getType());
+	}
+
+
+	@Override
 	public boolean isAtLeaf() {
 		return getNumChildren() == 0;
 	}
@@ -166,6 +179,12 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	@Override
 	public boolean isAtTop() {
 		return stack.isEmpty();
+	}
+
+
+	@Override
+	public Iterator<TreeCursor<Value, Type>> iterator() {
+		return new TreeCursorIterator<>(this);
 	}
 
 
@@ -187,5 +206,44 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	@Override
 	public String treeToString() {
 		return current.toString();
+	}
+
+
+	static class TreeCursorIterator<Value, Type, T> implements Iterator<TreeCursor<Value, Type>> {
+		private TreeCursor<Value, Type> subtreeCursor;
+		private int i = 0; // the next child to visit
+		private int numChildren;
+
+
+		TreeCursorIterator(AbstractTreeCursor<Value, Type, T> cursor) {
+			subtreeCursor = cursor.copySubtree();
+			numChildren = cursor.getNumChildren();
+			if(numChildren > 0) {
+				this.subtreeCursor.go(1);
+			}
+		}
+
+
+		@Override
+		public boolean hasNext() {
+			return numChildren > i;
+		}
+
+
+		@Override
+		public TreeCursor<Value, Type> next() {
+			while(!subtreeCursor.isAtRoot()) {
+				subtreeCursor.go(0);
+			}
+			subtreeCursor.go(++i);
+			return subtreeCursor;
+		}
+
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
 	}
 }

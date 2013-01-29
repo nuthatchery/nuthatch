@@ -1,5 +1,7 @@
 package nuthatch.engine.impl;
 
+import java.util.Iterator;
+
 import nuthatch.engine.Engine;
 import nuthatch.engine.errors.ReachedTop;
 import nuthatch.strategy.Strategy;
@@ -186,6 +188,18 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 
 
 	@Override
+	public boolean hasName(String name) {
+		return name.equals(current.getName());
+	}
+
+
+	@Override
+	public boolean hasType(Type type) {
+		return type.equals(current.getType());
+	}
+
+
+	@Override
 	public boolean isAtLeaf() {
 		return current.isAtLeaf();
 	}
@@ -253,6 +267,12 @@ public class StrategicEngine<Value, Type> implements Engine<Value, Type> {
 		else {
 			return "<top>";
 		}
+	}
+
+
+	@Override
+	public Iterator<TreeCursor<Value, Type>> iterator() {
+		return current.iterator();
 	}
 
 }
