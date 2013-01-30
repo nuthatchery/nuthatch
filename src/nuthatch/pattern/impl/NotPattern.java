@@ -4,8 +4,7 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 
-public class NotPattern<Value, Type> implements Pattern<Value, Type> {
-
+public class NotPattern<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 	private final Pattern<Value, Type> a;
 
 

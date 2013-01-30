@@ -21,4 +21,7 @@ public interface Pattern<Value, Type> {
 	 * @return true if the match succeeded
 	 */
 	boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env);
+
+
+	boolean match(TreeCursor<Value, Type> tree);
 }

@@ -4,8 +4,7 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 
-public class OrPattern<Value, Type> implements Pattern<Value, Type> {
-
+public class OrPattern<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 	private final Pattern<Value, Type> a;
 	private final Pattern<Value, Type> b;
 
@@ -24,5 +23,4 @@ public class OrPattern<Value, Type> implements Pattern<Value, Type> {
 	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
 		return a.match(tree, env) || b.match(tree, env);
 	}
-
 }

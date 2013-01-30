@@ -82,7 +82,7 @@ public abstract class RegisteredEngine<Value, Type, E extends RegisteredEngine<V
 	 * @return The string contained in the S register
 	 */
 	public String getS() {
-		return sReg.toString();
+		return sReg == null ? null : sReg.toString();
 	}
 
 
