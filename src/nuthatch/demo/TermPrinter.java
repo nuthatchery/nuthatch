@@ -24,52 +24,51 @@ public class TermPrinter {
 	 * @return its string representation
 	 */
 	public static String termToString(IStrategoTerm term) {
-		final StringBuilder builder = new StringBuilder();
 		Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
 			@Override
 			public void onEntry(TermEngine e) {
 				if(e.getType() == IStrategoTerm.LIST) {
-					builder.append("[");
+					e.appendToS("[");
 				}
 				else if(e.getType() == IStrategoTerm.TUPLE) {
-					builder.append("(");
+					e.appendToS("(");
 				}
 				else if(e.getType() == IStrategoTerm.STRING) {
-					builder.append(e.getData());
+					e.appendToS(e.getData().toString());
 				}
 				else if(e.getType() == IStrategoTerm.APPL) {
-					builder.append(e.getName());
+					e.appendToS(e.getName());
 					if(e.getNumChildren() > 0)
-						builder.append("(");
+						e.appendToS("(");
 				}
 				else {
-					builder.append(e.getData());
+					e.appendToS(e.getData().toString());
 				}
 			}
 			@Override
 			public void onExit(TermEngine e) {
 				if(e.getType() == IStrategoTerm.LIST) {
-					builder.append("]");
+					e.appendToS("]");
 				}
 				else if(e.getType() == IStrategoTerm.TUPLE) {
-					builder.append(")");
+					e.appendToS(")");
 				}
 				else if(e.getType() == IStrategoTerm.APPL && e.getNumChildren() > 0) {
-					builder.append(")");
+					e.appendToS(")");
 				}
 			}
 			@Override
 			public void beforeChild(TermEngine e, int i) {
 				if(i != 1) {
-					builder.append(",");
+					e.appendToS(",");
 				}
 			}
 		};
-		Engine<IStrategoTerm, Integer> e = new TermEngine(StrategoAdapter.termToTree(term), visitor);
+		TermEngine e = new TermEngine(StrategoAdapter.termToTree(term), visitor);
 		long t0 = System.currentTimeMillis();
 		e.engage();
 		System.err.println("Engine finished in " + (System.currentTimeMillis()-t0) + "ms");
-		String s1 = builder.toString();
+		String s1 = e.getS();
 		t0 = System.currentTimeMillis();
 		String s2 = term.toString();
 		System.err.println("toString() finished in " + (System.currentTimeMillis()-t0) + "ms");
