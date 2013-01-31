@@ -20,7 +20,7 @@ public class OrPattern<Value, Type> extends MinimalAbstractPattern<Value, Type> 
 
 
 	@Override
-	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
+	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		return a.match(tree, env) || b.match(tree, env);
 	}
 }

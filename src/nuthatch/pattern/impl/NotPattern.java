@@ -18,7 +18,7 @@ public class NotPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 
 
 	@Override
-	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
+	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		env.begin();
 		boolean result = !a.match(tree, env);
 		env.rollback();

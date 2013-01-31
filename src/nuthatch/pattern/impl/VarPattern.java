@@ -18,7 +18,7 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 
 
 	@Override
-	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
+	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		TreeCursor<Value, Type> binding = env.get(name);
 		if(binding != null) {
 			return tree.subtreeEquals(binding);
@@ -27,7 +27,7 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 			return false;
 		}
 		else {
-			env.put(name, tree.copy());
+			env.put(name, (T) tree.copy());
 		}
 		return true;
 	}

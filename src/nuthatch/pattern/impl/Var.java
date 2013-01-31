@@ -9,26 +9,14 @@ public class Var<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 	private final String name;
 
 
-	public Var() {
+	public Var(Environment<?> env) {
 		this.name = null;
 		this.type = null;
 	}
 
 
-	public Var(String name) {
-		this.name = name;
-		this.type = null;
-	}
-
-
-	public Var(String name, Type type) {
-		this.name = name;
-		this.type = type;
-	}
-
-
 	@Override
-	public boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
+	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		if(data == null) {
 			if(type == null || type.equals(tree.getType())) {
 				data = tree.copySubtree();

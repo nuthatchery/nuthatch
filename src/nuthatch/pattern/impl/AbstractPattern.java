@@ -6,7 +6,7 @@ import nuthatch.tree.TreeCursor;
 public abstract class AbstractPattern<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 
 	@Override
-	public final boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env) {
+	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		env.begin();
 		if(doMatch(tree, env)) {
 			env.commit();
@@ -19,6 +19,6 @@ public abstract class AbstractPattern<Value, Type> extends MinimalAbstractPatter
 	}
 
 
-	protected abstract boolean doMatch(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env);
+	protected abstract <T extends TreeCursor<Value, Type>> boolean doMatch(T tree, Environment<T> env);
 
 }

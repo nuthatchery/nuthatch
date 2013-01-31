@@ -20,8 +20,6 @@ public interface Pattern<Value, Type> {
 	 *            An environment
 	 * @return true if the match succeeded
 	 */
-	boolean match(TreeCursor<Value, Type> tree, Environment<TreeCursor<Value, Type>> env);
+	<T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env);
 
-
-	boolean match(TreeCursor<Value, Type> tree);
 }

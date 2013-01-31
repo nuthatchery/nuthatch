@@ -1,9 +1,12 @@
 package nuthatch.pattern;
 
+import nuthatch.pattern.impl.AncestorPattern;
 import nuthatch.pattern.impl.AndPattern;
+import nuthatch.pattern.impl.AnyPattern;
 import nuthatch.pattern.impl.NodePattern;
 import nuthatch.pattern.impl.NotPattern;
 import nuthatch.pattern.impl.OrPattern;
+import nuthatch.pattern.impl.ParentPattern;
 import nuthatch.pattern.impl.TreePattern;
 import nuthatch.pattern.impl.VarPattern;
 import nuthatch.tree.TreeCursor;
@@ -15,6 +18,16 @@ public class PatternFactory<Value, Type> {
 
 	public Pattern<Value, Type> and(Pattern<Value, Type> a, Pattern<Value, Type> b) {
 		return new AndPattern<Value, Type>(a, b);
+	}
+
+
+	public Pattern<Value, Type> ancestor(Pattern<Value, Type> ancestor) {
+		return new AncestorPattern<Value, Type>(ancestor);
+	}
+
+
+	public Pattern<Value, Type> parent(Pattern<Value, Type> parent) {
+		return new ParentPattern<Value, Type>(parent);
 	}
 
 
@@ -78,6 +91,11 @@ public class PatternFactory<Value, Type> {
 
 	public Pattern<Value, Type> var(String name, Pattern<Value, Type> p) {
 		return new AndPattern<Value, Type>(p, new VarPattern<Value, Type>(name, null));
+	}
+
+
+	public Pattern<Value, Type> any() {
+		return new AnyPattern<Value, Type>();
 	}
 
 

@@ -7,14 +7,17 @@ import nuthatch.tree.Tree;
 public class Visitor<E extends Engine<?, ?>> implements Strategy<E> {
 
 	/**
-	 * This method is called when a node is entered.
+	 * This method is called when a node is entered from the parent.
+	 * 
+	 * Visiting a leaf will call {@link #onEntry(Engine)} then
+	 * {@link #onExit(Engine)}.
 	 * 
 	 * By default it does nothing.
 	 * 
-	 * @param eng
+	 * @param e
 	 *            The engine
 	 */
-	public void onEntry(E eng) {
+	public void onEntry(E e) {
 	}
 
 
@@ -23,12 +26,12 @@ public class Visitor<E extends Engine<?, ?>> implements Strategy<E> {
 	 * 
 	 * By default it does nothing.
 	 * 
-	 * @param eng
+	 * @param e
 	 *            The engine
 	 * @param child
 	 *            The branch number of the child we are going to visit
 	 */
-	public void beforeChild(E eng, int child) {
+	public void beforeChild(E e, int child) {
 	}
 
 
@@ -37,46 +40,49 @@ public class Visitor<E extends Engine<?, ?>> implements Strategy<E> {
 	 * 
 	 * By default it does nothing.
 	 * 
-	 * @param eng
+	 * @param e
 	 *            The engine
 	 * @param child
 	 *            The branch number of the child we just visited
 	 */
-	public void afterChild(E eng, int child) {
+	public void afterChild(E e, int child) {
 	}
 
 
 	/**
-	 * This method is called when a node is exited.
+	 * This method is called when a node is exited in the parent direction.
+	 * 
+	 * Visiting a leaf will call {@link #onEntry(Engine)} then
+	 * {@link #onExit(Engine)}.
 	 * 
 	 * By default it does nothing.
 	 * 
-	 * @param eng
+	 * @param e
 	 */
-	public void onExit(E eng) {
+	public void onExit(E e) {
 	}
 
 
 	@Override
-	public final int visit(E eng) {
-		if(eng.isLeaf()) {
-			onEntry(eng);
-			onExit(eng);
+	public final int visit(E e) {
+		if(e.isLeaf()) {
+			onEntry(e);
+			onExit(e);
 		}
-		else if(eng.from(Tree.PARENT)) {
-			onEntry(eng);
-			beforeChild(eng, eng.from() + 1);
+		else if(e.from(Tree.PARENT)) {
+			onEntry(e);
+			beforeChild(e, e.from() + 1);
 		}
-		else if(eng.from(Tree.LAST)) {
-			afterChild(eng, eng.from());
-			onExit(eng);
+		else if(e.from(Tree.LAST)) {
+			afterChild(e, e.from());
+			onExit(e);
 		}
 		else {
-			afterChild(eng, eng.from());
-			beforeChild(eng, eng.from() + 1);
+			afterChild(e, e.from());
+			beforeChild(e, e.from() + 1);
 		}
 
-		return eng.from() + 1;
+		return e.from() + 1;
 	}
 
 }
