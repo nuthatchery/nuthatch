@@ -1,7 +1,5 @@
 package nuthatch.demo;
 
-import nuthatch.engine.Engine;
-import nuthatch.engine.impl.StrategicEngine;
 import nuthatch.library.strategies.Visitor;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermEngine;
@@ -44,8 +42,9 @@ public class TermPrinter {
 				}
 				else if(e.getType() == IStrategoTerm.APPL) {
 					e.appendToS(e.getName());
-					if(e.getNumChildren() > 0)
+					if(e.getNumChildren() > 0) {
 						e.appendToS("(");
+					}
 				}
 				else {
 					e.appendToS(e.getData().toString());

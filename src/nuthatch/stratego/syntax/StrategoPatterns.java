@@ -1,7 +1,8 @@
 package nuthatch.stratego.syntax;
 
-import nuthatch.stratego.pattern.TermPatternFactory;
 import nuthatch.pattern.Pattern;
+import nuthatch.stratego.pattern.TermPatternFactory;
+
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 

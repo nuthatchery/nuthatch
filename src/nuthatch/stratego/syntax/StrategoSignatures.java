@@ -1,5 +1,9 @@
 package nuthatch.stratego.syntax;
 
+import static nuthatch.stratego.syntax.StrategoPatterns.ConstType;
+import static nuthatch.stratego.syntax.StrategoPatterns.FunType;
+import static nuthatch.stratego.syntax.StrategoPatterns.OpDecl;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -7,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import nuthatch.engine.Engine;
-import nuthatch.engine.impl.StrategicEngine;
 import nuthatch.library.strategies.Visitor;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
@@ -16,7 +19,6 @@ import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermCursor;
 import nuthatch.stratego.adapter.TermEngine;
 import nuthatch.stratego.pattern.TermPatternFactory;
-import static nuthatch.stratego.syntax.StrategoPatterns.*;
 import nuthatch.tree.TreeCursor;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -28,30 +30,30 @@ import org.spoofax.jsglr.shared.SGLRException;
 import org.spoofax.jsglr.shared.TokenExpectedException;
 
 public class StrategoSignatures {
-	
+
 	private static ParseTable signaturesParseTable;
 
 	public static IStrategoTerm parseSignatureFile(String filePath) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException, InvalidParseTableException {
 		return StrategoAdapter.parseFile(filePath, getSignaturesParseTable());
 	}
-	
+
 	public static IStrategoTerm parseSignatureStream(InputStream input) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException, InvalidParseTableException {
 		return StrategoAdapter.parseStream(input, "", null, getSignaturesParseTable());
 	}
-	
+
 	public static IStrategoTerm parseSignatureString(String signature) throws IOException, InvalidParseTableException, SGLRException {
 		return StrategoAdapter.parseString(signature, "", getSignaturesParseTable());
 	}
 
 	public static String sig2java(IStrategoTerm signature, String packageName, String className) {
 		TermCursor tree = StrategoAdapter.termToTree(signature);
-		
+
 		TermPatternFactory pf = TermPatternFactory.getInstance();
-		
+
 		final Pattern<IStrategoTerm, Integer> opDeclPat = OpDecl(pf.var("name"), pf.var("def"));
 		final Pattern<IStrategoTerm, Integer> constTypePat = ConstType(pf.var("type"));
 		final Pattern<IStrategoTerm, Integer> funTypePat = FunType(pf.var("params"), pf.var("retType"));
-		final Set<String> methods = new HashSet<String>(); 
+		final Set<String> methods = new HashSet<String>();
 
 		Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
 			@Override
@@ -72,8 +74,9 @@ public class StrategoSignatures {
 					}
 					else if(funTypePat.match(env.get("def"), env)) {
 						for(@SuppressWarnings("unused") TreeCursor<IStrategoTerm, Integer> child : env.get("params")) {
-							if(numChildren > 0)
+							if(numChildren > 0) {
 								builder.append(", ");
+							}
 							builder.append("Pattern<IStrategoTerm, Integer> arg");
 							builder.append(numChildren++);
 						}
@@ -121,21 +124,21 @@ public class StrategoSignatures {
 		builder.append(" {\n");
 		builder.append("\tprivate static final TermPatternFactory pf = TermPatternFactory.getInstance();\n");
 		builder.append("\n");
-		
+
 		for(String s : array) {
 			builder.append(s);
 		}
 		builder.append("}\n");
-		
+
 		return builder.toString();
 	}
-	
+
 	private static ParseTable getSignaturesParseTable() throws IOException, InvalidParseTableException  {
 		if(signaturesParseTable == null) {
 			InputStream stream = StrategoSignatures.class.getResourceAsStream("sdf/Stratego-Signatures.tbl");
 			signaturesParseTable = StrategoAdapter.getParseTableManager().loadFromStream(stream);
 		}
-		
+
 		return signaturesParseTable;
 	}
 }

@@ -4,9 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import nuthatch.engine.Engine;
-import nuthatch.engine.impl.StrategicEngine;
-import nuthatch.library.strategies.TopdownStrategy;
-import nuthatch.library.strategies.VisitStrategy;
 import nuthatch.library.strategies.Visitor;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
@@ -16,9 +13,7 @@ import nuthatch.stratego.adapter.TermCursor;
 import nuthatch.stratego.adapter.TermEngine;
 import nuthatch.stratego.pattern.TermPatternFactory;
 import nuthatch.stratego.syntax.StrategoSignatures;
-import nuthatch.strategy.Transform;
 import nuthatch.tree.TreeCursor;
-
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -33,7 +28,7 @@ public class Main {
 		String inputFile = "";
 		String input = "package foo; public class Main { void f() throws Foo { throw new Foo(); } void g() { throw new Bar(); } }";
 		String parseTable = "/home/anya/magnolia/workspace/java-front/syntax/src/Java-15.tbl";
-		
+
 		try {
 			IStrategoTerm term = StrategoAdapter.parseString(input, null, parseTable);
 			System.err.println(term);
@@ -41,7 +36,7 @@ public class Main {
 			TermCursor tree = StrategoAdapter.termToTree(term);
 			TermPatternFactory pf = TermPatternFactory.getInstance();
 			final Pattern<IStrategoTerm, Integer> idPat = pf.appl("Id", pf.string("foo"));
-			
+
 			Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
 				@Override
 				public void onEntry(TermEngine e) {
@@ -53,8 +48,8 @@ public class Main {
 			};
 			Engine<IStrategoTerm, Integer> e = new TermEngine(tree, visitor);
 			e.engage();
-			
-			
+
+
 
 		} catch (TokenExpectedException e) {
 			// TODO Auto-generated catch block
@@ -78,7 +73,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		StrategoSignatures.sig2java(StrategoSignatures.parseSignatureFile("/home/anya/magnolia/workspace/java-front/syntax/src/Java-15.sig"), "nuthatch.stratego.javafront", "Java15");
 	}
 }

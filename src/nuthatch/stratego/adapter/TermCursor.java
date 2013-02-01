@@ -3,11 +3,16 @@ import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.AbstractTreeCursor;
 
-import org.spoofax.interpreter.terms.*;
+import org.spoofax.interpreter.terms.IStrategoAppl;
+import org.spoofax.interpreter.terms.IStrategoList;
+import org.spoofax.interpreter.terms.IStrategoNamed;
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.interpreter.terms.IStrategoTermBuilder;
+import org.spoofax.interpreter.terms.IStrategoTuple;
 
 public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStrategoTerm> {
 	private final IStrategoTermBuilder builder;
-	
+
 	public TermCursor(IStrategoTerm tree, IStrategoTermBuilder builder) {
 		super(tree);
 		this.builder = builder;
@@ -103,34 +108,34 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 	protected IStrategoTerm replaceChild(IStrategoTerm node,
 			IStrategoTerm child, int i) {
 		switch(getCurrent().getTermType()) {
-	    case IStrategoTerm.APPL: {
-	    	IStrategoAppl term = (IStrategoAppl) getCurrent();
-	    	IStrategoTerm[] kids = term.getAllSubterms().clone();
-	    	kids[i] = child;
-	    	return builder.makeAppl(term.getConstructor(), kids, term.getAnnotations());
-	    }
-	    case IStrategoTerm.LIST: {
-	    	IStrategoList term = (IStrategoList) getCurrent();
-	    	IStrategoTerm[] kids = term.getAllSubterms().clone();
-	    	kids[i] = child;
-	    	return builder.makeList(kids, term.getAnnotations());
-	    }
-	    case IStrategoTerm.TUPLE: {
-	    	IStrategoTuple term = (IStrategoTuple) getCurrent();
-	    	IStrategoTerm[] kids = term.getAllSubterms().clone();
-	    	kids[i] = child;
-	    	return builder.makeTuple(kids, term.getAnnotations());
-	    }
-	    case IStrategoTerm.INT:
-	    case IStrategoTerm.REAL:
-	    case IStrategoTerm.STRING:
-	    	throw new BranchNotFoundError(String.valueOf(i + 1));
-	    case IStrategoTerm.CTOR:
-	    case IStrategoTerm.REF:
-	    case IStrategoTerm.BLOB:
-	    case IStrategoTerm.PLACEHOLDER:
-	    	System.err.println("Don't know how to deal with term type " + getCurrent().getTermType());
-	    	break;
+		case IStrategoTerm.APPL: {
+			IStrategoAppl term = (IStrategoAppl) getCurrent();
+			IStrategoTerm[] kids = term.getAllSubterms().clone();
+			kids[i] = child;
+			return builder.makeAppl(term.getConstructor(), kids, term.getAnnotations());
+		}
+		case IStrategoTerm.LIST: {
+			IStrategoList term = (IStrategoList) getCurrent();
+			IStrategoTerm[] kids = term.getAllSubterms().clone();
+			kids[i] = child;
+			return builder.makeList(kids, term.getAnnotations());
+		}
+		case IStrategoTerm.TUPLE: {
+			IStrategoTuple term = (IStrategoTuple) getCurrent();
+			IStrategoTerm[] kids = term.getAllSubterms().clone();
+			kids[i] = child;
+			return builder.makeTuple(kids, term.getAnnotations());
+		}
+		case IStrategoTerm.INT:
+		case IStrategoTerm.REAL:
+		case IStrategoTerm.STRING:
+			throw new BranchNotFoundError(String.valueOf(i + 1));
+		case IStrategoTerm.CTOR:
+		case IStrategoTerm.REF:
+		case IStrategoTerm.BLOB:
+		case IStrategoTerm.PLACEHOLDER:
+			System.err.println("Don't know how to deal with term type " + getCurrent().getTermType());
+			break;
 		}
 
 		return null;

@@ -13,10 +13,10 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
 import org.spoofax.jsglr.client.ParseException;
 import org.spoofax.jsglr.client.ParseTable;
-import org.spoofax.jsglr.io.SGLR;
 import org.spoofax.jsglr.client.imploder.TermTreeFactory;
 import org.spoofax.jsglr.client.imploder.TreeBuilder;
 import org.spoofax.jsglr.io.ParseTableManager;
+import org.spoofax.jsglr.io.SGLR;
 import org.spoofax.jsglr.shared.BadTokenException;
 import org.spoofax.jsglr.shared.SGLRException;
 import org.spoofax.jsglr.shared.TokenExpectedException;
@@ -44,7 +44,7 @@ public class StrategoAdapter {
 	public static IStrategoTerm parseFile(String inputFile, ParseTable parseTable) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException {
 		return parseFile(inputFile, null, parseTable);
 	}
-	
+
 	/**
 	 * Parse a file.
 	 * 
@@ -62,7 +62,7 @@ public class StrategoAdapter {
 	public static IStrategoTerm parseFile(String inputFile, String parseTable) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException, InvalidParseTableException {
 		return parseFile(inputFile, null, parseTable);
 	}
-	
+
 	/**
 	 * Parse a file.
 	 * 
@@ -80,7 +80,7 @@ public class StrategoAdapter {
 	 */
 	public static IStrategoTerm parseFile(String inputFile, String startSymbol, ParseTable parseTable) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException {
 		SGLR sglr = new SGLR(new TreeBuilder(new TermTreeFactory(
-					ptm.getFactory())), parseTable);
+				ptm.getFactory())), parseTable);
 		try(Reader in = new FileReader(inputFile)) {
 			return (IStrategoTerm) sglr.parse(in, inputFile, startSymbol);
 		}
@@ -103,7 +103,7 @@ public class StrategoAdapter {
 	 */
 	public static IStrategoTerm parseFile(String inputFile, String startSymbol, String parseTable) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException, InvalidParseTableException {
 		SGLR sglr = new SGLR(new TreeBuilder(new TermTreeFactory(
-					ptm.getFactory())), ptm.loadFromFile(parseTable));
+				ptm.getFactory())), ptm.loadFromFile(parseTable));
 		try(Reader in = new FileReader(inputFile)) {
 			return (IStrategoTerm) sglr.parse(in, inputFile, startSymbol);
 		}
@@ -127,7 +127,7 @@ public class StrategoAdapter {
 	 */
 	public static IStrategoTerm parseStream(InputStream input, String fileName, String startSymbol, ParseTable parseTable) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException {
 		SGLR sglr = new SGLR(new TreeBuilder(new TermTreeFactory(
-					ptm.getFactory())), parseTable);
+				ptm.getFactory())), parseTable);
 		return (IStrategoTerm) sglr.parse(new InputStreamReader(input), fileName, startSymbol);
 	}
 
@@ -168,7 +168,7 @@ public class StrategoAdapter {
 	public static IStrategoTerm parseString(String input, String fileName, String parseTable) throws TokenExpectedException, FileNotFoundException, BadTokenException, ParseException, IOException, InvalidParseTableException, SGLRException {
 		return parseString(input, fileName, null, parseTable);
 	}
-	
+
 	/**
 	 * Parse a string.
 	 * 
@@ -187,7 +187,7 @@ public class StrategoAdapter {
 	 */
 	public static IStrategoTerm parseString(String input, String fileName, String startSymbol, ParseTable parseTable) throws TokenExpectedException, BadTokenException, ParseException, SGLRException {
 		SGLR sglr = new SGLR(new TreeBuilder(new TermTreeFactory(
-					ptm.getFactory())), parseTable);
+				ptm.getFactory())), parseTable);
 		return (IStrategoTerm) sglr.parse(input, fileName, startSymbol);
 	}
 
@@ -209,7 +209,7 @@ public class StrategoAdapter {
 	 */
 	public static IStrategoTerm parseString(String input, String fileName, String startSymbol, String parseTable) throws FileNotFoundException, IOException, InvalidParseTableException, TokenExpectedException, BadTokenException, ParseException, SGLRException {
 		SGLR sglr = new SGLR(new TreeBuilder(new TermTreeFactory(
-					ptm.getFactory())), ptm.loadFromFile(parseTable));
+				ptm.getFactory())), ptm.loadFromFile(parseTable));
 		return (IStrategoTerm) sglr.parse(input, fileName, startSymbol);
 	}
 

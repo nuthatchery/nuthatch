@@ -1,9 +1,9 @@
 package nuthatch.stratego.adapter;
 
-import org.spoofax.interpreter.terms.IStrategoTerm;
-
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.impl.Var;
+
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class TermVar extends Var<IStrategoTerm, Integer> {
 

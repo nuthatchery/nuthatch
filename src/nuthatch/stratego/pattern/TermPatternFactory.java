@@ -1,13 +1,13 @@
 package nuthatch.stratego.pattern;
 
-import org.spoofax.interpreter.terms.IStrategoTerm;
-
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.PatternFactory;
 
+import org.spoofax.interpreter.terms.IStrategoTerm;
+
 public class TermPatternFactory extends PatternFactory<IStrategoTerm, Integer> {
 	static final TermPatternFactory instance = new TermPatternFactory();
-	
+
 	private TermPatternFactory() {
 	}
 
@@ -23,7 +23,7 @@ public class TermPatternFactory extends PatternFactory<IStrategoTerm, Integer> {
 	public Pattern<IStrategoTerm, Integer> integer(int i) {
 		return node(String.valueOf(i), IStrategoTerm.INT, null);
 	}
-	
+
 
 	@SafeVarargs
 	public final Pattern<IStrategoTerm, Integer> list(Pattern<IStrategoTerm, Integer>... children) {
@@ -33,7 +33,7 @@ public class TermPatternFactory extends PatternFactory<IStrategoTerm, Integer> {
 	public Pattern<IStrategoTerm, Integer> string() {
 		return node(null, IStrategoTerm.STRING, null);
 	}
-	
+
 	public Pattern<IStrategoTerm, Integer> string(String string) {
 		return node(string, IStrategoTerm.STRING, null);
 	}
@@ -45,5 +45,5 @@ public class TermPatternFactory extends PatternFactory<IStrategoTerm, Integer> {
 	public static TermPatternFactory getInstance() {
 		return instance;
 	}
-	
+
 }
