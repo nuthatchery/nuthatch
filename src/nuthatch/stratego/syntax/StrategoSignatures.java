@@ -31,10 +31,6 @@ public class StrategoSignatures {
 	
 	private static ParseTable signaturesParseTable;
 
-	public static IStrategoTerm parseSignatureString(String signature) throws IOException, InvalidParseTableException, SGLRException {
-		return StrategoAdapter.parseString(signature, "", getSignaturesParseTable());
-	}
-	
 	public static IStrategoTerm parseSignatureFile(String filePath) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException, InvalidParseTableException {
 		return StrategoAdapter.parseFile(filePath, getSignaturesParseTable());
 	}
@@ -42,16 +38,11 @@ public class StrategoSignatures {
 	public static IStrategoTerm parseSignatureStream(InputStream input) throws TokenExpectedException, BadTokenException, ParseException, SGLRException, IOException, InvalidParseTableException {
 		return StrategoAdapter.parseStream(input, "", null, getSignaturesParseTable());
 	}
-
-	private static ParseTable getSignaturesParseTable() throws IOException, InvalidParseTableException  {
-		if(signaturesParseTable == null) {
-			InputStream stream = StrategoSignatures.class.getResourceAsStream("sdf/Stratego-Signatures.tbl");
-			signaturesParseTable = StrategoAdapter.getParseTableManager().loadFromStream(stream);
-		}
-		
-		return signaturesParseTable;
-	}
 	
+	public static IStrategoTerm parseSignatureString(String signature) throws IOException, InvalidParseTableException, SGLRException {
+		return StrategoAdapter.parseString(signature, "", getSignaturesParseTable());
+	}
+
 	public static String sig2java(IStrategoTerm signature, String packageName, String className) {
 		TermCursor tree = StrategoAdapter.termToTree(signature);
 		
@@ -63,6 +54,9 @@ public class StrategoSignatures {
 		final Set<String> methods = new HashSet<String>(); 
 
 		Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
+			@Override
+			public void beforeChild(TermEngine e, int i) {
+			}
 			@Override
 			public void onEntry(TermEngine e) {
 				StringBuilder builder = new StringBuilder();
@@ -104,9 +98,6 @@ public class StrategoSignatures {
 			@Override
 			public void onExit(TermEngine e) {
 			}
-			@Override
-			public void beforeChild(TermEngine e, int i) {
-			}
 		};
 		Engine<IStrategoTerm, Integer> e = new TermEngine(tree, visitor);
 		e.engage();
@@ -137,5 +128,14 @@ public class StrategoSignatures {
 		builder.append("}\n");
 		
 		return builder.toString();
+	}
+	
+	private static ParseTable getSignaturesParseTable() throws IOException, InvalidParseTableException  {
+		if(signaturesParseTable == null) {
+			InputStream stream = StrategoSignatures.class.getResourceAsStream("sdf/Stratego-Signatures.tbl");
+			signaturesParseTable = StrategoAdapter.getParseTableManager().loadFromStream(stream);
+		}
+		
+		return signaturesParseTable;
 	}
 }

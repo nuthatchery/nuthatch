@@ -26,6 +26,12 @@ public class TermPrinter {
 	public static String termToString(IStrategoTerm term) {
 		Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
 			@Override
+			public void beforeChild(TermEngine e, int i) {
+				if(i != 1) {
+					e.appendToS(",");
+				}
+			}
+			@Override
 			public void onEntry(TermEngine e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					e.appendToS("[");
@@ -55,12 +61,6 @@ public class TermPrinter {
 				}
 				else if(e.getType() == IStrategoTerm.APPL && e.getNumChildren() > 0) {
 					e.appendToS(")");
-				}
-			}
-			@Override
-			public void beforeChild(TermEngine e, int i) {
-				if(i != 1) {
-					e.appendToS(",");
 				}
 			}
 		};

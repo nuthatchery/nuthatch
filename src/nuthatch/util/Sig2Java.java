@@ -125,11 +125,6 @@ public class Sig2Java {
 		}
 	}
 
-	private static void fatalMissingName(String s) {
-		System.err.println("Missing " + s + " name, and not output file given");
-		System.exit(1);
-	}
-
 	private static void fatalExtraArgument(String s) {
 		System.err.println("Unknown extra argument: " + s);
 		System.exit(1);
@@ -137,6 +132,11 @@ public class Sig2Java {
 
 	private static void fatalMissingArgument(String s) {
 		System.err.println("Missing argument to " + s);
+		System.exit(1);
+	}
+
+	private static void fatalMissingName(String s) {
+		System.err.println("Missing " + s + " name, and not output file given");
 		System.exit(1);
 	}
 

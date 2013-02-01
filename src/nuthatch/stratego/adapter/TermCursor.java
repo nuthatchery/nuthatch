@@ -28,11 +28,6 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 	}
 
 	@Override
-	public TreeCursor<IStrategoTerm, Integer> copySubtree() {
-		return new TermCursor(this, false);
-	}
-
-	@Override
 	public TreeCursor<IStrategoTerm, Integer> copyAndReplaceSubtree(
 			TreeCursor<IStrategoTerm, Integer> replacement) {
 		if(replacement instanceof TermCursor) {
@@ -41,6 +36,11 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		else {
 			throw new UnsupportedOperationException("Replacing with different cursor type");
 		}
+	}
+
+	@Override
+	public TreeCursor<IStrategoTerm, Integer> copySubtree() {
+		return new TermCursor(this, false);
 	}
 
 	@Override
@@ -64,6 +64,10 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		return getCurrent().getSubtermCount();
 	}
 
+	public IStrategoTerm getTerm() {
+		return getCurrent();
+	}
+
 	@Override
 	public Integer getType() {
 		return getCurrent().getTermType();
@@ -74,11 +78,11 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		return true;
 	}
 
+
 	@Override
 	public boolean hasName() {
 		return getCurrent() instanceof IStrategoNamed;
 	}
-
 
 	@Override
 	public boolean subtreeEquals(TreeCursor<IStrategoTerm, Integer> other) {
@@ -88,6 +92,11 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		else {
 			throw new UnsupportedOperationException("Equality only supported on TermCursor");
 		}
+	}
+
+	@Override
+	protected IStrategoTerm getChild(int i) {
+		return getCurrent().getSubterm(i);
 	}
 
 	@Override
@@ -125,14 +134,5 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		}
 
 		return null;
-	}
-
-	@Override
-	protected IStrategoTerm getChild(int i) {
-		return getCurrent().getSubterm(i);
-	}
-
-	public IStrategoTerm getTerm() {
-		return getCurrent();
 	}
 }

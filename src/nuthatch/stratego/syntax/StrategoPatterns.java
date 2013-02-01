@@ -16,12 +16,12 @@ public class StrategoPatterns {
 		return pf.appl("Cons", arg0, arg1);
 	}
 
-	public static Pattern<IStrategoTerm, Integer> ConstType(Pattern<IStrategoTerm, Integer> arg0) {
-		return pf.appl("ConstType", arg0);
-	}
-
 	public static Pattern<IStrategoTerm, Integer> Constructors(Pattern<IStrategoTerm, Integer> arg0) {
 		return pf.appl("Constructors", arg0);
+	}
+
+	public static Pattern<IStrategoTerm, Integer> ConstType(Pattern<IStrategoTerm, Integer> arg0) {
+		return pf.appl("ConstType", arg0);
 	}
 
 	public static Pattern<IStrategoTerm, Integer> ExtOpDecl(Pattern<IStrategoTerm, Integer> arg0, Pattern<IStrategoTerm, Integer> arg1) {
@@ -80,12 +80,12 @@ public class StrategoPatterns {
 		return pf.appl("SortNoArgs", arg0);
 	}
 
-	public static Pattern<IStrategoTerm, Integer> SortVar(Pattern<IStrategoTerm, Integer> arg0) {
-		return pf.appl("SortVar", arg0);
-	}
-
 	public static Pattern<IStrategoTerm, Integer> Sorts(Pattern<IStrategoTerm, Integer> arg0) {
 		return pf.appl("Sorts", arg0);
+	}
+
+	public static Pattern<IStrategoTerm, Integer> SortVar(Pattern<IStrategoTerm, Integer> arg0) {
+		return pf.appl("SortVar", arg0);
 	}
 
 }
