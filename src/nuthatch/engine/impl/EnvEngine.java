@@ -22,22 +22,12 @@ public class EnvEngine<Value, Type, E extends EnvEngine<Value, Type, E>> extends
 	}
 
 
-	public void setGlobalVar(String name, TreeCursor<Value, Type> tree) {
-
-	}
-
-
-	public void setScopedVar(String name, TreeCursor<Value, Type> tree) {
-
-	}
-
-
-	public void setSubtreeVar(String name, TreeCursor<Value, Type> tree) {
-
-	}
-
-
 	public TreeCursor<Value, Type> getGlobalVar(String name) {
+		return null;
+	}
+
+
+	public <T> T getGlobalVar(VarName<T> name) {
 		return null;
 	}
 
@@ -47,12 +37,32 @@ public class EnvEngine<Value, Type, E extends EnvEngine<Value, Type, E>> extends
 	}
 
 
+	public <T> T getScopedVar(VarName<T> name) {
+		return null;
+	}
+
+
 	public TreeCursor<Value, Type> getSubtreeVar(String name) {
 		return null;
 	}
 
 
+	public <T> T getSubtreeVar(VarName<T> name) {
+		return null;
+	}
+
+
+	public void setGlobalVar(String name, TreeCursor<Value, Type> tree) {
+
+	}
+
+
 	public <T> void setGlobalVar(VarName<T> name, T value) {
+
+	}
+
+
+	public void setScopedVar(String name, TreeCursor<Value, Type> tree) {
 
 	}
 
@@ -62,23 +72,13 @@ public class EnvEngine<Value, Type, E extends EnvEngine<Value, Type, E>> extends
 	}
 
 
+	public void setSubtreeVar(String name, TreeCursor<Value, Type> tree) {
+
+	}
+
+
 	public <T> void setSubtreeVar(VarName<T> name, T value) {
 
-	}
-
-
-	public <T> T getGlobalVar(VarName<T> name) {
-		return null;
-	}
-
-
-	public <T> T getScopedVar(VarName<T> name) {
-		return null;
-	}
-
-
-	public <T> T getSubtreeVar(VarName<T> name) {
-		return null;
 	}
 
 }

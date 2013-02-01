@@ -14,35 +14,6 @@ public class VisitorAspect<E extends Engine<?, ?>> implements Strategy<E> {
 	}
 
 
-	@Override
-	public int visit(E e) {
-		if(e.from(Tree.PARENT)) {
-			beforeEntry(e);
-		}
-
-		int go = before(e);
-		if(go != PROCEED) {
-			if(go == Tree.PARENT) {
-				beforeExit(e);
-			}
-			return go;
-		}
-
-		go = strategy.visit(e);
-
-		int goAfter = after(e);
-		if(goAfter != PROCEED) {
-			go = goAfter;
-		}
-
-		if(go == Tree.PARENT) {
-			beforeExit(e);
-		}
-
-		return go;
-	}
-
-
 	/**
 	 * This method is called on every visit to a node, after the visit() method.
 	 * 
@@ -94,5 +65,34 @@ public class VisitorAspect<E extends Engine<?, ?>> implements Strategy<E> {
 	 *            The engine
 	 */
 	public void beforeExit(E e) {
+	}
+
+
+	@Override
+	public int visit(E e) {
+		if(e.from(Tree.PARENT)) {
+			beforeEntry(e);
+		}
+
+		int go = before(e);
+		if(go != PROCEED) {
+			if(go == Tree.PARENT) {
+				beforeExit(e);
+			}
+			return go;
+		}
+
+		go = strategy.visit(e);
+
+		int goAfter = after(e);
+		if(goAfter != PROCEED) {
+			go = goAfter;
+		}
+
+		if(go == Tree.PARENT) {
+			beforeExit(e);
+		}
+
+		return go;
 	}
 }

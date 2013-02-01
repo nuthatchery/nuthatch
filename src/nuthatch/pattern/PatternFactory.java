@@ -16,18 +16,18 @@ public class PatternFactory<Value, Type> {
 	private static PatternFactory instance;
 
 
-	public Pattern<Value, Type> and(Pattern<Value, Type> a, Pattern<Value, Type> b) {
-		return new AndPattern<Value, Type>(a, b);
-	}
-
-
 	public Pattern<Value, Type> ancestor(Pattern<Value, Type> ancestor) {
 		return new AncestorPattern<Value, Type>(ancestor);
 	}
 
 
-	public Pattern<Value, Type> parent(Pattern<Value, Type> parent) {
-		return new ParentPattern<Value, Type>(parent);
+	public Pattern<Value, Type> and(Pattern<Value, Type> a, Pattern<Value, Type> b) {
+		return new AndPattern<Value, Type>(a, b);
+	}
+
+
+	public Pattern<Value, Type> any() {
+		return new AnyPattern<Value, Type>();
 	}
 
 
@@ -79,18 +79,13 @@ public class PatternFactory<Value, Type> {
 	}
 
 
+	public Pattern<Value, Type> parent(Pattern<Value, Type> parent) {
+		return new ParentPattern<Value, Type>(parent);
+	}
+
+
 	public Pattern<Value, Type> tree(TreeCursor<Value, Type> tree) {
 		return new TreePattern<Value, Type>(tree);
-	}
-
-
-	public Pattern<Value, Type> var(VarName<?> name) {
-		return new VarPattern<Value, Type>(name, null);
-	}
-
-
-	public Pattern<Value, Type> var(VarName<?> name, Pattern<Value, Type> p) {
-		return new AndPattern<Value, Type>(p, new VarPattern<Value, Type>(name, null));
 	}
 
 
@@ -104,8 +99,22 @@ public class PatternFactory<Value, Type> {
 	}
 
 
-	public Pattern<Value, Type> any() {
-		return new AnyPattern<Value, Type>();
+	public Pattern<Value, Type> var(VarName<?> name) {
+		return new VarPattern<Value, Type>(name, null);
+	}
+
+
+	public Pattern<Value, Type> var(VarName<?> name, Pattern<Value, Type> p) {
+		return new AndPattern<Value, Type>(p, new VarPattern<Value, Type>(name, null));
+	}
+
+
+	@SuppressWarnings("rawtypes")
+	public static PatternFactory getInstance() {
+		if(instance == null) {
+			instance = new PatternFactory();
+		}
+		return instance;
 	}
 
 
@@ -124,14 +133,5 @@ public class PatternFactory<Value, Type> {
 			instance = new PatternFactory();
 		}
 		return (PatternFactory<Value, Type>) instance;
-	}
-
-
-	@SuppressWarnings("rawtypes")
-	public static PatternFactory getInstance() {
-		if(instance == null) {
-			instance = new PatternFactory();
-		}
-		return instance;
 	}
 }

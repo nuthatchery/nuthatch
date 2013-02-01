@@ -54,14 +54,14 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 
 
 	@Override
-	public TreeCursor<Value, Type> copySubtree() {
-		return current.copySubtree();
+	public TreeCursor<Value, Type> copyAndReplaceSubtree(TreeCursor<Value, Type> replacement) {
+		return current.copyAndReplaceSubtree(replacement);
 	}
 
 
 	@Override
-	public TreeCursor<Value, Type> copyAndReplaceSubtree(TreeCursor<Value, Type> replacement) {
-		return current.copyAndReplaceSubtree(replacement);
+	public TreeCursor<Value, Type> copySubtree() {
+		return current.copySubtree();
 	}
 
 
@@ -230,6 +230,18 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 
 
 	@Override
+	public Iterator<TreeCursor<Value, Type>> iterator() {
+		return current.iterator();
+	}
+
+
+	@Override
+	public void replace(TreeCursor<Value, Type> tree) {
+		current = current.copyAndReplaceSubtree(tree);
+	}
+
+
+	@Override
 	public void split() {
 		// @SuppressWarnings("unchecked")
 		// StrategicEngine<Value, Type> children[] = new StrategicEngine[current.getNumChildren()];
@@ -248,18 +260,6 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 
 
 	@Override
-	public void replace(TreeCursor<Value, Type> tree) {
-		current = current.copyAndReplaceSubtree(tree);
-	}
-
-
-	private boolean dataInvariant() {
-
-		return true;
-	}
-
-
-	@Override
 	public String treeToString() {
 		if(current != null) {
 			return current.treeToString();
@@ -270,9 +270,9 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 	}
 
 
-	@Override
-	public Iterator<TreeCursor<Value, Type>> iterator() {
-		return current.iterator();
+	private boolean dataInvariant() {
+
+		return true;
 	}
 
 }

@@ -153,8 +153,9 @@ public class Main {
 					}
 					return null;
 				}
-				else
+				else {
 					return null;
+				}
 			}
 		};
 		Strategy<SimpleEngine<String, String>> replace = new BottomupStrategy<>(u);

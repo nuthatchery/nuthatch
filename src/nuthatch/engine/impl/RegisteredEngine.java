@@ -36,25 +36,6 @@ public abstract class RegisteredEngine<Value, Type, E extends RegisteredEngine<V
 
 
 	/**
-	 * Append to S register.
-	 * 
-	 * If the register is previously unset, it is initalised to an empty string.
-	 * 
-	 * You may assume that the append operation is reasonably fast, e.g. using a
-	 * StringBuilder internally.
-	 * 
-	 * @param s
-	 *            A string to be appended
-	 */
-	public void appendToS(String s) {
-		if(sReg == null) {
-			sReg = new StringBuilder();
-		}
-		sReg.append(s);
-	}
-
-
-	/**
 	 * Add to X register.
 	 * 
 	 * @param value
@@ -73,6 +54,25 @@ public abstract class RegisteredEngine<Value, Type, E extends RegisteredEngine<V
 	 */
 	public void addToY(int value) {
 		yReg += value;
+	}
+
+
+	/**
+	 * Append to S register.
+	 * 
+	 * If the register is previously unset, it is initalised to an empty string.
+	 * 
+	 * You may assume that the append operation is reasonably fast, e.g. using a
+	 * StringBuilder internally.
+	 * 
+	 * @param s
+	 *            A string to be appended
+	 */
+	public void appendToS(String s) {
+		if(sReg == null) {
+			sReg = new StringBuilder();
+		}
+		sReg.append(s);
 	}
 
 

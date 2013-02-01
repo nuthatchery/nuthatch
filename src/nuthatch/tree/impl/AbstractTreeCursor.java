@@ -132,20 +132,6 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	}
 
 
-	/**
-	 * Replace child 'i' of 'node' with 'child'.
-	 * 
-	 * @param node
-	 *            Current node
-	 * @param child
-	 *            New child
-	 * @param i
-	 *            Child index, staring at 0
-	 * @return New current node
-	 */
-	protected abstract T replaceChild(T node, T child, int i);
-
-
 	@Override
 	public boolean hasBranch(int i) {
 		return BranchUtil.normalBranch(i, getNumChildren()) >= 0;
@@ -188,6 +174,12 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	}
 
 
+	@Override
+	public String treeToString() {
+		return current.toString();
+	}
+
+
 	/**
 	 * Return the child at index i.
 	 * 
@@ -203,10 +195,18 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	}
 
 
-	@Override
-	public String treeToString() {
-		return current.toString();
-	}
+	/**
+	 * Replace child 'i' of 'node' with 'child'.
+	 * 
+	 * @param node
+	 *            Current node
+	 * @param child
+	 *            New child
+	 * @param i
+	 *            Child index, staring at 0
+	 * @return New current node
+	 */
+	protected abstract T replaceChild(T node, T child, int i);
 
 
 	static class TreeCursorIterator<Value, Type, T> implements Iterator<TreeCursor<Value, Type>> {

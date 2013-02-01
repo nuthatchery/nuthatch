@@ -29,18 +29,6 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 
 
 	/**
-	 * Make a copy of this cursor rooted at the current node, tracking the same
-	 * tree.
-	 * 
-	 * The new cursor will be attached to the same tree, but its own position
-	 * and root
-	 * 
-	 * @return A copy of this cursor rooted at the current node
-	 */
-	TreeCursor<Value, Type> copySubtree();
-
-
-	/**
 	 * Make a copy of this cursor, replacing the subtree rooted at the current
 	 * node
 	 * with the replacement.
@@ -51,6 +39,18 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	 * @return A copy of this cursor, with the current subtree replaced
 	 */
 	TreeCursor<Value, Type> copyAndReplaceSubtree(TreeCursor<Value, Type> replacement);
+
+
+	/**
+	 * Make a copy of this cursor rooted at the current node, tracking the same
+	 * tree.
+	 * 
+	 * The new cursor will be attached to the same tree, but its own position
+	 * and root
+	 * 
+	 * @return A copy of this cursor rooted at the current node
+	 */
+	TreeCursor<Value, Type> copySubtree();
 
 
 	/**

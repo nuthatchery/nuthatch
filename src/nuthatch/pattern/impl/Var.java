@@ -15,6 +15,11 @@ public class Var<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 	}
 
 
+	public TreeCursor<Value, Type> get() {
+		return data;
+	}
+
+
 	@Override
 	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		if(data == null) {
@@ -43,11 +48,6 @@ public class Var<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 		else {
 			return "var";
 		}
-	}
-
-
-	public TreeCursor<Value, Type> get() {
-		return data;
 	}
 
 }

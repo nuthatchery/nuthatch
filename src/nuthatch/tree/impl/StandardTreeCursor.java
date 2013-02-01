@@ -27,12 +27,6 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 
 
 	@Override
-	public TreeCursor<Value, Type> copySubtree() {
-		return new StandardTreeCursor<Value, Type>(this, false);
-	}
-
-
-	@Override
 	public TreeCursor<Value, Type> copyAndReplaceSubtree(TreeCursor<Value, Type> replacement) {
 		if(replacement instanceof StandardTreeCursor) {
 			return new StandardTreeCursor<>(this, ((StandardTreeCursor<Value, Type>) replacement).getCurrent());
@@ -40,6 +34,12 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 		else {
 			throw new UnsupportedOperationException("Replacing with different cursor type");
 		}
+	}
+
+
+	@Override
+	public TreeCursor<Value, Type> copySubtree() {
+		return new StandardTreeCursor<Value, Type>(this, false);
 	}
 
 
