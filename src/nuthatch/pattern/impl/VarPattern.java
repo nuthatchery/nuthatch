@@ -1,6 +1,7 @@
 package nuthatch.pattern.impl;
 
 import nuthatch.pattern.Environment;
+import nuthatch.pattern.VarName;
 import nuthatch.tree.TreeCursor;
 
 public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type> {
@@ -8,11 +9,20 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 	private final String type;
 
 
+	public VarPattern(VarName<?> name, String type) {
+		if(name == null) {
+			throw new IllegalArgumentException("Name must not be null");
+		}
+		this.name = name.getName();
+		this.type = type;
+	}
+
+
 	public VarPattern(String name, String type) {
 		if(name == null) {
 			throw new IllegalArgumentException("Name must not be null");
 		}
-		this.name = name;
+		this.name = name.intern();
 		this.type = type;
 	}
 
