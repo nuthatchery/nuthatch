@@ -45,11 +45,6 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 	}
 
 	@Override
-	public TreeCursor<String, Type> copySubtree() {
-		return new UptrCursor(this, false);
-	}
-
-	@Override
 	public TreeCursor<String, Type> copyAndReplaceSubtree(
 			TreeCursor<String, Type> replacement) {
 		if(replacement instanceof UptrCursor) {
@@ -62,6 +57,11 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		else {
 			throw new UnsupportedOperationException("Replacing with different cursor type");
 		}
+	}
+
+	@Override
+	public TreeCursor<String, Type> copySubtree() {
+		return new UptrCursor(this, false);
 	}
 
 	@Override

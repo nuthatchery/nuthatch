@@ -26,15 +26,10 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 	protected PdbCursor(PdbCursor src, IValue replacement) {
 		super(src, replacement);
 	}
-	
+
 	@Override
 	public TreeCursor<IValue, Type> copy() {
 		return new PdbCursor(this, true);
-	}
-
-	@Override
-	public TreeCursor<IValue, Type> copySubtree() {
-		return new PdbCursor(this, false);
 	}
 
 	@Override
@@ -51,7 +46,12 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 			throw new UnsupportedOperationException("Replacing with different cursor type");
 		}
 	}
-	
+
+	@Override
+	public TreeCursor<IValue, Type> copySubtree() {
+		return new PdbCursor(this, false);
+	}
+
 	@Override
 	public IValue getData() {
 		return getCurrent();
