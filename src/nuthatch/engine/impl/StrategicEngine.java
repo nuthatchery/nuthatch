@@ -218,6 +218,12 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 
 
 	@Override
+	public boolean isEngaged() {
+		return current.isAtTop();
+	}
+
+
+	@Override
 	public boolean isLeaf() {
 		return current.isAtLeaf();
 	}
@@ -236,13 +242,7 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 
 
 	@Override
-	public void replace(TreeCursor<Value, Type> tree) {
-		current = current.copyAndReplaceSubtree(tree);
-	}
-
-
-	@Override
-	public void split() {
+	public void nest() {
 		// @SuppressWarnings("unchecked")
 		// StrategicEngine<Value, Type> children[] = new StrategicEngine[current.getNumChildren()];
 
@@ -251,6 +251,12 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 			children[i++] = clone(child, top, strategy);
 		}
  */	}
+
+
+	@Override
+	public void replace(TreeCursor<Value, Type> tree) {
+		current = current.copyAndReplaceSubtree(tree);
+	}
 
 
 	@Override
@@ -274,5 +280,4 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 
 		return true;
 	}
-
 }

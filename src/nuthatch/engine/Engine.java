@@ -37,6 +37,13 @@ public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
 
 
 	/**
+	 * @return True if the engine is currently running (i.e., isAtTop() is
+	 *         false)
+	 */
+	boolean isEngaged();
+
+
+	/**
 	 * Check if current node is a leaf.
 	 * 
 	 * @return True if current node has no children
@@ -70,5 +77,5 @@ public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
 	 * Split execution into one engine per child, operating in parallel.
 	 * 
 	 */
-	void split();
+	void nest();
 }

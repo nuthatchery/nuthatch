@@ -1,6 +1,7 @@
 package nuthatch.engine.impl;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,17 +28,26 @@ public class EnvEngine<Value, Type, E extends EnvEngine<Value, Type, E>> extends
 	}
 
 
-	public void clear() {
+	/**
+	 * Clear all variables.
+	 * 
+	 * Note that engine state is *not* automatically cleared when engage() is
+	 * called or when it returns. This means that variables can be assigned
+	 * values before the engine starts, and that the values can be inspected
+	 * after it completes. If the engine is to be engaged again, calling clear()
+	 * may be necessary.
+	 * 
+	 * @throws ConcurrentModificationException
+	 *             if the engine is currently running
+	 */
+	public void clear() throws ConcurrentModificationException {
+		if(isEngaged()) {
+			throw new ConcurrentModificationException();
+		}
 		env = EnvironmentFactory.env();
 		globalVars = new IdentityHashMap<String, Object>();
 		subtreeVars = new IdentityHashMap<String, Object>();
 		subtreeScoping = new ArrayList<Map<String, Object>>();
-	}
-
-
-	@Override
-	public void engage() {
-		super.engage();
 	}
 
 

@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import nuthatch.tree.Path;
 
-@SuppressWarnings("serial")
 public class StandardPath extends ArrayList<Integer> implements Path {
+	private static final long serialVersionUID = 3231044019230326233L;
+
 
 	public StandardPath() {
 		super();
