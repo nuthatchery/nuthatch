@@ -15,7 +15,6 @@ import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.rascalmpl.interpreter.IEvaluatorContext;
 
-
 public class Nuthatch {
 	private final IValueFactory vf;
 
@@ -29,16 +28,18 @@ public class Nuthatch {
 			@Override
 			public TreeCursor<String, Type> apply(Engine<String, Type> e) {
 				String name = e.getName();
-				if(name != null) {
+				if (name != null) {
 					ctx.getStdOut().print(name + " ");
 				} else {
-					ctx.getStdOut().print(e.getData().toString());
+					ctx.getStdOut().print(e.getData());
 				}
 				return null;
 			}
 		};
-		TopdownStrategy<String, Type, SimpleEngine<String, Type>> topDown = new TopdownStrategy<String, Type, SimpleEngine<String, Type>>(t);
-		Engine<String, Type> e = new SimpleEngine<String, Type>(new UptrCursor(tree), topDown);
+		TopdownStrategy<String, Type, SimpleEngine<String, Type>> topDown = new TopdownStrategy<String, Type, SimpleEngine<String, Type>>(
+				t);
+		Engine<String, Type> e = new SimpleEngine<String, Type>(new UptrCursor(
+				tree), topDown);
 		e.engage();
 
 		ctx.getStdOut().println();
@@ -52,7 +53,7 @@ public class Nuthatch {
 			@Override
 			public TreeCursor<IValue, Type> apply(Engine<IValue, Type> e) {
 				String name = e.getName();
-				if(name != null) {
+				if (name != null) {
 					ctx.getStdOut().print(e.getName() + " ");
 				} else {
 					ctx.getStdOut().print(e.getData().toString());
@@ -60,8 +61,10 @@ public class Nuthatch {
 				return null;
 			}
 		};
-		TopdownStrategy<IValue, Type, SimpleEngine<IValue, Type>> topDown = new TopdownStrategy<IValue, Type, SimpleEngine<IValue, Type>>(t);
-		Engine<IValue, Type> e = new SimpleEngine<IValue, Type>(new PdbCursor(n), topDown);
+		TopdownStrategy<IValue, Type, SimpleEngine<IValue, Type>> topDown = new TopdownStrategy<IValue, Type, SimpleEngine<IValue, Type>>(
+				t);
+		Engine<IValue, Type> e = new SimpleEngine<IValue, Type>(
+				new PdbCursor(n), topDown);
 		e.engage();
 
 		ctx.getStdOut().println();
