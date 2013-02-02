@@ -1,4 +1,5 @@
 package nuthatch.stratego.adapter;
+
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.AbstractTreeCursor;
@@ -10,7 +11,8 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTermBuilder;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 
-public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStrategoTerm> {
+public class TermCursor extends
+		AbstractTreeCursor<IStrategoTerm, Integer, IStrategoTerm> {
 	private final IStrategoTermBuilder builder;
 
 	public TermCursor(IStrategoTerm tree, IStrategoTermBuilder builder) {
@@ -22,6 +24,7 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		super(src, fullTree);
 		this.builder = src.builder;
 	}
+
 	protected TermCursor(TermCursor src, IStrategoTerm replacement) {
 		super(src, replacement);
 		this.builder = src.builder;
@@ -35,11 +38,11 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 	@Override
 	public TreeCursor<IStrategoTerm, Integer> copyAndReplaceSubtree(
 			TreeCursor<IStrategoTerm, Integer> replacement) {
-		if(replacement instanceof TermCursor) {
+		if (replacement instanceof TermCursor) {
 			return new TermCursor(this, ((TermCursor) replacement).getCurrent());
-		}
-		else {
-			throw new UnsupportedOperationException("Replacing with different cursor type");
+		} else {
+			throw new UnsupportedOperationException(
+					"Replacing with different cursor type");
 		}
 	}
 
@@ -56,10 +59,9 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 	@Override
 	public String getName() {
 		IStrategoTerm term = getCurrent();
-		if(term instanceof IStrategoNamed) {
+		if (term instanceof IStrategoNamed) {
 			return ((IStrategoNamed) term).getName();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -83,7 +85,6 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		return true;
 	}
 
-
 	@Override
 	public boolean hasName() {
 		return getCurrent() instanceof IStrategoNamed;
@@ -91,11 +92,11 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 
 	@Override
 	public boolean subtreeEquals(TreeCursor<IStrategoTerm, Integer> other) {
-		if(other instanceof TermCursor) {
+		if (other instanceof TermCursor) {
 			return getCurrent().equals(((TermCursor) other).getCurrent());
-		}
-		else {
-			throw new UnsupportedOperationException("Equality only supported on TermCursor");
+		} else {
+			throw new UnsupportedOperationException(
+					"Equality only supported on TermCursor");
 		}
 	}
 
@@ -107,12 +108,13 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 	@Override
 	protected IStrategoTerm replaceChild(IStrategoTerm node,
 			IStrategoTerm child, int i) {
-		switch(getCurrent().getTermType()) {
+		switch (getCurrent().getTermType()) {
 		case IStrategoTerm.APPL: {
 			IStrategoAppl term = (IStrategoAppl) getCurrent();
 			IStrategoTerm[] kids = term.getAllSubterms().clone();
 			kids[i] = child;
-			return builder.makeAppl(term.getConstructor(), kids, term.getAnnotations());
+			return builder.makeAppl(term.getConstructor(), kids,
+					term.getAnnotations());
 		}
 		case IStrategoTerm.LIST: {
 			IStrategoList term = (IStrategoList) getCurrent();
@@ -134,8 +136,12 @@ public class TermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStra
 		case IStrategoTerm.REF:
 		case IStrategoTerm.BLOB:
 		case IStrategoTerm.PLACEHOLDER:
-			System.err.println("Don't know how to deal with term type " + getCurrent().getTermType());
+			System.err.println("Don't know how to deal with term type "
+					+ getCurrent().getTermType());
 			break;
+		default:
+			System.err.println("Illegal term type: "
+					+ getCurrent().getTermType());
 		}
 
 		return null;

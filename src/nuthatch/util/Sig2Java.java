@@ -69,7 +69,8 @@ public class Sig2Java {
 			default:
 				if(inFile == null) {
 					inFile = args[i];
-				} else {
+				}
+				else {
 					fatalExtraArgument(args[i]);
 				}
 				break;
@@ -96,7 +97,7 @@ public class Sig2Java {
 
 		if(pkgName == null && outFile != null && outFile.contains(File.separator)) {
 			pkgName = outFile.substring(0, outFile.lastIndexOf(File.separator));
-			pkgName = pkgName.replaceAll(File.separator, ".");
+			pkgName = pkgName.replaceAll(File.separatorChar == '\\' ? "\\\\" : File.separator, ".");
 		}
 
 		/*
@@ -116,7 +117,7 @@ public class Sig2Java {
 		String javaCode = StrategoSignatures.sig2java(signature, pkgName, className);
 
 		if(outFile != null) {
-			try(PrintWriter out = new PrintWriter(new FileOutputStream(outFile))) {
+			try (PrintWriter out = new PrintWriter(new FileOutputStream(outFile))) {
 				out.print(javaCode);
 			}
 		}
@@ -125,20 +126,24 @@ public class Sig2Java {
 		}
 	}
 
+
 	private static void fatalExtraArgument(String s) {
 		System.err.println("Unknown extra argument: " + s);
 		System.exit(1);
 	}
+
 
 	private static void fatalMissingArgument(String s) {
 		System.err.println("Missing argument to " + s);
 		System.exit(1);
 	}
 
+
 	private static void fatalMissingName(String s) {
 		System.err.println("Missing " + s + " name, and not output file given");
 		System.exit(1);
 	}
+
 
 	private static void help() {
 		System.err.println("usage: Sig2Java [[-i] inFile.str] [-o outFile.java]");
