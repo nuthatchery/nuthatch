@@ -71,14 +71,16 @@ public class EnvEngine<Value, Type, E extends EnvEngine<Value, Type, E>> extends
 		int j = BranchUtil.normalBranch(i, getNumChildren());
 		if(j == 0) {
 			int k = subtreeScoping.size();
-			Map<String, Object> map = subtreeScoping.remove(k - 1);
-			if(map != null) {
-				for(Entry<String, Object> entry : map.entrySet()) {
-					if(entry.getValue() == null) {
-						subtreeVars.remove(entry.getKey());
-					}
-					else {
-						subtreeVars.put(entry.getKey(), entry.getValue());
+			if(k > 0) {
+				Map<String, Object> map = subtreeScoping.remove(k - 1);
+				if(map != null) {
+					for(Entry<String, Object> entry : map.entrySet()) {
+						if(entry.getValue() == null) {
+							subtreeVars.remove(entry.getKey());
+						}
+						else {
+							subtreeVars.put(entry.getKey(), entry.getValue());
+						}
 					}
 				}
 			}
