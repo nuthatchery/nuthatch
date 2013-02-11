@@ -1,9 +1,9 @@
 package nuthatch.rascal.adapter;
 
 import nullness.Nullable;
-import nuthatch.engine.errors.TypeMismatch;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.AbstractTreeCursor;
+import nuthatch.walker.errors.TypeMismatch;
 
 import org.eclipse.imp.pdb.facts.IList;
 import org.eclipse.imp.pdb.facts.IMap;

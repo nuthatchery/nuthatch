@@ -1,12 +1,12 @@
 package nuthatch.rascal;
 
-import nuthatch.engine.Engine;
-import nuthatch.engine.impl.SimpleEngine;
-import nuthatch.library.strategies.TopdownStrategy;
+import nuthatch.library.walks.Topdown;
 import nuthatch.rascal.adapter.PdbCursor;
 import nuthatch.rascal.adapter.UptrCursor;
-import nuthatch.strategy.Transform;
 import nuthatch.tree.TreeCursor;
+import nuthatch.walk.Action;
+import nuthatch.walker.Walker;
+import nuthatch.walker.impl.BasicWalker;
 
 import org.eclipse.imp.pdb.facts.IConstructor;
 import org.eclipse.imp.pdb.facts.INode;
@@ -24,9 +24,9 @@ public class Nuthatch {
 	}
 
 	public IConstructor engage(IConstructor tree, final IEvaluatorContext ctx) {
-		Transform<String, Type> t = new Transform<String, Type>() {
+		Action<String, Type> t = new Action<String, Type>() {
 			@Override
-			public TreeCursor<String, Type> apply(Engine<String, Type> e) {
+			public TreeCursor<String, Type> apply(Walker<String, Type> e) {
 				String name = e.getName();
 				if (name != null) {
 					ctx.getStdOut().print(name + " ");
@@ -36,11 +36,11 @@ public class Nuthatch {
 				return null;
 			}
 		};
-		TopdownStrategy<String, Type, SimpleEngine<String, Type>> topDown = new TopdownStrategy<String, Type, SimpleEngine<String, Type>>(
+		Topdown<String, Type, BasicWalker<String, Type>> topDown = new Topdown<String, Type, BasicWalker<String, Type>>(
 				t);
-		Engine<String, Type> e = new SimpleEngine<String, Type>(new UptrCursor(
+		Walker<String, Type> e = new BasicWalker<String, Type>(new UptrCursor(
 				tree), topDown);
-		e.engage();
+		e.start();
 
 		ctx.getStdOut().println();
 		ctx.getStdOut().flush();
@@ -49,9 +49,9 @@ public class Nuthatch {
 	}
 
 	public INode engage(INode n, final IEvaluatorContext ctx) {
-		Transform<IValue, Type> t = new Transform<IValue, Type>() {
+		Action<IValue, Type> t = new Action<IValue, Type>() {
 			@Override
-			public TreeCursor<IValue, Type> apply(Engine<IValue, Type> e) {
+			public TreeCursor<IValue, Type> apply(Walker<IValue, Type> e) {
 				String name = e.getName();
 				if (name != null) {
 					ctx.getStdOut().print(e.getName() + " ");
@@ -61,11 +61,11 @@ public class Nuthatch {
 				return null;
 			}
 		};
-		TopdownStrategy<IValue, Type, SimpleEngine<IValue, Type>> topDown = new TopdownStrategy<IValue, Type, SimpleEngine<IValue, Type>>(
+		Topdown<IValue, Type, BasicWalker<IValue, Type>> topDown = new Topdown<IValue, Type, BasicWalker<IValue, Type>>(
 				t);
-		Engine<IValue, Type> e = new SimpleEngine<IValue, Type>(
+		Walker<IValue, Type> e = new BasicWalker<IValue, Type>(
 				new PdbCursor(n), topDown);
-		e.engage();
+		e.start();
 
 		ctx.getStdOut().println();
 		ctx.getStdOut().flush();
