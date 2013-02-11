@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import nuthatch.engine.errors.ReachedTop;
 import nuthatch.tree.Path;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.util.BranchUtil;
+import nuthatch.walker.errors.ReachedTop;
 
 public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<Value, Type> {
 	private final List<T> stack;

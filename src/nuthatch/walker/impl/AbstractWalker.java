@@ -1,18 +1,18 @@
-package nuthatch.engine.impl;
+package nuthatch.walker.impl;
 
 import java.util.Iterator;
 
-import nuthatch.engine.Engine;
-import nuthatch.engine.errors.ReachedTop;
-import nuthatch.strategy.Strategy;
 import nuthatch.tree.Path;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.StandardPath;
 import nuthatch.tree.impl.StandardTreeCursor;
+import nuthatch.walk.Step;
+import nuthatch.walker.Walker;
+import nuthatch.walker.errors.ReachedTop;
 
-public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Value, Type, E>> implements Engine<Value, Type> {
+public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value, Type, E>> implements Walker<Value, Type> {
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
@@ -26,23 +26,23 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 	 * If replaceDepth == -1, then current == original
 	 */
 	private TreeCursor<Value, Type> current;
-	private final Strategy<StrategicEngine<Value, Type, E>> strategy;
+	private final Step<AbstractWalker<Value, Type, E>> strategy;
 
 	private final Path path;
 
 
-	public StrategicEngine(Tree<Value, Type> tree, Strategy<E> strat) {
+	public AbstractWalker(Tree<Value, Type> tree, Step<E> strat) {
 		this.rootCursor = new StandardTreeCursor<>(tree);
 		this.current = null;
-		this.strategy = (Strategy<StrategicEngine<Value, Type, E>>) strat;
+		this.strategy = (Step<AbstractWalker<Value, Type, E>>) strat;
 		this.path = new StandardPath();
 	}
 
 
-	public StrategicEngine(TreeCursor<Value, Type> cursor, Strategy<E> strat) {
+	public AbstractWalker(TreeCursor<Value, Type> cursor, Step<E> strat) {
 		this.rootCursor = cursor;
 		this.current = null;
-		this.strategy = (Strategy<StrategicEngine<Value, Type, E>>) strat;
+		this.strategy = (Step<AbstractWalker<Value, Type, E>>) strat;
 		this.path = new StandardPath();
 	}
 
@@ -72,11 +72,11 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 
 
 	@Override
-	public void engage() {
+	public void start() {
 		current = rootCursor.copy();
 		try {
 			while(!current.isAtTop()) {
-				int go = strategy.visit(this);
+				int go = strategy.step(this);
 				go(go);
 			}
 		}
@@ -218,7 +218,7 @@ public abstract class StrategicEngine<Value, Type, E extends StrategicEngine<Val
 
 
 	@Override
-	public boolean isEngaged() {
+	public boolean isRunning() {
 		return current.isAtTop();
 	}
 

@@ -1,4 +1,4 @@
-package nuthatch.engine.impl;
+package nuthatch.walker.impl;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -10,19 +10,19 @@ import java.util.Map.Entry;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.VarName;
-import nuthatch.strategy.Strategy;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.util.BranchUtil;
+import nuthatch.walk.Step;
 
-public class EnvEngine<Value, Type, E extends EnvEngine<Value, Type, E>> extends RegisteredEngine<Value, Type, E> {
+public class EnvWalker<Value, Type, E extends EnvWalker<Value, Type, E>> extends AbstractVarWalker<Value, Type, E> {
 	private Environment<Object> env = null;
 	private List<Map<String, Object>> subtreeScoping;
 	private Map<String, Object> subtreeVars;
 	private Map<String, Object> globalVars;
 
 
-	public EnvEngine(TreeCursor<Value, Type> cursor, Strategy<E> strat) {
+	public EnvWalker(TreeCursor<Value, Type> cursor, Step<E> strat) {
 		super(cursor, strat);
 		clear();
 	}
@@ -41,7 +41,7 @@ public class EnvEngine<Value, Type, E extends EnvEngine<Value, Type, E>> extends
 	 *             if the engine is currently running
 	 */
 	public void clear() throws ConcurrentModificationException {
-		if(isEngaged()) {
+		if(isRunning()) {
 			throw new ConcurrentModificationException();
 		}
 		env = EnvironmentFactory.env();

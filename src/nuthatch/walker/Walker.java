@@ -1,21 +1,15 @@
-package nuthatch.engine;
+package nuthatch.walker;
 
-import nuthatch.engine.errors.TypeMismatch;
 import nuthatch.tree.TreeCursor;
+import nuthatch.walker.errors.TypeMismatch;
 
-public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
+public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	/**
 	 * Return the depth of the tree at the current position.
 	 * 
 	 * @return Current depth, where root has depth 0
 	 */
 	int depth();
-
-
-	/**
-	 * Start executing the engine.
-	 */
-	void engage();
 
 
 	/**
@@ -37,13 +31,6 @@ public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
 
 
 	/**
-	 * @return True if the engine is currently running (i.e., isAtTop() is
-	 *         false)
-	 */
-	boolean isEngaged();
-
-
-	/**
 	 * Check if current node is a leaf.
 	 * 
 	 * @return True if current node has no children
@@ -57,6 +44,20 @@ public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
 	 * @return True if current node has no parent
 	 */
 	boolean isRoot();
+
+
+	/**
+	 * @return True if the walker is currently running (i.e., isAtTop() is
+	 *         false)
+	 */
+	boolean isRunning();
+
+
+	/**
+	 * Split execution into one walker per child, operating in parallel.
+	 * 
+	 */
+	void nest();
 
 
 	/**
@@ -74,8 +75,7 @@ public interface Engine<Value, Type> extends TreeCursor<Value, Type> {
 
 
 	/**
-	 * Split execution into one engine per child, operating in parallel.
-	 * 
+	 * Start executing the walker.
 	 */
-	void nest();
+	void start();
 }

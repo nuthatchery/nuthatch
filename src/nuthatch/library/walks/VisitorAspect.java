@@ -1,15 +1,15 @@
-package nuthatch.library.strategies;
+package nuthatch.library.walks;
 
-import nuthatch.engine.Engine;
-import nuthatch.strategy.Strategy;
 import nuthatch.tree.Tree;
+import nuthatch.walk.Step;
+import nuthatch.walker.Walker;
 
-public class VisitorAspect<E extends Engine<?, ?>> implements Strategy<E> {
+public class VisitorAspect<E extends Walker<?, ?>> implements Step<E> {
 	public static final int PROCEED = Integer.MIN_VALUE;
-	private final Strategy<E> strategy;
+	private final Step<E> strategy;
 
 
-	public VisitorAspect(Strategy<E> s) {
+	public VisitorAspect(Step<E> s) {
 		strategy = s;
 	}
 
@@ -69,7 +69,7 @@ public class VisitorAspect<E extends Engine<?, ?>> implements Strategy<E> {
 
 
 	@Override
-	public int visit(E e) {
+	public int step(E e) {
 		if(e.from(Tree.PARENT)) {
 			beforeEntry(e);
 		}
@@ -82,7 +82,7 @@ public class VisitorAspect<E extends Engine<?, ?>> implements Strategy<E> {
 			return go;
 		}
 
-		go = strategy.visit(e);
+		go = strategy.step(e);
 
 		int goAfter = after(e);
 		if(goAfter != PROCEED) {
