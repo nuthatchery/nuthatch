@@ -3,8 +3,8 @@ package nuthatch.demo;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import nuthatch.engine.Engine;
-import nuthatch.library.strategies.Visitor;
+import nuthatch.library.walks.DefaultVisitor;
+import nuthatch.library.walks.Visitor;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
@@ -14,6 +14,7 @@ import nuthatch.stratego.adapter.TermEngine;
 import nuthatch.stratego.pattern.TermPatternFactory;
 import nuthatch.stratego.syntax.StrategoSignatures;
 import nuthatch.tree.TreeCursor;
+import nuthatch.walker.Walker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -37,7 +38,7 @@ public class Main {
 			TermPatternFactory pf = TermPatternFactory.getInstance();
 			final Pattern<IStrategoTerm, Integer> idPat = pf.appl("Id", pf.string("foo"));
 
-			Visitor<TermEngine> visitor = new Visitor<TermEngine>() {
+			Visitor<TermEngine> visitor = new DefaultVisitor<TermEngine>() {
 				@Override
 				public void onEntry(TermEngine e) {
 					Environment<TreeCursor<IStrategoTerm, Integer>> env = EnvironmentFactory.env();
@@ -46,30 +47,35 @@ public class Main {
 					}
 				}
 			};
-			Engine<IStrategoTerm, Integer> e = new TermEngine(tree, visitor);
-			e.engage();
+			Walker<IStrategoTerm, Integer> e = new TermEngine(tree, visitor);
+			e.start();
 
-
-
-		} catch (TokenExpectedException e) {
+		}
+		catch(TokenExpectedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (FileNotFoundException e) {
+		}
+		catch(FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (BadTokenException e) {
+		}
+		catch(BadTokenException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ParseException e) {
+		}
+		catch(ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch(IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvalidParseTableException e) {
+		}
+		catch(InvalidParseTableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SGLRException e) {
+		}
+		catch(SGLRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
