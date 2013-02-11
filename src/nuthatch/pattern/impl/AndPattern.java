@@ -1,6 +1,7 @@
 package nuthatch.pattern.impl;
 
 import nuthatch.pattern.Environment;
+import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 
@@ -15,6 +16,12 @@ public class AndPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 		}
 		this.a = a;
 		this.b = b;
+	}
+
+
+	@Override
+	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
+		throw new NotBuildableException("and");
 	}
 
 

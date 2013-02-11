@@ -5,6 +5,23 @@ import nuthatch.tree.TreeCursor;
 public interface Pattern<Value, Type> {
 
 	/**
+	 * Build a tree from a pattern.
+	 * 
+	 * The built tree replaces the current node of the cursor (if any).
+	 * 
+	 * @param tree
+	 *            A tree cursor to insert the new tree into
+	 * @param env
+	 *            An environment
+	 * @return the tree cursor
+	 * @throws NotBuildableException
+	 *             if the pattern contains elements that are not buildable, such
+	 *             as And, Or, Any, etc.
+	 */
+	<T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException;
+
+
+	/**
 	 * Match pattern against tree.
 	 * 
 	 * Any variables in the pattern will be either bound in the environment (if

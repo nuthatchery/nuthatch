@@ -1,6 +1,7 @@
 package nuthatch.pattern.impl;
 
 import nuthatch.pattern.Environment;
+import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.VarName;
 import nuthatch.tree.TreeCursor;
 
@@ -24,6 +25,12 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 		}
 		this.name = name.getName();
 		this.type = type;
+	}
+
+
+	@Override
+	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
+		throw new UnsupportedOperationException();
 	}
 
 

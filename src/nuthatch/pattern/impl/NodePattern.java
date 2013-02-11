@@ -1,6 +1,7 @@
 package nuthatch.pattern.impl;
 
 import nuthatch.pattern.Environment;
+import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 
@@ -22,6 +23,12 @@ public class NodePattern<Value, Type> extends AbstractPattern<Value, Type> {
 		else {
 			this.children = null;
 		}
+	}
+
+
+	@Override
+	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
+		throw new UnsupportedOperationException();
 	}
 
 
