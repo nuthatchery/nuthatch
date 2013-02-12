@@ -20,6 +20,10 @@ public class ToLaTeX {
 	private static final int MODE_VISIT = 1 << 1;
 	private static final int MODE_PREAMBLE = 1 << 2;
 
+	/**
+	 * This step function produces commands to build a tree using the TikZ in
+	 * LaTeX. The result is accumulated in the S-variable of the walker.
+	 */
 	public static final Step<SimpleWalker<String, String>> toTikz = new Visitor<SimpleWalker<String, String>>() {
 		@Override
 		public void afterChild(SimpleWalker<String, String> walker, int child) {
@@ -120,10 +124,12 @@ public class ToLaTeX {
 		System.out.println(treePrinter.getS());
 		System.out.println(";");
 
+		// we should output commands for drawing the walk
 		if((mode & MODE_WALK) != 0) {
 			System.out.println(traceWalk(ExampleTree.TREE.makeCursor(), topdown));
 		}
 
+		// we should output commands for drawing the order of visiting nodes
 		if((mode & MODE_VISIT) != 0) {
 			SimpleWalker<String, String> walker = new SimpleWalker<String, String>(ExampleTree.TREE.makeCursor(), strat);
 			walker.start();
@@ -140,8 +146,21 @@ public class ToLaTeX {
 	}
 
 
+	/**
+	 * Trace the walker's path in a tree.
+	 * 
+	 * The output must be places inside the same tikzpicture as the tree. LaTeX
+	 * definitions for \\down and \\up must be provided.
+	 * 
+	 * @param tree
+	 *            The tree we're tracing
+	 * @param step
+	 *            A step function
+	 * @return A series of up and down commands tracing the walk produced by a
+	 *         walker running the step function
+	 */
 	public static String traceWalk(TreeCursor<String, String> tree, Step<SimpleWalker<String, String>> step) {
-		SimpleWalker<String, String> walker = new SimpleWalker<String, String>(tree, new VisitorAspect<SimpleWalker<String, String>>(step) {
+		SimpleWalker<String, String> walkTracingWalker = new SimpleWalker<String, String>(tree, new VisitorAspect<SimpleWalker<String, String>>(step) {
 			@Override
 			public int before(SimpleWalker<String, String> w) {
 				TreeCursor<String, String> prev = w.getBranch(w.from());
@@ -157,11 +176,18 @@ public class ToLaTeX {
 				return PROCEED;
 			}
 		});
-		walker.start();
-		return walker.getS();
+		walkTracingWalker.start();
+		return walkTracingWalker.getS();
 	}
 
 
+	/**
+	 * Make an action that adds the current node to a list of visited nodes
+	 * 
+	 * @param visits
+	 *            The list we should add nodes to
+	 * @return An action, suitable for use in a step function
+	 */
 	private static Action<String, String> traceVisit(final List<String> visits) {
 		return new Action<String, String>() {
 			@Override
@@ -173,6 +199,13 @@ public class ToLaTeX {
 	}
 
 
+	/**
+	 * Turn a list of visits into LaTeX commands
+	 * 
+	 * @param visits
+	 *            The list of nodes that have been visited
+	 * @return LaTeX commands
+	 */
 	private static String visitsToString(List<String> visits) {
 		StringBuilder b = new StringBuilder();
 		if(!visits.isEmpty()) {
