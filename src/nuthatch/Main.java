@@ -1,14 +1,8 @@
 package nuthatch;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nuthatch.library.walks.Bottomup;
 import nuthatch.library.walks.Inorder;
 import nuthatch.library.walks.Topdown;
-import nuthatch.library.walks.Visitor;
-import nuthatch.library.walks.VisitorAspect;
-import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.StringTree;
 import nuthatch.walk.Action;
@@ -55,109 +49,6 @@ public class Main {
 		System.out.print("InOrder: ");
 		new SimpleWalker<String, String>(tree, inorder).start();
 		System.out.println();
-
-		Step<SimpleWalker<String, String>> toTerm = new Step<SimpleWalker<String, String>>() {
-			@Override
-			public int step(SimpleWalker<String, String> walker) {
-				if(walker.isAtLeaf()) {
-					walker.appendToS(walker.getData().toString());
-				}
-				else if(walker.from(PARENT)) {
-					walker.appendToS(walker.getName());
-					walker.appendToS("(");
-				}
-				else if(walker.from(LAST)) {
-					walker.appendToS(")");
-				}
-				else {
-					walker.appendToS(", ");
-				}
-
-				return NEXT;
-			}
-		};
-
-		System.out.print("ToTerm: ");
-		SimpleWalker<String, String> toTermWalker = new SimpleWalker<String, String>(tree, toTerm);
-		toTermWalker.start();
-		System.out.println(toTermWalker.getS());
-
-		Step<SimpleWalker<String, String>> toTikz = new Visitor<SimpleWalker<String, String>>() {
-			@Override
-			public void afterChild(SimpleWalker<String, String> walker, int child) {
-				walker.appendToS("}");
-			}
-
-
-			@Override
-			public void beforeChild(SimpleWalker<String, String> walker, int child) {
-				walker.appendToS("child{");
-			}
-
-
-			@Override
-			public void onEntry(SimpleWalker<String, String> walker) {
-				walker.appendToS("node[treenode] (" + walker.getPathId() + ") {" + walker.getName() + "} [->]");
-			}
-
-
-			@Override
-			public void onExit(SimpleWalker<String, String> walker) {
-			}
-		};
-
-		System.out.println("\\documentclass{minimal}");
-		System.out.println("\\usepackage[a4paper,margin=1cm,landscape]{geometry}");
-		System.out.println("\\usepackage{tikz}");
-		System.out.println("\\usetikzlibrary{positioning,shadows,arrows}");
-		System.out.println("");
-		System.out.println("\\begin{document}");
-		System.out.println("\\begin{center}");
-		System.out.println("\\begin{tikzpicture}[");
-		System.out.println("    level distance=0.5cm, growth parent anchor=south");
-		System.out.println("]");
-		System.out.print("\\");
-		new SimpleWalker<String, String>(tree.makeCursor(), toTikz).start();
-		System.out.println(";");
-
-		final List<String> visits = new ArrayList<String>();
-		Action traceVisit = new Action() {
-
-			@Override
-			public TreeCursor apply(Walker e) {
-				visits.add(e.getPathId());
-				return null;
-			}
-		};
-		new SimpleWalker<String, String>(tree, new VisitorAspect<SimpleWalker<String, String>>(new Inorder<String, String, SimpleWalker<String, String>>(traceVisit, traceVisit, traceVisit)) {
-			@Override
-			public int before(SimpleWalker<String, String> e) {
-				TreeCursor<String, String> prev = e.getBranch(e.from());
-				int branch = e.getFromBranch();
-				if(e.from(Tree.PARENT)) {
-					if(!e.isRoot()) {
-						System.out.println("\\down{" + prev.getPathId() + "}{" + branch + "}{" + e.getPathId() + "}");
-					}
-				}
-				else {
-					System.out.println("\\up{" + prev.getPathId() + "}{" + e.from() + "}{" + e.getPathId() + "}");
-				}
-				return PROCEED;
-			}
-		}).start();
-		if(!visits.isEmpty()) {
-			int i = 0;
-			String last = visits.get(i++);
-			while(i < visits.size()) {
-				String current = visits.get(i++);
-				System.out.println("\\visit{" + last + "}{" + current + "}");
-				last = current;
-			}
-
-		}
-		System.out.println("\\end{tikzpicture}");
-		System.out.println("\\end{center}");
-		System.out.println("\\end{document}");
 
 		System.out.println(tree);
 
