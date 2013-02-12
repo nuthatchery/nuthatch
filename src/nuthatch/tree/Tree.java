@@ -27,14 +27,6 @@ public interface Tree<Value, Type> {
 
 
 	/**
-	 * Return a modifiable copy of this tree.
-	 * 
-	 * @return A copy of the tree, rooted at this node
-	 */
-	ModifiableTree<Value, Type> copy();
-
-
-	/**
 	 * Get the tree node at a branch.
 	 * 
 	 * @param i

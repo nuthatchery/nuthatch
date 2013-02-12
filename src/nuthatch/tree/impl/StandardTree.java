@@ -2,12 +2,11 @@ package nuthatch.tree.impl;
 
 import java.util.Arrays;
 
-import nuthatch.tree.ModifiableTree;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 
-public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
+public class StandardTree<Value, Type> implements Tree<Value, Type> {
 	private Tree<Value, Type>[] children;
 	private final Value data;
 	private final String name;
@@ -27,8 +26,8 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 			this.children = null;
 		}
 		for(int i = 0; i < children.length; i++) {
-			ModifiableTree<Value, Type> copy = children[i].copy();
-			this.children[i] = copy;
+			// ModifiableTree<Value, Type> copy = children[i].copy();
+			this.children[i] = children[i];
 		}
 	}
 
@@ -57,43 +56,9 @@ public class StandardTree<Value, Type> implements ModifiableTree<Value, Type> {
 	}
 
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void addChild(Tree<Value, Type> tree) {
-		if(children == null) {
-			children = new Tree[] { tree };
-		}
-		else {
-			children = Arrays.copyOf(children, children.length + 1);
-			children[children.length - 1] = tree;
-		}
-	}
-
-
 	@Override
 	public Iterable<Tree<Value, Type>> children() {
 		return Arrays.asList(children);
-	}
-
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public ModifiableTree<Value, Type> copy() {
-		StandardTree<Value, Type> tree = new StandardTree<Value, Type>(name, type, data);
-		if(children != null) {
-			tree.children = new Tree[children.length];
-			for(int i = 0; i < children.length; i++) {
-				ModifiableTree<Value, Type> copy = children[i].copy();
-				tree.children[i] = copy;
-			}
-		}
-		return tree;
-	}
-
-
-	@Override
-	public Tree<Value, Type> freeze() {
-		return this;
 	}
 
 

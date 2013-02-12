@@ -10,15 +10,15 @@ import nuthatch.library.walks.Visitor;
 import nuthatch.library.walks.VisitorAspect;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
-import nuthatch.tree.impl.StandardTree;
+import nuthatch.tree.impl.StringTree;
 import nuthatch.walk.Action;
 import nuthatch.walk.Step;
 import nuthatch.walker.Walker;
-import nuthatch.walker.impl.BasicWalker;
+import nuthatch.walker.impl.SimpleWalker;
 
 public class Main {
 	public static void main(String[] args) {
-		StandardTree<String, String> tree = new StandardTree("+", "", new StandardTree("5", ""), new StandardTree("*", "", new StandardTree("+", "", new StandardTree("7", ""), new StandardTree("3", "")), new StandardTree("4", "")));
+		StringTree tree = new StringTree("+", new StringTree("5"), new StringTree("*", new StringTree("+", new StringTree("7"), new StringTree("3")), new StringTree("4")));
 
 		Action t = new Action() {
 			@Override
@@ -29,12 +29,12 @@ public class Main {
 		};
 		Topdown topDown = new Topdown(t);
 		System.out.print("TopDown: ");
-		new BasicWalker<String, String>(tree, topDown).start();
+		new SimpleWalker<String, String>(tree, topDown).start();
 		System.out.println();
 
 		Bottomup bottomup = new Bottomup(t);
 		System.out.print("BottomUp: ");
-		new BasicWalker<String, String>(tree, bottomup).start();
+		new SimpleWalker<String, String>(tree, bottomup).start();
 		System.out.println();
 
 		Inorder inorder = new Inorder(new Action() {
@@ -53,30 +53,56 @@ public class Main {
 			}
 		});
 		System.out.print("InOrder: ");
-		new BasicWalker<String, String>(tree, inorder).start();
+		new SimpleWalker<String, String>(tree, inorder).start();
 		System.out.println();
 
-		Step<BasicWalker<String, String>> toTikz = new Visitor<BasicWalker<String, String>>() {
+		Step<SimpleWalker<String, String>> toTerm = new Step<SimpleWalker<String, String>>() {
 			@Override
-			public void afterChild(BasicWalker<String, String> walker, int child) {
+			public int step(SimpleWalker<String, String> walker) {
+				if(walker.isAtLeaf()) {
+					walker.appendToS(walker.getData().toString());
+				}
+				else if(walker.from(PARENT)) {
+					walker.appendToS(walker.getName());
+					walker.appendToS("(");
+				}
+				else if(walker.from(LAST)) {
+					walker.appendToS(")");
+				}
+				else {
+					walker.appendToS(", ");
+				}
+
+				return NEXT;
+			}
+		};
+
+		System.out.print("ToTerm: ");
+		SimpleWalker<String, String> toTermWalker = new SimpleWalker<String, String>(tree, toTerm);
+		toTermWalker.start();
+		System.out.println(toTermWalker.getS());
+
+		Step<SimpleWalker<String, String>> toTikz = new Visitor<SimpleWalker<String, String>>() {
+			@Override
+			public void afterChild(SimpleWalker<String, String> walker, int child) {
 				walker.appendToS("}");
 			}
 
 
 			@Override
-			public void beforeChild(BasicWalker<String, String> walker, int child) {
+			public void beforeChild(SimpleWalker<String, String> walker, int child) {
 				walker.appendToS("child{");
 			}
 
 
 			@Override
-			public void onEntry(BasicWalker<String, String> walker) {
+			public void onEntry(SimpleWalker<String, String> walker) {
 				walker.appendToS("node[treenode] (" + walker.getPathId() + ") {" + walker.getName() + "} [->]");
 			}
 
 
 			@Override
-			public void onExit(BasicWalker<String, String> walker) {
+			public void onExit(SimpleWalker<String, String> walker) {
 			}
 		};
 
@@ -91,7 +117,7 @@ public class Main {
 		System.out.println("    level distance=0.5cm, growth parent anchor=south");
 		System.out.println("]");
 		System.out.print("\\");
-		new BasicWalker<String, String>(tree.makeCursor(), toTikz).start();
+		new SimpleWalker<String, String>(tree.makeCursor(), toTikz).start();
 		System.out.println(";");
 
 		final List<String> visits = new ArrayList<String>();
@@ -103,9 +129,9 @@ public class Main {
 				return null;
 			}
 		};
-		new BasicWalker<String, String>(tree, new VisitorAspect<BasicWalker<String, String>>(new Inorder<String, String, BasicWalker<String, String>>(traceVisit, traceVisit, traceVisit)) {
+		new SimpleWalker<String, String>(tree, new VisitorAspect<SimpleWalker<String, String>>(new Inorder<String, String, SimpleWalker<String, String>>(traceVisit, traceVisit, traceVisit)) {
 			@Override
-			public int before(BasicWalker<String, String> e) {
+			public int before(SimpleWalker<String, String> e) {
 				TreeCursor<String, String> prev = e.getBranch(e.from());
 				int branch = e.getFromBranch();
 				if(e.from(Tree.PARENT)) {
@@ -146,9 +172,9 @@ public class Main {
 
 						switch(name) {
 						case "+":
-							return new StandardTree<String, String>(String.valueOf(a + b), "").makeCursor();
+							return new StringTree(String.valueOf(a + b)).makeCursor();
 						case "*":
-							return new StandardTree<String, String>(String.valueOf(a + b), "").makeCursor();
+							return new StringTree(String.valueOf(a + b)).makeCursor();
 						}
 					}
 					return null;
@@ -158,9 +184,9 @@ public class Main {
 				}
 			}
 		};
-		Step<BasicWalker<String, String>> replace = new Bottomup<>(u);
+		Step<SimpleWalker<String, String>> replace = new Bottomup<>(u);
 		System.out.print("TopDownReplace: ");
-		BasicWalker<String, String> engine = new BasicWalker<String, String>(tree, replace);
+		SimpleWalker<String, String> engine = new SimpleWalker<String, String>(tree, replace);
 		engine.start();
 		System.out.println(engine.treeToString());
 

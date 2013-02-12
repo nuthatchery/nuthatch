@@ -15,14 +15,14 @@ import nuthatch.walk.Step;
  * @param <Value>
  * @param <Type>
  */
-public final class BasicWalker<Value, Type> extends AbstractVarWalker<Value, Type, BasicWalker<Value, Type>> {
+public final class SimpleWalker<Value, Type> extends AbstractVarWalker<Value, Type, SimpleWalker<Value, Type>> {
 
-	public BasicWalker(Tree<Value, Type> tree, Step<BasicWalker<Value, Type>> strat) {
+	public SimpleWalker(Tree<Value, Type> tree, Step<SimpleWalker<Value, Type>> strat) {
 		super(tree, strat);
 	}
 
 
-	public BasicWalker(TreeCursor<Value, Type> cursor, Step<BasicWalker<Value, Type>> strat) {
+	public SimpleWalker(TreeCursor<Value, Type> cursor, Step<SimpleWalker<Value, Type>> strat) {
 		super(cursor, strat);
 	}
 }

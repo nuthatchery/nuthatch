@@ -72,20 +72,6 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
-	public void start() {
-		current = rootCursor.copy();
-		try {
-			while(!current.isAtTop()) {
-				int go = strategy.step(this);
-				go(go);
-			}
-		}
-		catch(ReachedTop e) {
-		}
-	}
-
-
-	@Override
 	public int from() {
 		return current.getFromBranch();
 	}
@@ -218,12 +204,6 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
-	public boolean isRunning() {
-		return current.isAtTop();
-	}
-
-
-	@Override
 	public boolean isLeaf() {
 		return current.isAtLeaf();
 	}
@@ -232,6 +212,12 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	@Override
 	public boolean isRoot() {
 		return current.isAtRoot();
+	}
+
+
+	@Override
+	public boolean isRunning() {
+		return current.isAtTop();
 	}
 
 
@@ -256,6 +242,23 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	@Override
 	public void replace(TreeCursor<Value, Type> tree) {
 		current = current.copyAndReplaceSubtree(tree);
+	}
+
+
+	@Override
+	public void start() {
+		current = rootCursor.copy();
+		try {
+			while(!current.isAtTop()) {
+				int go = strategy.step(this);
+				if(go == Step.NEXT) {
+					go = from() + 1;
+				}
+				go(go);
+			}
+		}
+		catch(ReachedTop e) {
+		}
 	}
 
 
