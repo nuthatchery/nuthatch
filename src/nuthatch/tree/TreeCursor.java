@@ -138,6 +138,15 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 
 
 	/**
+	 * Get the length of the path to the current node; i.e., the current depth
+	 * we're at.
+	 * 
+	 * @return Length of the path
+	 */
+	int getPathLength();
+
+
+	/**
 	 * Get the type of this node.
 	 * 
 	 * @return The type

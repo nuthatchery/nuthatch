@@ -88,6 +88,12 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 
 	@Override
+	public int getPathLength() {
+		return path.size();
+	}
+
+
+	@Override
 	public TreeCursor<Value, Type> go(int i) throws BranchNotFoundError {
 		assert current != null;
 

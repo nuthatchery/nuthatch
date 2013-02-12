@@ -6,7 +6,6 @@ import nuthatch.tree.Path;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
-import nuthatch.tree.impl.StandardPath;
 import nuthatch.tree.impl.StandardTreeCursor;
 import nuthatch.walk.Step;
 import nuthatch.walker.Walker;
@@ -28,14 +27,11 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	private TreeCursor<Value, Type> current;
 	private final Step<AbstractWalker<Value, Type, E>> strategy;
 
-	private final Path path;
-
 
 	public AbstractWalker(Tree<Value, Type> tree, Step<E> strat) {
 		this.rootCursor = new StandardTreeCursor<>(tree);
 		this.current = null;
 		this.strategy = (Step<AbstractWalker<Value, Type, E>>) strat;
-		this.path = new StandardPath();
 	}
 
 
@@ -43,7 +39,6 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 		this.rootCursor = cursor;
 		this.current = null;
 		this.strategy = (Step<AbstractWalker<Value, Type, E>>) strat;
-		this.path = new StandardPath();
 	}
 
 
@@ -67,7 +62,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 	@Override
 	public int depth() {
-		return path.size();
+		return current.getPathLength();
 	}
 
 
@@ -126,19 +121,25 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 	@Override
 	public Path getPath() {
-		return path.copy();
+		return current.getPath();
 	}
 
 
 	@Override
 	public int getPathElement(int i) {
-		return path.getElement(i);
+		return current.getPathElement(i);
 	}
 
 
 	@Override
 	public String getPathId() {
-		return path.toString();
+		return current.getPathId();
+	}
+
+
+	@Override
+	public int getPathLength() {
+		return current.getPathLength();
 	}
 
 
