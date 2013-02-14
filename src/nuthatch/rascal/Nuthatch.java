@@ -5,8 +5,8 @@ import nuthatch.rascal.adapter.PdbCursor;
 import nuthatch.rascal.adapter.UptrCursor;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walk.Action;
-import nuthatch.walker.Walker;
-import nuthatch.walker.impl.BasicWalker;
+import nuthatch.walk.Walk;
+import nuthatch.walk.impl.SimpleWalk;
 
 import org.eclipse.imp.pdb.facts.IConstructor;
 import org.eclipse.imp.pdb.facts.INode;
@@ -26,7 +26,7 @@ public class Nuthatch {
 	public IConstructor engage(IConstructor tree, final IEvaluatorContext ctx) {
 		Action<String, Type> t = new Action<String, Type>() {
 			@Override
-			public TreeCursor<String, Type> apply(Walker<String, Type> e) {
+			public TreeCursor<String, Type> apply(Walk<String, Type> e) {
 				String name = e.getName();
 				if (name != null) {
 					ctx.getStdOut().print(name + " ");
@@ -36,9 +36,9 @@ public class Nuthatch {
 				return null;
 			}
 		};
-		Topdown<String, Type, BasicWalker<String, Type>> topDown = new Topdown<String, Type, BasicWalker<String, Type>>(
+		Topdown<String, Type, SimpleWalk<String, Type>> topDown = new Topdown<String, Type, SimpleWalk<String, Type>>(
 				t);
-		Walker<String, Type> e = new BasicWalker<String, Type>(new UptrCursor(
+		Walk<String, Type> e = new SimpleWalk<String, Type>(new UptrCursor(
 				tree), topDown);
 		e.start();
 
@@ -51,7 +51,7 @@ public class Nuthatch {
 	public INode engage(INode n, final IEvaluatorContext ctx) {
 		Action<IValue, Type> t = new Action<IValue, Type>() {
 			@Override
-			public TreeCursor<IValue, Type> apply(Walker<IValue, Type> e) {
+			public TreeCursor<IValue, Type> apply(Walk<IValue, Type> e) {
 				String name = e.getName();
 				if (name != null) {
 					ctx.getStdOut().print(e.getName() + " ");
@@ -61,9 +61,9 @@ public class Nuthatch {
 				return null;
 			}
 		};
-		Topdown<IValue, Type, BasicWalker<IValue, Type>> topDown = new Topdown<IValue, Type, BasicWalker<IValue, Type>>(
+		Topdown<IValue, Type, SimpleWalk<IValue, Type>> topDown = new Topdown<IValue, Type, SimpleWalk<IValue, Type>>(
 				t);
-		Walker<IValue, Type> e = new BasicWalker<IValue, Type>(
+		Walk<IValue, Type> e = new SimpleWalk<IValue, Type>(
 				new PdbCursor(n), topDown);
 		e.start();
 

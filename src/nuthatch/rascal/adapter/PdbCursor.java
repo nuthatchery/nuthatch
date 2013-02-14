@@ -3,7 +3,7 @@ package nuthatch.rascal.adapter;
 import nullness.Nullable;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.AbstractTreeCursor;
-import nuthatch.walker.errors.TypeMismatch;
+import nuthatch.walk.errors.TypeMismatch;
 
 import org.eclipse.imp.pdb.facts.IList;
 import org.eclipse.imp.pdb.facts.IMap;
