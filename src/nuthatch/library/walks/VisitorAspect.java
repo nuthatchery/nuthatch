@@ -2,14 +2,14 @@ package nuthatch.library.walks;
 
 import nuthatch.tree.Tree;
 import nuthatch.walk.Step;
-import nuthatch.walker.Walker;
+import nuthatch.walk.Walk;
 
-public class VisitorAspect<E extends Walker<?, ?>> implements Step<E> {
+public class VisitorAspect<W extends Walk<?, ?>> implements Step<W> {
 	public static final int PROCEED = Integer.MIN_VALUE;
-	private final Step<E> strategy;
+	private final Step<W> strategy;
 
 
-	public VisitorAspect(Step<E> s) {
+	public VisitorAspect(Step<W> s) {
 		strategy = s;
 	}
 
@@ -20,11 +20,13 @@ public class VisitorAspect<E extends Walker<?, ?>> implements Step<E> {
 	 * If the return value is not PROCEED, it will override whatever the main
 	 * visit method returned.
 	 * 
-	 * @param e
-	 *            The engine
+	 * @param walker
+	 *            The walker
+	 * @param go
+	 *            Where the walker is going next
 	 * @return PROCEED, or direction override
 	 */
-	public int after(E e) {
+	public int after(W walker, int go) {
 		return PROCEED;
 	}
 
@@ -34,14 +36,14 @@ public class VisitorAspect<E extends Walker<?, ?>> implements Step<E> {
 	 * method.
 	 * 
 	 * If the return value is not PROCEED, the visit() method will not be
-	 * called, and the engine will go in the given direction. If the direction
+	 * called, and the walker will go in the given direction. If the direction
 	 * is PARENT, beforeExit() may be called if applicable.
 	 * 
 	 * @param e
-	 *            The engine
+	 *            The walker
 	 * @return PROCEED, or a direction override
 	 */
-	public int before(E e) {
+	public int before(W e) {
 		return PROCEED;
 
 	}
@@ -52,9 +54,9 @@ public class VisitorAspect<E extends Walker<?, ?>> implements Step<E> {
 	 * main visiting is performed.
 	 * 
 	 * @param e
-	 *            The engine
+	 *            The walker
 	 */
-	public void beforeEntry(E e) {
+	public void beforeEntry(W e) {
 	}
 
 
@@ -62,14 +64,14 @@ public class VisitorAspect<E extends Walker<?, ?>> implements Step<E> {
 	 * This method is called after visiting a node, before going to the parent.
 	 * 
 	 * @param e
-	 *            The engine
+	 *            The walker
 	 */
-	public void beforeExit(E e) {
+	public void beforeExit(W e) {
 	}
 
 
 	@Override
-	public int step(E e) {
+	public int step(W e) {
 		if(e.from(Tree.PARENT)) {
 			beforeEntry(e);
 		}
@@ -84,7 +86,7 @@ public class VisitorAspect<E extends Walker<?, ?>> implements Step<E> {
 
 		go = strategy.step(e);
 
-		int goAfter = after(e);
+		int goAfter = after(e, go);
 		if(goAfter != PROCEED) {
 			go = goAfter;
 		}

@@ -1,9 +1,8 @@
 package nuthatch.walk;
 
 import nuthatch.tree.Tree;
-import nuthatch.walker.Walker;
 
-public interface Step<W extends Walker<?, ?>> {
+public interface Step<W extends Walk<?, ?>> {
 	public static final int PARENT = Tree.PARENT;
 	public static final int FIRST = Tree.FIRST;
 	public static final int LAST = Tree.LAST;

@@ -1,8 +1,8 @@
 package nuthatch.library.walks;
 
-import nuthatch.walker.Walker;
+import nuthatch.walk.Walk;
 
-public class DefaultVisitor<W extends Walker<?, ?>> extends Visitor<W> {
+public class DefaultVisitor<W extends Walk<?, ?>> extends Visitor<W> {
 
 	@Override
 	public void afterChild(W walker, int child) {

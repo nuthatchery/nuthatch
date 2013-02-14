@@ -4,9 +4,9 @@ import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walk.Action;
 import nuthatch.walk.Step;
-import nuthatch.walker.Walker;
+import nuthatch.walk.Walk;
 
-public abstract class AbstractTraversalStep<Value, Type, E extends Walker<Value, Type>> implements Step<E> {
+public abstract class AbstractTraversalStep<Value, Type, E extends Walk<Value, Type>> implements Step<E> {
 	protected static final int FIRST = Tree.FIRST;
 	protected static final int LAST = Tree.LAST;
 	protected static final int PARENT = Tree.PARENT;

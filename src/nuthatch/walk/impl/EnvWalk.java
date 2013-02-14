@@ -1,4 +1,4 @@
-package nuthatch.walker.impl;
+package nuthatch.walk.impl;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -15,14 +15,14 @@ import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.util.BranchUtil;
 import nuthatch.walk.Step;
 
-public class EnvWalker<Value, Type, E extends EnvWalker<Value, Type, E>> extends AbstractVarWalker<Value, Type, E> {
+public class EnvWalk<Value, Type, E extends EnvWalk<Value, Type, E>> extends AbstractVarWalk<Value, Type, E> {
 	private Environment<Object> env = null;
 	private List<Map<String, Object>> subtreeScoping;
 	private Map<String, Object> subtreeVars;
 	private Map<String, Object> globalVars;
 
 
-	public EnvWalker(TreeCursor<Value, Type> cursor, Step<E> strat) {
+	public EnvWalk(TreeCursor<Value, Type> cursor, Step<E> strat) {
 		super(cursor, strat);
 		clear();
 	}

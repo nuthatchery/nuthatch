@@ -1,10 +1,10 @@
 package nuthatch.library.walks;
 
 import nuthatch.walk.Action;
+import nuthatch.walk.Walk;
 import nuthatch.walk.impl.AbstractTraversalStep;
-import nuthatch.walker.Walker;
 
-public class Bottomup<Value, Type, W extends Walker<Value, Type>> extends AbstractTraversalStep<Value, Type, W> {
+public class Bottomup<Value, Type, W extends Walk<Value, Type>> extends AbstractTraversalStep<Value, Type, W> {
 	private final Action<Value, Type> action;
 
 

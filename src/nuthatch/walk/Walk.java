@@ -1,9 +1,9 @@
-package nuthatch.walker;
+package nuthatch.walk;
 
 import nuthatch.tree.TreeCursor;
-import nuthatch.walker.errors.TypeMismatch;
+import nuthatch.walk.errors.TypeMismatch;
 
-public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
+public interface Walk<Value, Type> extends TreeCursor<Value, Type> {
 	/**
 	 * Return the depth of the tree at the current position.
 	 * 

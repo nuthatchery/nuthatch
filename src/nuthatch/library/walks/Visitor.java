@@ -2,9 +2,9 @@ package nuthatch.library.walks;
 
 import nuthatch.tree.Tree;
 import nuthatch.walk.Step;
-import nuthatch.walker.Walker;
+import nuthatch.walk.Walk;
 
-public abstract class Visitor<W extends Walker<?, ?>> implements Step<W> {
+public abstract class Visitor<W extends Walk<?, ?>> implements Step<W> {
 
 	/**
 	 * This method is called after a child is visited.
@@ -35,8 +35,8 @@ public abstract class Visitor<W extends Walker<?, ?>> implements Step<W> {
 	/**
 	 * This method is called when a node is entered from the parent.
 	 * 
-	 * Visiting a leaf will call {@link #onEntry(Walker)} then
-	 * {@link #onExit(Walker)}.
+	 * Visiting a leaf will call {@link #onEntry(Walk)} then
+	 * {@link #onExit(Walk)}.
 	 * 
 	 * By default it does nothing.
 	 * 
@@ -49,8 +49,8 @@ public abstract class Visitor<W extends Walker<?, ?>> implements Step<W> {
 	/**
 	 * This method is called when a node is exited in the parent direction.
 	 * 
-	 * Visiting a leaf will call {@link #onEntry(Walker)} then
-	 * {@link #onExit(Walker)}.
+	 * Visiting a leaf will call {@link #onEntry(Walk)} then
+	 * {@link #onExit(Walk)}.
 	 * 
 	 * By default it does nothing.
 	 * 

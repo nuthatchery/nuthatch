@@ -1,4 +1,4 @@
-package nuthatch.walker.impl;
+package nuthatch.walk.impl;
 
 import java.util.Iterator;
 
@@ -8,10 +8,10 @@ import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.StandardTreeCursor;
 import nuthatch.walk.Step;
-import nuthatch.walker.Walker;
-import nuthatch.walker.errors.ReachedTop;
+import nuthatch.walk.Walk;
+import nuthatch.walk.errors.ReachedTop;
 
-public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value, Type, E>> implements Walker<Value, Type> {
+public abstract class AbstractWalk<Value, Type, E extends AbstractWalk<Value, Type, E>> implements Walk<Value, Type> {
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
@@ -25,20 +25,20 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	 * If replaceDepth == -1, then current == original
 	 */
 	private TreeCursor<Value, Type> current;
-	private final Step<AbstractWalker<Value, Type, E>> strategy;
+	private final Step<AbstractWalk<Value, Type, E>> step;
 
 
-	public AbstractWalker(Tree<Value, Type> tree, Step<E> strat) {
+	public AbstractWalk(Tree<Value, Type> tree, Step<E> step) {
 		this.rootCursor = new StandardTreeCursor<>(tree);
 		this.current = null;
-		this.strategy = (Step<AbstractWalker<Value, Type, E>>) strat;
+		this.step = (Step<AbstractWalk<Value, Type, E>>) step;
 	}
 
 
-	public AbstractWalker(TreeCursor<Value, Type> cursor, Step<E> strat) {
+	public AbstractWalk(TreeCursor<Value, Type> cursor, Step<E> step) {
 		this.rootCursor = cursor;
 		this.current = null;
-		this.strategy = (Step<AbstractWalker<Value, Type, E>>) strat;
+		this.step = (Step<AbstractWalk<Value, Type, E>>) step;
 	}
 
 
@@ -251,7 +251,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 		current = rootCursor.copy();
 		try {
 			while(!current.isAtTop()) {
-				int go = strategy.step(this);
+				int go = step.step(this);
 				if(go == Step.NEXT) {
 					go = from() + 1;
 				}

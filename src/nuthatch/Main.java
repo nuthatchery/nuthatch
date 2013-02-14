@@ -7,8 +7,8 @@ import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.StringTree;
 import nuthatch.walk.Action;
 import nuthatch.walk.Step;
-import nuthatch.walker.Walker;
-import nuthatch.walker.impl.SimpleWalker;
+import nuthatch.walk.Walk;
+import nuthatch.walk.impl.SimpleWalk;
 
 public class Main {
 	public static void main(String[] args) {
@@ -16,45 +16,45 @@ public class Main {
 
 		Action t = new Action() {
 			@Override
-			public TreeCursor apply(Walker e) {
+			public TreeCursor apply(Walk e) {
 				System.out.print(e.getName() + " ");
 				return null;
 			}
 		};
 		Topdown topDown = new Topdown(t);
 		System.out.print("TopDown: ");
-		new SimpleWalker<String, String>(tree, topDown).start();
+		new SimpleWalk<String, String>(tree, topDown).start();
 		System.out.println();
 
 		Bottomup bottomup = new Bottomup(t);
 		System.out.print("BottomUp: ");
-		new SimpleWalker<String, String>(tree, bottomup).start();
+		new SimpleWalk<String, String>(tree, bottomup).start();
 		System.out.println();
 
 		Inorder inorder = new Inorder(new Action() {
 
 			@Override
-			public TreeCursor apply(Walker e) {
+			public TreeCursor apply(Walk e) {
 				System.out.print("(");
 				return null;
 			}
 		}, t, new Action() {
 
 			@Override
-			public TreeCursor apply(Walker e) {
+			public TreeCursor apply(Walk e) {
 				System.out.print(")");
 				return null;
 			}
 		});
 		System.out.print("InOrder: ");
-		new SimpleWalker<String, String>(tree, inorder).start();
+		new SimpleWalk<String, String>(tree, inorder).start();
 		System.out.println();
 
 		System.out.println(tree);
 
 		Action<String, String> u = new Action<String, String>() {
 			@Override
-			public TreeCursor<String, String> apply(Walker<String, String> e) {
+			public TreeCursor<String, String> apply(Walk<String, String> e) {
 				if(e.hasName()) {
 					String name = e.getName();
 					if(!name.matches("^[0-9]+$")) {
@@ -75,9 +75,9 @@ public class Main {
 				}
 			}
 		};
-		Step<SimpleWalker<String, String>> replace = new Bottomup<>(u);
+		Step<SimpleWalk<String, String>> replace = new Bottomup<>(u);
 		System.out.print("TopDownReplace: ");
-		SimpleWalker<String, String> engine = new SimpleWalker<String, String>(tree, replace);
+		SimpleWalk<String, String> engine = new SimpleWalk<String, String>(tree, replace);
 		engine.start();
 		System.out.println(engine.treeToString());
 
