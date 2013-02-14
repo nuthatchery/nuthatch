@@ -3,7 +3,7 @@ package nuthatch.demo;
 import nuthatch.library.walks.DefaultVisitor;
 import nuthatch.library.walks.Visitor;
 import nuthatch.stratego.adapter.StrategoAdapter;
-import nuthatch.stratego.adapter.TermEngine;
+import nuthatch.stratego.adapter.TermWalk;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -24,9 +24,9 @@ public class TermPrinter {
 	 * @return its string representation
 	 */
 	public static String termToString(IStrategoTerm term) {
-		Visitor<TermEngine> visitor = new DefaultVisitor<TermEngine>() {
+		Visitor<TermWalk> visitor = new DefaultVisitor<TermWalk>() {
 			@Override
-			public void beforeChild(TermEngine e, int i) {
+			public void beforeChild(TermWalk e, int i) {
 				if(i != 1) {
 					e.appendToS(",");
 				}
@@ -34,7 +34,7 @@ public class TermPrinter {
 
 
 			@Override
-			public void onEntry(TermEngine e) {
+			public void onEntry(TermWalk e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					e.appendToS("[");
 				}
@@ -57,7 +57,7 @@ public class TermPrinter {
 
 
 			@Override
-			public void onExit(TermEngine e) {
+			public void onExit(TermWalk e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					e.appendToS("]");
 				}
@@ -69,7 +69,7 @@ public class TermPrinter {
 				}
 			}
 		};
-		TermEngine e = new TermEngine(StrategoAdapter.termToTree(term), visitor);
+		TermWalk e = new TermWalk(StrategoAdapter.termToTree(term), visitor);
 		long t0 = System.currentTimeMillis();
 		e.start();
 		System.err.println("Engine finished in " + (System.currentTimeMillis() - t0) + "ms");

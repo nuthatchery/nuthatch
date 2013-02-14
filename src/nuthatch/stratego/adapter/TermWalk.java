@@ -3,18 +3,18 @@ package nuthatch.stratego.adapter;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.walk.Step;
-import nuthatch.walker.impl.EnvWalker;
+import nuthatch.walk.impl.EnvWalk;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class TermEngine extends EnvWalker<IStrategoTerm, Integer, TermEngine> {
-	public TermEngine(IStrategoTerm term, Step<TermEngine> strat) {
-		super(StrategoAdapter.termToTree(term), strat);
+public class TermWalk extends EnvWalk<IStrategoTerm, Integer, TermWalk> {
+	public TermWalk(IStrategoTerm term, Step<TermWalk> step) {
+		super(StrategoAdapter.termToTree(term), step);
 	}
 
 
-	public TermEngine(TermCursor cursor, Step<TermEngine> strat) {
-		super(cursor, strat);
+	public TermWalk(TermCursor cursor, Step<TermWalk> step) {
+		super(cursor, step);
 	}
 
 

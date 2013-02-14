@@ -17,10 +17,10 @@ import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermCursor;
-import nuthatch.stratego.adapter.TermEngine;
+import nuthatch.stratego.adapter.TermWalk;
 import nuthatch.stratego.pattern.TermPatternFactory;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walker.Walker;
+import nuthatch.walk.Walk;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -60,9 +60,9 @@ public class StrategoSignatures {
 		final Pattern<IStrategoTerm, Integer> funTypePat = FunType(pf.var("params"), pf.var("retType"));
 		final Set<String> methods = new HashSet<String>();
 
-		Visitor<TermEngine> visitor = new DefaultVisitor<TermEngine>() {
+		Visitor<TermWalk> visitor = new DefaultVisitor<TermWalk>() {
 			@Override
-			public void onEntry(TermEngine e) {
+			public void onEntry(TermWalk e) {
 				StringBuilder builder = new StringBuilder();
 				Environment<TreeCursor<IStrategoTerm, Integer>> env = EnvironmentFactory.env();
 				if(opDeclPat.match(e, env)) {
@@ -103,7 +103,7 @@ public class StrategoSignatures {
 			}
 
 		};
-		Walker<IStrategoTerm, Integer> e = new TermEngine(tree, visitor);
+		Walk<IStrategoTerm, Integer> e = new TermWalk(tree, visitor);
 		e.start();
 
 		String[] array = methods.toArray(new String[methods.size()]);
