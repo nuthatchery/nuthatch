@@ -1,6 +1,21 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: nuthatch
+Bundle-Name: Nuthatch/J
 Bundle-SymbolicName: nuthatch
-Bundle-Version: 1.0.0
+Bundle-Version: 0.99.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
+Export-Package: 
+ nullness,
+ nuthatch.examples,
+ nuthatch.library.actions,
+ nuthatch.library.walks,
+ nuthatch.pattern,
+ nuthatch.pattern.impl,
+ nuthatch.tree,
+ nuthatch.tree.errors,
+ nuthatch.tree.impl,
+ nuthatch.tree.util,
+ nuthatch.walk.errors,
+ nuthatch.walk.impl,
+ nuthatch.walk
