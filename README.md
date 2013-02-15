@@ -1,4 +1,4 @@
-## Nuthatch/J+Stratego
+## Nuthatch/J+Rascal
 
 This library extends [Nuthatch/J](http://nuthatchery.org/) with support
 for [Rascal](http://www.rascal-mpl.org/) data values.
