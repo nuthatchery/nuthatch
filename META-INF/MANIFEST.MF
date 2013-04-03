@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Nuthatch-benchmark
+Bundle-SymbolicName: nuthatch-benchmark
+Bundle-Version: 0.99.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.spoofax.terms;bundle-version="1.0.0",
+ org.spoofax.compiler;bundle-version="0.3.9",
+ nuthatch_javafront;bundle-version="0.99.0",
+ nuthatch_stratego;bundle-version="0.99.0",
+ nuthatch;bundle-version="0.99.0",
+ org.strategoxt.strj;bundle-version="0.17.92",
+ org.spoofax.interpreter;bundle-version="0.4.1",
+ org.spoofax.jsglr
+Import-Package: org.spoofax.jsglr.shared
