@@ -25,4 +25,11 @@ public final class SimpleWalk<Value, Type> extends AbstractVarWalk<Value, Type, 
 	public SimpleWalk(TreeCursor<Value, Type> cursor, Step<SimpleWalk<Value, Type>> strat) {
 		super(cursor, strat);
 	}
+
+
+	@Override
+	protected SimpleWalk<Value, Type> subWalk(TreeCursor<Value, Type> cursor, Step<SimpleWalk<Value, Type>> step) {
+		return new SimpleWalk<Value, Type>(cursor, step);
+	}
+
 }

@@ -117,7 +117,11 @@ public class EnvWalk<Value, Type, E extends EnvWalk<Value, Type, E>> extends Abs
 
 
 	public <T> void setSubtreeVar(VarName<T> name, T value) {
+		if(subtreeScoping.size() == 0) {
+			subtreeScoping.add(null);
+		}
 		Map<String, Object> map = subtreeScoping.get(subtreeScoping.size() - 1);
+
 		String n = name.getName();
 		if(map == null) {
 			map = new IdentityHashMap<>();
@@ -129,5 +133,12 @@ public class EnvWalk<Value, Type, E extends EnvWalk<Value, Type, E>> extends Abs
 		}
 
 		subtreeVars.put(name.getName(), value);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected E subWalk(TreeCursor<Value, Type> cursor, Step<E> step) {
+		return (E) new EnvWalk<Value, Type, E>(cursor, step);
 	}
 }

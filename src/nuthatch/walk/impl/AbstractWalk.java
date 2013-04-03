@@ -2,6 +2,8 @@ package nuthatch.walk.impl;
 
 import java.util.Iterator;
 
+import nuthatch.pattern.Environment;
+import nuthatch.pattern.Pattern;
 import nuthatch.tree.Path;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
@@ -57,6 +59,12 @@ public abstract class AbstractWalk<Value, Type, E extends AbstractWalk<Value, Ty
 	@Override
 	public TreeCursor<Value, Type> copySubtree() {
 		return current.copySubtree();
+	}
+
+
+	private boolean dataInvariant() {
+
+		return true;
 	}
 
 
@@ -218,13 +226,20 @@ public abstract class AbstractWalk<Value, Type, E extends AbstractWalk<Value, Ty
 
 	@Override
 	public boolean isRunning() {
-		return current.isAtTop();
+		return current != null && current.isAtTop();
 	}
 
 
 	@Override
 	public Iterator<TreeCursor<Value, Type>> iterator() {
 		return current.iterator();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean match(Pattern<Value, Type> pat, Environment<? extends TreeCursor<Value, Type>> env) {
+		return pat.match(current, (Environment<TreeCursor<Value, Type>>) env);
 	}
 
 
@@ -269,6 +284,9 @@ public abstract class AbstractWalk<Value, Type, E extends AbstractWalk<Value, Ty
 	}
 
 
+	protected abstract E subWalk(TreeCursor<Value, Type> cursor, Step<E> step);
+
+
 	@Override
 	public String treeToString() {
 		if(current != null) {
@@ -280,8 +298,14 @@ public abstract class AbstractWalk<Value, Type, E extends AbstractWalk<Value, Ty
 	}
 
 
-	private boolean dataInvariant() {
+	public void walkSubtree(Step<E> step) {
+		subWalk(copySubtree(), step).start();
+	}
 
-		return true;
+
+	public void walkSubtreeAndReplace(Step<E> step) {
+		E walk = subWalk(copySubtree(), step);
+		walk.start();
+		replace(walk);
 	}
 }

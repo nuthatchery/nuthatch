@@ -1,5 +1,7 @@
 package nuthatch.walk;
 
+import nuthatch.pattern.Environment;
+import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walk.errors.TypeMismatch;
 
@@ -51,6 +53,9 @@ public interface Walk<Value, Type> extends TreeCursor<Value, Type> {
 	 *         false)
 	 */
 	boolean isRunning();
+
+
+	boolean match(Pattern<Value, Type> pat, Environment<? extends TreeCursor<Value, Type>> env);
 
 
 	/**

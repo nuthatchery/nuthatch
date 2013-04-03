@@ -11,14 +11,54 @@ import nuthatch.tree.util.BranchUtil;
 import nuthatch.walk.errors.ReachedTop;
 
 public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<Value, Type> {
+	static class TreeCursorIterator<Value, Type, T> implements Iterator<TreeCursor<Value, Type>> {
+		private TreeCursor<Value, Type> subtreeCursor;
+		private int i = 0; // the next child to visit
+		private int numChildren;
+
+
+		TreeCursorIterator(AbstractTreeCursor<Value, Type, T> cursor) {
+			subtreeCursor = cursor.copySubtree();
+			numChildren = cursor.getNumChildren();
+			if(numChildren > 0) {
+				this.subtreeCursor.go(1);
+			}
+		}
+
+
+		@Override
+		public boolean hasNext() {
+			return numChildren > i;
+		}
+
+
+		@Override
+		public TreeCursor<Value, Type> next() {
+			while(!subtreeCursor.isAtRoot()) {
+				subtreeCursor.go(0);
+			}
+			subtreeCursor.go(++i);
+			return subtreeCursor;
+		}
+
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
+	}
+
 	private final List<T> stack;
 	private final Path path;
 	private T current;
+
 	private int from = 0;
 
 
 	protected AbstractTreeCursor(AbstractTreeCursor<Value, Type, T> src, boolean fullTree) {
 		this.current = src.current;
+		this.from = src.from;
 		if(fullTree) {
 			this.stack = new ArrayList<T>(src.stack);
 			this.path = src.path.copy();
@@ -35,6 +75,10 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 		this.current = replacement;
 		this.stack = new ArrayList<T>(src.stack);
 		this.path = src.path.copy();
+		this.from = src.from;
+		if(from > getNumChildren()) {
+			from = getNumChildren();
+		}
 	}
 
 
@@ -49,6 +93,21 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	@Override
 	public TreeCursor<Value, Type> getBranch(int i) {
 		return copy().go(i);
+	}
+
+
+	/**
+	 * Return the child at index i.
+	 * 
+	 * @param i
+	 *            A zero-based child index
+	 * @return The child at i
+	 */
+	protected abstract T getChild(int i);
+
+
+	protected T getCurrent() {
+		return current;
 	}
 
 
@@ -113,7 +172,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 				from = path.popElement();
 				if(getChild(from - 1) != old) {
 					current = replaceChild(current, old, from - 1);
-					System.err.println("Needs patching: " + old);
+					// System.err.println("Needs patching: " + old);
 				}
 			}
 			else if(!stack.isEmpty()) {
@@ -180,27 +239,6 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	}
 
 
-	@Override
-	public String treeToString() {
-		return current.toString();
-	}
-
-
-	/**
-	 * Return the child at index i.
-	 * 
-	 * @param i
-	 *            A zero-based child index
-	 * @return The child at i
-	 */
-	protected abstract T getChild(int i);
-
-
-	protected T getCurrent() {
-		return current;
-	}
-
-
 	/**
 	 * Replace child 'i' of 'node' with 'child'.
 	 * 
@@ -215,41 +253,8 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	protected abstract T replaceChild(T node, T child, int i);
 
 
-	static class TreeCursorIterator<Value, Type, T> implements Iterator<TreeCursor<Value, Type>> {
-		private TreeCursor<Value, Type> subtreeCursor;
-		private int i = 0; // the next child to visit
-		private int numChildren;
-
-
-		TreeCursorIterator(AbstractTreeCursor<Value, Type, T> cursor) {
-			subtreeCursor = cursor.copySubtree();
-			numChildren = cursor.getNumChildren();
-			if(numChildren > 0) {
-				this.subtreeCursor.go(1);
-			}
-		}
-
-
-		@Override
-		public boolean hasNext() {
-			return numChildren > i;
-		}
-
-
-		@Override
-		public TreeCursor<Value, Type> next() {
-			while(!subtreeCursor.isAtRoot()) {
-				subtreeCursor.go(0);
-			}
-			subtreeCursor.go(++i);
-			return subtreeCursor;
-		}
-
-
-		@Override
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-
+	@Override
+	public String treeToString() {
+		return current.toString();
 	}
 }
