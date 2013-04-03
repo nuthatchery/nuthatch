@@ -71,9 +71,6 @@ exports
     "import-term"
       -/- [a-zA-Z0-9\'\-\_]
   
-  context-free restrictions
-    Wld -/- [a-zA-Z0-9\'\-\_]
-
   sorts Keyword
   lexical syntax
     "all"               -> Keyword

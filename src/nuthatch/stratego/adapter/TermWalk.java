@@ -25,10 +25,10 @@ public class TermWalk extends EnvWalk<IStrategoTerm, Integer, TermWalk> {
 
 
 	@Override
-	public TermCursor copyAndReplaceSubtree(
-			TreeCursor<IStrategoTerm, Integer> replacement) {
+	public TermCursor copyAndReplaceSubtree(TreeCursor<IStrategoTerm, Integer> replacement) {
 		return (TermCursor) super.copyAndReplaceSubtree(replacement);
 	}
+
 
 	@Override
 	public TermCursor copySubtree() {
@@ -37,9 +37,14 @@ public class TermWalk extends EnvWalk<IStrategoTerm, Integer, TermWalk> {
 
 
 	@Override
-	public TermCursor getBranch(int i)
-			throws BranchNotFoundError {
+	public TermCursor getBranch(int i) throws BranchNotFoundError {
 		return (TermCursor) super.getBranch(i);
+	}
+
+
+	@Override
+	protected TermWalk subWalk(TreeCursor<IStrategoTerm, Integer> cursor, Step<TermWalk> step) {
+		return new TermWalk((TermCursor) cursor, step);
 	}
 
 }

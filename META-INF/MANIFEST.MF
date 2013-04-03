@@ -8,3 +8,7 @@ Require-Bundle: org.spoofax.jsglr;bundle-version="0.3.0",
  nuthatch;bundle-version="0.99.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
+Export-Package: nuthatch.stratego.adapter,
+ nuthatch.stratego.pattern,
+ nuthatch.stratego.syntax,
+ nuthatch.util

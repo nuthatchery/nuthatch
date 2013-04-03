@@ -12,10 +12,6 @@ public class StaticTermPatternFactory extends StaticPatternFactory {
 	public static final Pattern<IStrategoTerm, Integer> _ = TermPatternFactory.instance.any();
 
 
-	private StaticTermPatternFactory() {
-	}
-
-
 	@SafeVarargs
 	public static final Pattern<IStrategoTerm, Integer> appl(String name, Pattern<IStrategoTerm, Integer>... children) {
 		return TermPatternFactory.instance.appl(name, children);
@@ -29,6 +25,11 @@ public class StaticTermPatternFactory extends StaticPatternFactory {
 
 	public static Pattern<IStrategoTerm, Integer> integer(int i) {
 		return TermPatternFactory.instance.integer(i);
+	}
+
+
+	public static Pattern<IStrategoTerm, Integer> isList() {
+		return TermPatternFactory.instance.isList();
 	}
 
 
@@ -81,6 +82,10 @@ public class StaticTermPatternFactory extends StaticPatternFactory {
 	 */
 	public static Pattern<IStrategoTerm, Integer> var(String name) {
 		return TermPatternFactory.instance.var(name);
+	}
+
+
+	private StaticTermPatternFactory() {
 	}
 
 }
