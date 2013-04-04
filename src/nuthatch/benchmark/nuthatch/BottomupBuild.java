@@ -9,13 +9,12 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class BottomupBuild extends NuthatchBenchmark {
 	private TermCursor replacement;
-	
 
 	public BottomupBuild(IStrategoTerm term) {
 		super("BottomupBuild", term);
-		replacement = StrategoAdapter.termToTree(StrategoAdapter.getTermFactory().makeInt(42));
+		replacement = StrategoAdapter.termToTree(StrategoAdapter
+				.getTermFactory().makeInt(42));
 	}
-
 
 	@Override
 	protected TermWalk walk(TermCursor c) {
@@ -25,7 +24,6 @@ public class BottomupBuild extends NuthatchBenchmark {
 			}
 		});
 	}
-
 
 	@Override
 	protected boolean check() {

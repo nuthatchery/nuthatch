@@ -12,12 +12,10 @@ public class Traverse extends NuthatchBenchmark {
 		super("DefaultWalk", term);
 	}
 
-
 	@Override
 	protected TermWalk walk(TermCursor c) {
 		return new TermWalk(c, new Default<TermWalk>());
 	}
-
 
 	@Override
 	protected boolean check() {

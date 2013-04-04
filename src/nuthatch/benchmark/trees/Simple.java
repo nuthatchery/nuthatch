@@ -5,8 +5,8 @@ public class Simple {
 		bar(1, 2);
 		bar(3, 4);
 	}
-	
-	void bar(int x, int y){
-		
+
+	void bar(int x, int y) {
+
 	}
 }

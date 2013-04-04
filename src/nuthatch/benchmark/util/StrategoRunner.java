@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 import org.spoofax.interpreter.ConcreteInterpreter;
 import org.spoofax.interpreter.core.InterpreterErrorExit;
 import org.spoofax.interpreter.core.InterpreterException;
@@ -45,12 +44,13 @@ public class StrategoRunner extends HybridInterpreter {
 	private static class ConcreteIOAgent extends IOAgent {
 
 		@Override
-		public InputStream openInputStream(String fn, boolean isDefinitionFile) throws FileNotFoundException {
-			if(isDefinitionFile) {
-				InputStream r = ConcreteInterpreter.class.getClassLoader().getResourceAsStream(fn);
+		public InputStream openInputStream(String fn, boolean isDefinitionFile)
+				throws FileNotFoundException {
+			if (isDefinitionFile) {
+				InputStream r = ConcreteInterpreter.class.getClassLoader()
+						.getResourceAsStream(fn);
 				return r;
-			}
-			else {
+			} else {
 				return super.openInputStream(fn, isDefinitionFile);
 			}
 		}
@@ -64,15 +64,16 @@ public class StrategoRunner extends HybridInterpreter {
 		super(termFactory, new TermFactory());
 		try {
 			load(findLocalResource("share/frontend.ctree"));
-	/*		load(findLibrary("stratego-lib/libstratego-lib.ctree"));
-			load(findLibrary("libstrc.ctree"));
-			load(findLibrary("libstratego-aterm.ctree"));
-			load(findLibrary("libstratego-gpp.ctree"));
-			load(findLibrary("libstratego-rtg.ctree"));
-			load(findLibrary("libstratego-sdf.ctree"));
-			load(findLibrary("libstratego-sglr.ctree"));
-			load(findLibrary("libstratego-tool-doc.ctree"));
-*/
+			/*
+			 * load(findLibrary("stratego-lib/libstratego-lib.ctree"));
+			 * load(findLibrary("libstrc.ctree"));
+			 * load(findLibrary("libstratego-aterm.ctree"));
+			 * load(findLibrary("libstratego-gpp.ctree"));
+			 * load(findLibrary("libstratego-rtg.ctree"));
+			 * load(findLibrary("libstratego-sdf.ctree"));
+			 * load(findLibrary("libstratego-sglr.ctree"));
+			 * load(findLibrary("libstratego-tool-doc.ctree"));
+			 */
 			ParseTableManager ptm = new ParseTableManager();
 			sugarTable = ptm
 					.loadFromStream(findLocalResource("share/Stratego-Shell.tbl"));
@@ -93,8 +94,9 @@ public class StrategoRunner extends HybridInterpreter {
 	}
 
 	private InputStream findLocalResource(String path) throws IOException {
-		InputStream ins = ConcreteInterpreter.class.getClassLoader().getResourceAsStream(path);
-		if(ins == null)
+		InputStream ins = ConcreteInterpreter.class.getClassLoader()
+				.getResourceAsStream(path);
+		if (ins == null)
 			throw new IOException("Failed to load internal resource " + path);
 		return ins;
 	}
@@ -110,57 +112,59 @@ public class StrategoRunner extends HybridInterpreter {
 				throw new RuntimeException(e);
 			}
 		}
-		throw new IOException("Failed to find Stratego library " + file.getAbsolutePath());
+		throw new IOException("Failed to find Stratego library "
+				+ file.getAbsolutePath());
 	}
 
 	public void loadConcrete(String file, String[] path, boolean lib)
 			throws IOException, InterpreterException {
 	}
 
-	private IStrategoAppl parseAndCompile(String codeAsString, String frontendStrategy, String startSymbol) 
-			throws TokenExpectedException, BadTokenException, ParseException, 
-			SGLRException, InterpreterErrorExit, InterpreterExit, 
-			UndefinedStrategyException, InterpreterException, InterruptedException {
-		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString, "stdin", startSymbol);
+	private IStrategoAppl parseAndCompile(String codeAsString,
+			String frontendStrategy, String startSymbol)
+			throws TokenExpectedException, BadTokenException, ParseException,
+			SGLRException, InterpreterErrorExit, InterpreterExit,
+			UndefinedStrategyException, InterpreterException,
+			InterruptedException {
+		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString,
+				"stdin", startSymbol);
 		IStrategoTerm old = current();
 		setCurrent(tree);
-		if(!invoke(frontendStrategy))
+		if (!invoke(frontendStrategy))
 			return null;
 		IStrategoAppl ret = (IStrategoAppl) current();
 		setCurrent(old);
 		return ret;
 	}
 
-	public IStrategoAppl compile(String codeAsString) 
-			throws BenchmarkError {
+	public IStrategoAppl compile(String codeAsString) throws BenchmarkError {
 		IStrategoAppl program;
 		try {
-			program = parseAndCompile(codeAsString, "spx_shell_frontend_0_0", "Toplevel");
-			if(program == null) {
+			program = parseAndCompile(codeAsString, "spx_shell_frontend_0_0",
+					"Toplevel");
+			if (program == null) {
 				throw new InterpreterException("Failed to compile fragment");
-			} else  {
+			} else {
 				return program;
 			}
-		} catch (SGLRException
-				| InterpreterException | InterruptedException e) {
+		} catch (SGLRException | InterpreterException | InterruptedException e) {
 			throw new BenchmarkError(e);
 		}
 	}
-	
+
 	public boolean invoke(IStrategoAppl program) throws BenchmarkError {
 		try {
-		if(program.getName().equals("SDefT")) {
-			SDefT def = loader.parseSDefT(program);
-			context.addSVar(def.getName(), def);
-			return true;
-		} else if(program.getName().equals("Specification")) {
-			load(program);
-			return true;
-		} else {
-			return evaluate(program);
-		}
-		}
-		catch(InterpreterException e) {
+			if (program.getName().equals("SDefT")) {
+				SDefT def = loader.parseSDefT(program);
+				context.addSVar(def.getName(), def);
+				return true;
+			} else if (program.getName().equals("Specification")) {
+				load(program);
+				return true;
+			} else {
+				return evaluate(program);
+			}
+		} catch (InterpreterException e) {
 			throw new BenchmarkError(e);
 		}
 	}

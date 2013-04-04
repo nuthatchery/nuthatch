@@ -16,7 +16,7 @@ public abstract class NuthatchBenchmark extends Benchmark {
 		super(name, "(Nuthatch)");
 		this.tree = StrategoAdapter.termToTree(term);
 	}
-	
+
 	public NuthatchBenchmark(String name, int n, IStrategoTerm term) {
 		super(name, n, "(Nuthatch)");
 		this.tree = StrategoAdapter.termToTree(term);
@@ -27,11 +27,11 @@ public abstract class NuthatchBenchmark extends Benchmark {
 		walk = walk(tree);
 		walk.start();
 	}
-	
+
 	public TermCursor getResult() {
 		return walk.copy();
 	}
-	
+
 	protected abstract TermWalk walk(TermCursor tree);
 
 }
