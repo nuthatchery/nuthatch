@@ -3,69 +3,28 @@ package nuthatch.examples;
 import java.util.ArrayList;
 import java.util.List;
 
-import nuthatch.library.walks.Bottomup;
-import nuthatch.library.walks.Inorder;
-import nuthatch.library.walks.Topdown;
-import nuthatch.library.walks.Visitor;
-import nuthatch.library.walks.VisitorAspect;
+import nuthatch.library.impl.actions.AbstractComposeWalk;
+import nuthatch.library.impl.actions.ActionFactory;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walk.Action;
-import nuthatch.walk.Step;
 import nuthatch.walk.Walk;
-import nuthatch.walk.impl.SimpleWalk;
+import nuthatch.walk.impl.SimpleWalker;
 
 public class ToLaTeX {
 	private static final int MODE_WALK = 1 << 0;
+
 	private static final int MODE_VISIT = 1 << 1;
 	private static final int MODE_PREAMBLE = 1 << 2;
-
-	/**
-	 * This step function produces commands to build a tree using the TikZ in
-	 * LaTeX. The result is accumulated in the S-variable of the walker.
-	 */
-	public static final Step<SimpleWalk<String, String>> toTikz = new Visitor<SimpleWalk<String, String>>() {
-		@Override
-		public void afterChild(SimpleWalk<String, String> walker, int child) {
-			spaces(walker);
-			walker.appendToS("}\n");
-		}
-
-
-		@Override
-		public void beforeChild(SimpleWalk<String, String> walker, int child) {
-			spaces(walker);
-			walker.appendToS("child{\n");
-		}
-
-
-		@Override
-		public void onEntry(SimpleWalk<String, String> walker) {
-			spaces(walker);
-			walker.appendToS("node[treenode] (" + walker.getPathId() + ") {" + walker.getName() + "} [->]\n");
-		}
-
-
-		@Override
-		public void onExit(SimpleWalk<String, String> walker) {
-		}
-
-
-		private void spaces(SimpleWalk<String, String> walker) {
-			for(int i = 0; i < walker.depth(); i++) {
-				walker.appendToS("  ");
-			}
-		}
-	};
+	private static final ActionFactory<String, String, TreeCursor<String, String>, SimpleWalker<String, String>> AF = ActionFactory.getInstance();
 
 
 	public static void main(String[] args) {
 		int mode = 0;
-		List<String> visits = new ArrayList<String>();
-		Step<SimpleWalk<String, String>> bottomup = new Bottomup<String, String, SimpleWalk<String, String>>(traceVisit(visits));
-		Step<SimpleWalk<String, String>> inorder = new Inorder<String, String, SimpleWalk<String, String>>(traceVisit(visits), traceVisit(visits), traceVisit(visits));
-		Step<SimpleWalk<String, String>> topdown = new Topdown<String, String, SimpleWalk<String, String>>(traceVisit(visits));
-		Step<SimpleWalk<String, String>> strat = topdown;
+		TraceVisit traceVisit = new TraceVisit();
+		Walk<SimpleWalker<String, String>> bottomup = AF.walk(AF.up(traceVisit));
+		Walk<SimpleWalker<String, String>> topdown = AF.walk(AF.down(traceVisit));
+		Walk<SimpleWalker<String, String>> strat = topdown;
 		int i = 0;
 		while(i < args.length) {
 			switch(args[i++]) {
@@ -78,9 +37,9 @@ public class ToLaTeX {
 			case "-bu":
 				strat = bottomup;
 				break;
-			case "-in":
-				strat = inorder;
-				break;
+			//case "-in":
+			//	strat = inorder;
+			//	break;
 			case "-w":
 				mode |= MODE_WALK;
 				break;
@@ -94,7 +53,7 @@ public class ToLaTeX {
 				System.err.println("    -v     Trace the order of visits");
 				System.err.println("    -td    Use topdown strategy (default)");
 				System.err.println("    -bu    Use bottomup strategy");
-				System.err.println("    -in    Use inorder strategy");
+				//System.err.println("    -in    Use inorder strategy");
 				System.err.println("You should specify at least one of -v and -w, or you'll get just the tree");
 				System.exit(1);
 				break;
@@ -119,7 +78,7 @@ public class ToLaTeX {
 		System.out.println("]");
 		// draw the tree itself
 		System.out.print("\\");
-		SimpleWalk<String, String> treePrinter = new SimpleWalk<String, String>(ExampleTree.TREE.makeCursor(), toTikz);
+		SimpleWalker<String, String> treePrinter = new SimpleWalker<String, String>(ExampleTree.TREE.makeCursor(), new ToTikzWalk());
 		treePrinter.start();
 		System.out.println(treePrinter.getS());
 		System.out.println(";");
@@ -131,9 +90,9 @@ public class ToLaTeX {
 
 		// we should output commands for drawing the order of visiting nodes
 		if((mode & MODE_VISIT) != 0) {
-			SimpleWalk<String, String> walker = new SimpleWalk<String, String>(ExampleTree.TREE.makeCursor(), strat);
+			SimpleWalker<String, String> walker = new SimpleWalker<String, String>(ExampleTree.TREE.makeCursor(), strat);
 			walker.start();
-			System.out.println(visitsToString(visits));
+			System.out.println(visitsToString(traceVisit.getResult()));
 
 		}
 		System.out.println("\\end{tikzpicture}");
@@ -159,10 +118,10 @@ public class ToLaTeX {
 	 * @return A series of up and down commands tracing the walk produced by a
 	 *         walker running the step function
 	 */
-	public static String traceWalk(TreeCursor<String, String> tree, Step<SimpleWalk<String, String>> step) {
-		SimpleWalk<String, String> walkTracingWalker = new SimpleWalk<String, String>(tree, new VisitorAspect<SimpleWalk<String, String>>(step) {
+	public static String traceWalk(TreeCursor<String, String> tree, final Walk<SimpleWalker<String, String>> step) {
+		SimpleWalker<String, String> walkTracingWalker = new SimpleWalker<String, String>(tree, new AbstractComposeWalk<SimpleWalker<String, String>>(step) {
 			@Override
-			public int before(SimpleWalk<String, String> w) {
+			public int step(SimpleWalker<String, String> w) {
 				TreeCursor<String, String> prev = w.getBranch(w.from());
 				int branch = w.getFromBranch();
 				if(w.from(Tree.PARENT)) {
@@ -173,29 +132,11 @@ public class ToLaTeX {
 				else {
 					w.appendToS("\\up{" + prev.getPathId() + "}{" + w.from() + "}{" + w.getPathId() + "}\n");
 				}
-				return PROCEED;
+				return super.step(w);
 			}
 		});
 		walkTracingWalker.start();
 		return walkTracingWalker.getS();
-	}
-
-
-	/**
-	 * Make an action that adds the current node to a list of visited nodes
-	 * 
-	 * @param visits
-	 *            The list we should add nodes to
-	 * @return An action, suitable for use in a step function
-	 */
-	private static Action<String, String> traceVisit(final List<String> visits) {
-		return new Action<String, String>() {
-			@Override
-			public TreeCursor<String, String> apply(Walk<String, String> e) {
-				visits.add(e.getPathId());
-				return null;
-			}
-		};
 	}
 
 
@@ -218,5 +159,40 @@ public class ToLaTeX {
 			}
 		}
 		return b.toString();
+	}
+
+
+	protected static void spaces(SimpleWalker<String, String> walker) {
+		for(int i = 0; i < walker.depth(); i++) {
+			walker.appendToS("  ");
+		}
+	}
+
+
+	/**
+	 * An action that adds the current node to a list of visited nodes
+	 * 
+	 * @return An action, suitable for use in a step function
+	 */
+	private static final class TraceVisit implements Action<SimpleWalker<String, String>> {
+		private ArrayList<String> visits;
+
+
+		public List<String> getResult() {
+			return visits;
+		}
+
+
+		@Override
+		public void init(SimpleWalker<String, String> walker) {
+			visits = new ArrayList<String>();
+		}
+
+
+		@Override
+		public int step(SimpleWalker<String, String> walker) {
+			visits.add(walker.getPathId());
+			return PROCEED;
+		}
 	}
 }

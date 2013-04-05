@@ -13,16 +13,16 @@ import nuthatch.pattern.VarName;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.util.BranchUtil;
-import nuthatch.walk.Step;
+import nuthatch.walk.Walk;
 
-public class EnvWalk<Value, Type, E extends EnvWalk<Value, Type, E>> extends AbstractVarWalk<Value, Type, E> {
+public class EnvWalker<Value, Type, E extends EnvWalker<Value, Type, E>> extends AbstractVarWalker<Value, Type, E> {
 	private Environment<Object> env = null;
 	private List<Map<String, Object>> subtreeScoping;
 	private Map<String, Object> subtreeVars;
 	private Map<String, Object> globalVars;
 
 
-	public EnvWalk(TreeCursor<Value, Type> cursor, Step<E> strat) {
+	public EnvWalker(TreeCursor<Value, Type> cursor, Walk<E> strat) {
 		super(cursor, strat);
 		clear();
 	}
@@ -138,7 +138,7 @@ public class EnvWalk<Value, Type, E extends EnvWalk<Value, Type, E>> extends Abs
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected E subWalk(TreeCursor<Value, Type> cursor, Step<E> step) {
-		return (E) new EnvWalk<Value, Type, E>(cursor, step);
+	protected E subWalk(TreeCursor<Value, Type> cursor, Walk<E> step) {
+		return (E) new EnvWalker<Value, Type, E>(cursor, step);
 	}
 }

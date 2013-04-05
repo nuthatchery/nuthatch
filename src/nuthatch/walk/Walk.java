@@ -1,86 +1,20 @@
 package nuthatch.walk;
 
-import nuthatch.pattern.Environment;
-import nuthatch.pattern.Pattern;
-import nuthatch.tree.TreeCursor;
-import nuthatch.walk.errors.TypeMismatch;
-
-public interface Walk<Value, Type> extends TreeCursor<Value, Type> {
+public interface Walk<W extends Walker<?, ?>> extends Action<W> {
 	/**
-	 * Return the depth of the tree at the current position.
+	 * Visit a new node.
 	 * 
-	 * @return Current depth, where root has depth 0
-	 */
-	int depth();
-
-
-	/**
-	 * Return the direction we came from.
+	 * This method is called whenever the walker enters a node.
 	 * 
-	 * @return Direction back to the previous visited node
-	 */
-	int from();
-
-
-	/**
-	 * Check where we came from.
+	 * The step should perform the task of visiting the current node only,
+	 * and return the next node that should be visited (rather than trying to
+	 * visit multiple nodes during the same visit call).
 	 * 
-	 * @param i
-	 *            A direction
-	 * @return True if we entered the current node from direction i
+	 * @param walker
+	 *            The walker
+	 * @return The direction of the next node to visit; should not be PROCEED
 	 */
-	boolean from(int i);
+	@Override
+	int step(W walker);
 
-
-	/**
-	 * Check if current node is a leaf.
-	 * 
-	 * @return True if current node has no children
-	 */
-	boolean isLeaf();
-
-
-	/**
-	 * Check if current node is root.
-	 * 
-	 * @return True if current node has no parent
-	 */
-	boolean isRoot();
-
-
-	/**
-	 * @return True if the walker is currently running (i.e., isAtTop() is
-	 *         false)
-	 */
-	boolean isRunning();
-
-
-	boolean match(Pattern<Value, Type> pat, Environment<? extends TreeCursor<Value, Type>> env);
-
-
-	/**
-	 * Split execution into one walker per child, operating in parallel.
-	 * 
-	 */
-	void nest();
-
-
-	/**
-	 * Replace current node.
-	 * 
-	 * The current node and its children are replace by the subtree identified
-	 * by the supplied tree cursor.
-	 * 
-	 * @param tree
-	 *            Replacement subtree
-	 * @throws TypeMismatch
-	 *             if the replacement tree is of an incompatible type
-	 */
-	void replace(TreeCursor<Value, Type> tree) throws TypeMismatch;
-
-
-	/**
-	 * Start executing the walker.
-	 */
-	void start();
 }

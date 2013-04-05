@@ -2,7 +2,7 @@ package nuthatch.walk.impl;
 
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Step;
+import nuthatch.walk.Walk;
 
 /**
  * This engine variant adds a few state registers.
@@ -19,18 +19,18 @@ import nuthatch.walk.Step;
  * @param <E>
  *            The type of the implemented engine
  */
-public abstract class AbstractVarWalk<Value, Type, E extends AbstractVarWalk<Value, Type, E>> extends AbstractWalk<Value, Type, E> {
+public abstract class AbstractVarWalker<Value, Type, E extends AbstractVarWalker<Value, Type, E>> extends AbstractWalker<Value, Type, E> {
 	protected StringBuilder sReg;
 	protected int xReg, yReg;
 	protected Object zReg;
 
 
-	public AbstractVarWalk(Tree<Value, Type> tree, Step<E> strat) {
+	public AbstractVarWalker(Tree<Value, Type> tree, Walk<E> strat) {
 		super(tree, strat);
 	}
 
 
-	public AbstractVarWalk(TreeCursor<Value, Type> cursor, Step<E> strat) {
+	public AbstractVarWalker(TreeCursor<Value, Type> cursor, Walk<E> strat) {
 		super(cursor, strat);
 	}
 

@@ -9,13 +9,13 @@ Export-Package:
  nullness,
  nuthatch.examples,
  nuthatch.library.actions,
- nuthatch.library.walks,
+ nuthatch.library.impl.walks,
  nuthatch.pattern,
  nuthatch.pattern.impl,
  nuthatch.tree,
  nuthatch.tree.errors,
  nuthatch.tree.impl,
  nuthatch.tree.util,
+ nuthatch.walk,
  nuthatch.walk.errors,
- nuthatch.walk.impl,
- nuthatch.walk
+ nuthatch.walk.impl
