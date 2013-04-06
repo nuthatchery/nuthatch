@@ -6,15 +6,15 @@ import static nuthatch.stratego.actions.SActionFactory.walk;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import nuthatch.library.AbstractAction;
+import nuthatch.library.BaseAction;
 import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
+import nuthatch.stratego.adapter.STermCursor;
+import nuthatch.stratego.adapter.SWalker;
 import nuthatch.stratego.adapter.StrategoAdapter;
-import nuthatch.stratego.adapter.TermCursor;
-import nuthatch.stratego.adapter.TermWalk;
-import nuthatch.stratego.pattern.TermPatternFactory;
+import nuthatch.stratego.pattern.impl.TermPatternFactory;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
@@ -37,13 +37,13 @@ public class Main {
 			IStrategoTerm term = StrategoAdapter.parseString(input, null, parseTable);
 			System.err.println(term);
 			System.out.println(TermPrinter.termToString(term));
-			TermCursor tree = StrategoAdapter.termToTree(term);
+			STermCursor tree = StrategoAdapter.termToTree(term);
 			TermPatternFactory pf = TermPatternFactory.getInstance();
 			final Pattern<IStrategoTerm, Integer> idPat = pf.appl("Id", pf.string("foo"));
 
-			Walk<TermWalk> walk = walk(down(new AbstractAction<TermWalk>() {
+			Walk<SWalker> walk = walk(down(new BaseAction<SWalker>() {
 				@Override
-				public int step(TermWalk e) {
+				public int step(SWalker e) {
 					Environment<TreeCursor<IStrategoTerm, Integer>> env = EnvironmentFactory.env();
 					if(idPat.match(e, env)) {
 						System.out.println("match!");
@@ -51,7 +51,7 @@ public class Main {
 					return PROCEED;
 				}
 			}));
-			Walker<IStrategoTerm, Integer> e = new TermWalk(tree, walk);
+			Walker<IStrategoTerm, Integer> e = new SWalker(tree, walk);
 			e.start();
 
 		}

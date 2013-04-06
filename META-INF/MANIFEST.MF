@@ -11,4 +11,6 @@ Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
 Export-Package: nuthatch.stratego.adapter,
  nuthatch.stratego.pattern,
  nuthatch.stratego.syntax,
+ nuthatch.stratego.adapter,
+ nuthatch.stratego.actions,
  nuthatch.util

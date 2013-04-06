@@ -11,110 +11,123 @@ import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTermBuilder;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 
-public class TermCursor extends
-		AbstractTreeCursor<IStrategoTerm, Integer, IStrategoTerm> {
+public class STermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStrategoTerm> {
 	private final IStrategoTermBuilder builder;
 
-	public TermCursor(IStrategoTerm tree, IStrategoTermBuilder builder) {
+
+	public STermCursor(IStrategoTerm tree, IStrategoTermBuilder builder) {
 		super(tree);
 		this.builder = builder;
 	}
 
-	protected TermCursor(TermCursor src, boolean fullTree) {
+
+	protected STermCursor(STermCursor src, boolean fullTree) {
 		super(src, fullTree);
 		this.builder = src.builder;
 	}
 
-	protected TermCursor(TermCursor src, IStrategoTerm replacement) {
+
+	protected STermCursor(STermCursor src, IStrategoTerm replacement) {
 		super(src, replacement);
 		this.builder = src.builder;
 	}
 
-	@Override
-	public TreeCursor<IStrategoTerm, Integer> copy() {
-		return new TermCursor(this, true);
-	}
 
 	@Override
-	public TreeCursor<IStrategoTerm, Integer> copyAndReplaceSubtree(
-			TreeCursor<IStrategoTerm, Integer> replacement) {
-		if (replacement instanceof TermCursor) {
-			return new TermCursor(this, ((TermCursor) replacement).getCurrent());
-		} else {
-			throw new UnsupportedOperationException(
-					"Replacing with different cursor type");
+	public TreeCursor<IStrategoTerm, Integer> copy() {
+		return new STermCursor(this, true);
+	}
+
+
+	@Override
+	public TreeCursor<IStrategoTerm, Integer> copyAndReplaceSubtree(TreeCursor<IStrategoTerm, Integer> replacement) {
+		if(replacement instanceof STermCursor) {
+			return new STermCursor(this, ((STermCursor) replacement).getCurrent());
+		}
+		else {
+			throw new UnsupportedOperationException("Replacing with different cursor type");
 		}
 	}
 
+
 	@Override
 	public TreeCursor<IStrategoTerm, Integer> copySubtree() {
-		return new TermCursor(this, false);
+		return new STermCursor(this, false);
 	}
+
 
 	@Override
 	public IStrategoTerm getData() {
 		return getCurrent();
 	}
 
+
 	@Override
 	public String getName() {
 		IStrategoTerm term = getCurrent();
-		if (term instanceof IStrategoNamed) {
+		if(term instanceof IStrategoNamed) {
 			return ((IStrategoNamed) term).getName();
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
+
 
 	@Override
 	public int getNumChildren() {
 		return getCurrent().getSubtermCount();
 	}
 
+
 	public IStrategoTerm getTerm() {
 		return getCurrent();
 	}
+
 
 	@Override
 	public Integer getType() {
 		return getCurrent().getTermType();
 	}
 
+
 	@Override
 	public boolean hasData() {
 		return true;
 	}
+
 
 	@Override
 	public boolean hasName() {
 		return getCurrent() instanceof IStrategoNamed;
 	}
 
+
 	@Override
 	public boolean subtreeEquals(TreeCursor<IStrategoTerm, Integer> other) {
-		if (other instanceof TermCursor) {
-			return getCurrent().equals(((TermCursor) other).getCurrent());
-		} else {
-			throw new UnsupportedOperationException(
-					"Equality only supported on TermCursor");
+		if(other instanceof STermCursor) {
+			return getCurrent().equals(((STermCursor) other).getCurrent());
+		}
+		else {
+			throw new UnsupportedOperationException("Equality only supported on TermCursor");
 		}
 	}
+
 
 	@Override
 	protected IStrategoTerm getChild(int i) {
 		return getCurrent().getSubterm(i);
 	}
 
+
 	@Override
-	protected IStrategoTerm replaceChild(IStrategoTerm node,
-			IStrategoTerm child, int i) {
-		switch (getCurrent().getTermType()) {
+	protected IStrategoTerm replaceChild(IStrategoTerm node, IStrategoTerm child, int i) {
+		switch(getCurrent().getTermType()) {
 		case IStrategoTerm.APPL: {
 			IStrategoAppl term = (IStrategoAppl) getCurrent();
 			IStrategoTerm[] kids = term.getAllSubterms().clone();
 			kids[i] = child;
-			return builder.makeAppl(term.getConstructor(), kids,
-					term.getAnnotations());
+			return builder.makeAppl(term.getConstructor(), kids, term.getAnnotations());
 		}
 		case IStrategoTerm.LIST: {
 			IStrategoList term = (IStrategoList) getCurrent();
@@ -136,12 +149,10 @@ public class TermCursor extends
 		case IStrategoTerm.REF:
 		case IStrategoTerm.BLOB:
 		case IStrategoTerm.PLACEHOLDER:
-			System.err.println("Don't know how to deal with term type "
-					+ getCurrent().getTermType());
+			System.err.println("Don't know how to deal with term type " + getCurrent().getTermType());
 			break;
 		default:
-			System.err.println("Illegal term type: "
-					+ getCurrent().getTermType());
+			System.err.println("Illegal term type: " + getCurrent().getTermType());
 		}
 
 		return null;

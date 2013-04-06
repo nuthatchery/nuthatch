@@ -1,21 +1,23 @@
 package nuthatch.stratego.actions;
 
 import nuthatch.library.Action;
+import nuthatch.library.ActionBuilder;
+import nuthatch.library.ActionFactory;
+import nuthatch.library.FactoryFactory;
 import nuthatch.library.MatchAction;
+import nuthatch.library.MatchBuilder;
 import nuthatch.library.Walk;
-import nuthatch.library.impl.actions.AbstractComposeBuilder;
-import nuthatch.library.impl.actions.MatchBuilder;
 import nuthatch.pattern.Pattern;
-import nuthatch.stratego.adapter.TermCursor;
-import nuthatch.stratego.adapter.TermWalk;
+import nuthatch.stratego.adapter.STermCursor;
+import nuthatch.stratego.adapter.SWalker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class SActionFactory {
-	public static final nuthatch.library.impl.actions.ActionFactory<IStrategoTerm, Integer, TermCursor, TermWalk> factory = nuthatch.library.impl.actions.ActionFactory.getInstance();
+	public static final ActionFactory<IStrategoTerm, Integer, STermCursor, SWalker> factory = FactoryFactory.getActionFactory();
 
 
-	public nuthatch.library.impl.actions.ActionFactory<IStrategoTerm, Integer, TermCursor, TermWalk> getInstance() {
+	public ActionFactory<IStrategoTerm, Integer, STermCursor, SWalker> getInstance() {
 		return factory;
 	}
 
@@ -25,9 +27,9 @@ public class SActionFactory {
 	/**
 	 * @param action
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#afterChild(nuthatch.library.Action)
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#afterChild(nuthatch.library.Action)
 	 */
-	public static Action<TermWalk> afterChild(Action<TermWalk> action) {
+	public static Action<SWalker> afterChild(Action<SWalker> action) {
 		return factory.afterChild(action);
 	}
 
@@ -35,9 +37,9 @@ public class SActionFactory {
 	/**
 	 * @param action
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#atLeaf(nuthatch.library.Action)
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#atLeaf(nuthatch.library.Action)
 	 */
-	public static Action<TermWalk> atLeaf(Action<TermWalk> action) {
+	public static Action<SWalker> atLeaf(Action<SWalker> action) {
 		return factory.atLeaf(action);
 	}
 
@@ -45,9 +47,9 @@ public class SActionFactory {
 	/**
 	 * @param action
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#atRoot(nuthatch.library.Action)
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#atRoot(nuthatch.library.Action)
 	 */
-	public static Action<TermWalk> atRoot(Action<TermWalk> action) {
+	public static Action<SWalker> atRoot(Action<SWalker> action) {
 		return factory.atRoot(action);
 	}
 
@@ -55,9 +57,9 @@ public class SActionFactory {
 	/**
 	 * @param action
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#beforeChild(nuthatch.library.Action)
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#beforeChild(nuthatch.library.Action)
 	 */
-	public static Action<TermWalk> beforeChild(Action<TermWalk> action) {
+	public static Action<SWalker> beforeChild(Action<SWalker> action) {
 		return factory.beforeChild(action);
 	}
 
@@ -70,16 +72,17 @@ public class SActionFactory {
 	 *      Action
 	 *      <W>[])
 	 */
-	public static final Action<TermWalk> combine(Action<TermWalk>... actions) {
+	@SafeVarargs
+	public static final Action<SWalker> combine(Action<SWalker>... actions) {
 		return factory.combine(actions);
 	}
 
 
 	/**
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#combineBuilder()
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#combineBuilder()
 	 */
-	public static AbstractComposeBuilder<TermWalk> combineBuilder() {
+	public static ActionBuilder<SWalker> combineBuilder() {
 		return factory.combineBuilder();
 	}
 
@@ -87,9 +90,9 @@ public class SActionFactory {
 	/**
 	 * @param action
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#down(nuthatch.library.Action)
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#down(nuthatch.library.Action)
 	 */
-	public static Action<TermWalk> down(Action<TermWalk> action) {
+	public static Action<SWalker> down(Action<SWalker> action) {
 		return factory.down(action);
 	}
 
@@ -98,10 +101,10 @@ public class SActionFactory {
 	 * @param downAction
 	 * @param upAction
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#downup(nuthatch.library.Action,
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#downup(nuthatch.library.Action,
 	 *      nuthatch.library.Action)
 	 */
-	public static Action<TermWalk> downup(Action<TermWalk> downAction, Action<TermWalk> upAction) {
+	public static Action<SWalker> downup(Action<SWalker> downAction, Action<SWalker> upAction) {
 		return factory.downup(downAction, upAction);
 	}
 
@@ -110,16 +113,21 @@ public class SActionFactory {
 	 * @param pat
 	 * @param action
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#match(nuthatch.pattern.Pattern,
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#match(nuthatch.pattern.Pattern,
 	 *      nuthatch.library.MatchAction)
 	 */
-	public static Action<TermWalk> match(Pattern<IStrategoTerm, Integer> pat, MatchAction<IStrategoTerm, Integer, TermCursor, TermWalk> action) {
+	public static Action<SWalker> match(Pattern<IStrategoTerm, Integer> pat, MatchAction<IStrategoTerm, Integer, STermCursor, SWalker> action) {
 		return factory.match(pat, action);
 	}
 
 
-	public static MatchBuilder<IStrategoTerm, Integer, TermCursor, TermWalk> matchBuilder() {
+	public static MatchBuilder<IStrategoTerm, Integer, STermCursor, SWalker> matchBuilder() {
 		return factory.matchBuilder();
+	}
+
+
+	public static Action<SWalker> nop() {
+		return factory.nop();
 	}
 
 
@@ -132,16 +140,16 @@ public class SActionFactory {
 	 *      W>[])
 	 */
 	@SafeVarargs
-	public static final Action<TermWalk> seq(Action<TermWalk>... actions) {
+	public static final Action<SWalker> seq(Action<SWalker>... actions) {
 		return factory.seq(actions);
 	}
 
 
 	/**
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#sequenceBuilder()
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#sequenceBuilder()
 	 */
-	public static AbstractComposeBuilder<TermWalk> sequenceBuilder() {
+	public static ActionBuilder<SWalker> sequenceBuilder() {
 		return factory.sequenceBuilder();
 	}
 
@@ -149,9 +157,9 @@ public class SActionFactory {
 	/**
 	 * @param action
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#up(nuthatch.library.Action)
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#up(nuthatch.library.Action)
 	 */
-	public static Action<TermWalk> up(Action<TermWalk> action) {
+	public static Action<SWalker> up(Action<SWalker> action) {
 		return factory.up(action);
 	}
 
@@ -159,9 +167,9 @@ public class SActionFactory {
 	/**
 	 * @param action
 	 * @return
-	 * @see nuthatch.library.impl.actions.ActionFactory#walk(nuthatch.library.Action)
+	 * @see nuthatch.library.impl.actions.StandardActionFactory#walk(nuthatch.library.Action)
 	 */
-	public static Walk<TermWalk> walk(Action<TermWalk> action) {
+	public static Walk<SWalker> walk(Action<SWalker> action) {
 		return factory.walk(action);
 	}
 

@@ -5,14 +5,15 @@ import nuthatch.pattern.impl.Var;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class TermVar extends Var<IStrategoTerm, Integer> {
+public class STermVar extends Var<IStrategoTerm, Integer> {
 
-	public TermVar(Environment<?> env) {
+	public STermVar(Environment<?> env) {
 		super(env);
 	}
 
+
 	@Override
-	public TermCursor get() {
-		return (TermCursor) super.get();
+	public STermCursor get() {
+		return (STermCursor) super.get();
 	}
 }

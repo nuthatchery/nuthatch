@@ -1,10 +1,10 @@
 package nuthatch.demo;
 
-import nuthatch.library.AbstractVisitAction;
 import nuthatch.library.Action;
+import nuthatch.library.BaseVisitAction;
 import nuthatch.stratego.actions.SActionFactory;
+import nuthatch.stratego.adapter.SWalker;
 import nuthatch.stratego.adapter.StrategoAdapter;
-import nuthatch.stratego.adapter.TermWalk;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -25,9 +25,9 @@ public class TermPrinter {
 	 * @return its string representation
 	 */
 	public static String termToString(IStrategoTerm term) {
-		Action<TermWalk> visitor = new AbstractVisitAction<TermWalk>() {
+		Action<SWalker> visitor = new BaseVisitAction<SWalker>() {
 			@Override
-			public int beforeChild(TermWalk e, int i) {
+			public int beforeChild(SWalker e, int i) {
 				if(i != 1) {
 					e.appendToS(",");
 				}
@@ -36,7 +36,7 @@ public class TermPrinter {
 
 
 			@Override
-			public int down(TermWalk e) {
+			public int down(SWalker e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					e.appendToS("[");
 				}
@@ -60,7 +60,7 @@ public class TermPrinter {
 
 
 			@Override
-			public int up(TermWalk e) {
+			public int up(SWalker e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					e.appendToS("]");
 				}
@@ -73,7 +73,7 @@ public class TermPrinter {
 				return PROCEED;
 			}
 		};
-		TermWalk e = new TermWalk(StrategoAdapter.termToTree(term), SActionFactory.walk(visitor));
+		SWalker e = new SWalker(StrategoAdapter.termToTree(term), SActionFactory.walk(visitor));
 		long t0 = System.currentTimeMillis();
 		e.start();
 		System.err.println("Engine finished in " + (System.currentTimeMillis() - t0) + "ms");

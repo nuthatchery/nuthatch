@@ -338,8 +338,8 @@ public class StrategoAdapter {
 	 *            The term
 	 * @return A tree cursor wrapping the term
 	 */
-	public static TermCursor termToTree(IStrategoTerm term) {
-		return new TermCursor(term, ptm.getFactory());
+	public static STermCursor termToTree(IStrategoTerm term) {
+		return new STermCursor(term, ptm.getFactory());
 	}
 
 
@@ -352,8 +352,8 @@ public class StrategoAdapter {
 	 *         term
 	 */
 	public static IStrategoTerm treeToTerm(TreeCursor<IStrategoTerm, Integer> tree) {
-		if(tree instanceof TermCursor) {
-			return ((TermCursor) tree).getTerm();
+		if(tree instanceof STermCursor) {
+			return ((STermCursor) tree).getTerm();
 		}
 		else {
 			return null;

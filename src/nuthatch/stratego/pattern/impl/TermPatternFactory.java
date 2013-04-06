@@ -1,4 +1,4 @@
-package nuthatch.stratego.pattern;
+package nuthatch.stratego.pattern.impl;
 
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.PatternFactory;
@@ -6,15 +6,11 @@ import nuthatch.pattern.PatternFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class TermPatternFactory extends PatternFactory<IStrategoTerm, Integer> {
-	static final TermPatternFactory instance = new TermPatternFactory();
-
-
-	public static TermPatternFactory getInstance() {
-		return instance;
-	}
+	static final TermPatternFactory tpfInstance = new TermPatternFactory();
 
 
 	private TermPatternFactory() {
+		super();
 	}
 
 
@@ -58,6 +54,12 @@ public class TermPatternFactory extends PatternFactory<IStrategoTerm, Integer> {
 	@SafeVarargs
 	public final Pattern<IStrategoTerm, Integer> tuple(Pattern<IStrategoTerm, Integer>... children) {
 		return nodeWithChildren(null, IStrategoTerm.TUPLE, null, children);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public static TermPatternFactory getInstance() {
+		return tpfInstance;
 	}
 
 }

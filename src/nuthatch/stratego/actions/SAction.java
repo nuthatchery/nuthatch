@@ -1,11 +1,11 @@
 package nuthatch.stratego.actions;
 
 import nuthatch.library.Action;
-import nuthatch.stratego.adapter.TermWalk;
+import nuthatch.stratego.adapter.SWalker;
 
-public abstract class SAction implements Action<TermWalk> {
+public abstract class SAction implements Action<SWalker> {
 
 	@Override
-	public void init(TermWalk walker) {
+	public void init(SWalker walker) {
 	}
 }

@@ -17,10 +17,10 @@ import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
 import nuthatch.stratego.actions.SMatchAction;
+import nuthatch.stratego.adapter.STermCursor;
+import nuthatch.stratego.adapter.SWalker;
 import nuthatch.stratego.adapter.StrategoAdapter;
-import nuthatch.stratego.adapter.TermCursor;
-import nuthatch.stratego.adapter.TermWalk;
-import nuthatch.stratego.pattern.TermPatternFactory;
+import nuthatch.stratego.pattern.impl.TermPatternFactory;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
@@ -53,7 +53,7 @@ public class StrategoSignatures {
 
 
 	public static String sig2java(IStrategoTerm signature, String packageName, String className) {
-		TermCursor tree = StrategoAdapter.termToTree(signature);
+		STermCursor tree = StrategoAdapter.termToTree(signature);
 
 		TermPatternFactory pf = TermPatternFactory.getInstance();
 
@@ -62,14 +62,14 @@ public class StrategoSignatures {
 		final Pattern<IStrategoTerm, Integer> funTypePat = FunType(pf.var("params"), pf.var("retType"));
 		final Set<String> methods = new HashSet<String>();
 
-		Walk<TermWalk> walk = walk(down(match(opDeclPat, new SMatchAction() {
+		Walk<SWalker> walk = walk(down(match(opDeclPat, new SMatchAction() {
 			@Override
-			public void init(TermWalk walker) {
+			public void init(SWalker walker) {
 			}
 
 
 			@Override
-			public int step(TermWalk w, Environment<TermCursor> env) {
+			public int step(SWalker w, Environment<STermCursor> env) {
 				StringBuilder builder = new StringBuilder();
 				builder.append("\tpublic static Pattern<IStrategoTerm, Integer> ");
 				builder.append(env.get("name").getName());
@@ -107,7 +107,7 @@ public class StrategoSignatures {
 				return PROCEED;
 			}
 		})));
-		Walker<IStrategoTerm, Integer> e = new TermWalk(tree, walk);
+		Walker<IStrategoTerm, Integer> e = new SWalker(tree, walk);
 		e.start();
 
 		String[] array = methods.toArray(new String[methods.size()]);
