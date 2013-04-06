@@ -1,14 +1,16 @@
 package nuthatch.benchmark.nuthatch;
 
-import nuthatch.library.walks.DefaultVisitor;
+import static nuthatch.stratego.actions.SActionFactory.up;
+import static nuthatch.stratego.actions.SActionFactory.walk;
+import nuthatch.stratego.actions.SAction;
+import nuthatch.stratego.adapter.STermCursor;
+import nuthatch.stratego.adapter.SWalker;
 import nuthatch.stratego.adapter.StrategoAdapter;
-import nuthatch.stratego.adapter.TermCursor;
-import nuthatch.stratego.adapter.TermWalk;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class BottomupBuild extends NuthatchBenchmark {
-	private TermCursor replacement;
+	private STermCursor replacement;
 
 	public BottomupBuild(IStrategoTerm term) {
 		super("BottomupBuild", term);
@@ -17,16 +19,18 @@ public class BottomupBuild extends NuthatchBenchmark {
 	}
 
 	@Override
-	protected TermWalk walk(TermCursor c) {
-		return new TermWalk(c, new DefaultVisitor<TermWalk>() {
-			public void onExit(TermWalk w) {
-				w.replace(replacement);
-			}
-		});
+	protected boolean check() {
+		return getResult().subtreeEquals(replacement);
 	}
 
 	@Override
-	protected boolean check() {
-		return getResult().subtreeEquals(replacement);
+	protected SWalker getWalk(STermCursor c) {
+		return new SWalker(c, walk(up(new SAction() {
+			@Override
+			public int step(SWalker w) {
+				w.replace(replacement);
+				return PROCEED;
+			}
+		})));
 	}
 }

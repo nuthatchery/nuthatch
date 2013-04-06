@@ -10,13 +10,6 @@ public abstract class StrategoBenchmark extends Benchmark {
 	StrategoRunner runner;
 	private IStrategoTerm term;
 
-	public StrategoBenchmark(String name, IStrategoTerm term,
-			StrategoRunner runner) {
-		super(name, "(Stratego)");
-		this.term = term;
-		this.runner = runner;
-	}
-
 	public StrategoBenchmark(String name, int n, IStrategoTerm term,
 			StrategoRunner runner) {
 		super(name, n, "(Stratego)");
@@ -24,13 +17,15 @@ public abstract class StrategoBenchmark extends Benchmark {
 		this.runner = runner;
 	}
 
-	protected IStrategoTerm invoke(IStrategoAppl program, IStrategoTerm term) {
-		runner.setCurrent(term);
-		if (runner.invoke(program)) {
-			return runner.current();
-		} else {
-			return null;
-		}
+	public StrategoBenchmark(String name, IStrategoTerm term,
+			StrategoRunner runner) {
+		super(name, "(Stratego)");
+		this.term = term;
+		this.runner = runner;
+	}
+
+	public IStrategoTerm getResult() {
+		return runner.current();
 	}
 
 	@Override
@@ -40,8 +35,13 @@ public abstract class StrategoBenchmark extends Benchmark {
 
 	protected abstract void doIt(IStrategoTerm term);
 
-	public IStrategoTerm getResult() {
-		return runner.current();
+	protected IStrategoTerm invoke(IStrategoAppl program, IStrategoTerm term) {
+		runner.setCurrent(term);
+		if (runner.invoke(program)) {
+			return runner.current();
+		} else {
+			return null;
+		}
 	}
 
 }

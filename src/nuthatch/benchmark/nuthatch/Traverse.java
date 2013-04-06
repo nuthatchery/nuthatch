@@ -1,8 +1,9 @@
 package nuthatch.benchmark.nuthatch;
 
-import nuthatch.library.walks.Default;
-import nuthatch.stratego.adapter.TermCursor;
-import nuthatch.stratego.adapter.TermWalk;
+import static nuthatch.stratego.actions.SActionFactory.nop;
+import static nuthatch.stratego.actions.SActionFactory.walk;
+import nuthatch.stratego.adapter.STermCursor;
+import nuthatch.stratego.adapter.SWalker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -13,12 +14,12 @@ public class Traverse extends NuthatchBenchmark {
 	}
 
 	@Override
-	protected TermWalk walk(TermCursor c) {
-		return new TermWalk(c, new Default<TermWalk>());
+	protected boolean check() {
+		return true;
 	}
 
 	@Override
-	protected boolean check() {
-		return true;
+	protected SWalker getWalk(STermCursor c) {
+		return new SWalker(c, walk(nop()));
 	}
 }

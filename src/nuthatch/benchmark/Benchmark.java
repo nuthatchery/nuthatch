@@ -8,19 +8,15 @@ public abstract class Benchmark implements Runnable {
 
 	private String variant;
 
-	public Benchmark(String name, String variant) {
-		this(name, N, variant);
-	}
-
 	public Benchmark(String name, int n, String variant) {
 		this.name = name;
 		this.n = n;
 		this.variant = variant;
 	}
 
-	protected abstract void doIt();
-
-	protected abstract boolean check();
+	public Benchmark(String name, String variant) {
+		this(name, N, variant);
+	}
 
 	@Override
 	public void run() {
@@ -30,11 +26,15 @@ public abstract class Benchmark implements Runnable {
 		}
 		t = System.currentTimeMillis() - t;
 		System.out.printf(
-				"%-18s %10s: %5dms, %d iterations, %5.0fµs per iteration%n", name,
-				variant, t, n, (1000.0 * t) / n);
+				"%-18s %10s: %5dms, %d iterations, %5.0fµs per iteration%n",
+				name, variant, t, n, 1000.0 * t / n);
 		if (!check()) {
 			System.out.println("  WARNING: check failed");
 		}
 	}
+
+	protected abstract boolean check();
+
+	protected abstract void doIt();
 
 }

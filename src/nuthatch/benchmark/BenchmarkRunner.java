@@ -9,8 +9,8 @@ import nuthatch.benchmark.nuthatch.Commute;
 import nuthatch.benchmark.nuthatch.Traverse;
 import nuthatch.benchmark.stratego.StrategyBenchmark;
 import nuthatch.benchmark.util.StrategoRunner;
+import nuthatch.stratego.adapter.STermCursor;
 import nuthatch.stratego.adapter.StrategoAdapter;
-import nuthatch.stratego.adapter.TermCursor;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.terms.ParseError;
@@ -28,8 +28,8 @@ public class BenchmarkRunner {
 		// StrategoAdapter.loadTermFromStream(BenchmarkRunner.class.getResourceAsStream("trees/java.tree"));
 		IStrategoTerm term = StrategoAdapter
 				.loadTermFromFile("nuthatch/benchmark/trees/java.aterm");
-		 //IStrategoTerm term =
-		 //StrategoAdapter.loadTermFromFile("nuthatch/benchmark/trees/Simple.java.aterm");
+		// IStrategoTerm term =
+		// StrategoAdapter.loadTermFromFile("nuthatch/benchmark/trees/Simple.java.aterm");
 
 		StrategoRunner runner = new StrategoRunner(StrategoAdapter
 				.getParseTableManager().getFactory());
@@ -38,20 +38,20 @@ public class BenchmarkRunner {
 		System.out.println("-------------------");
 		Commute commute = new Commute(term);
 		commute.run();
-		TermCursor commuteResult = commute.getResult(); // so we can check that
-														// it's equal to the
-														// Stratego version
+		STermCursor commuteResult = commute.getResult(); // so we can check that
+		// it's equal to the
+		// Stratego version
 		JavaCommute jcommute = new JavaCommute(term, commuteResult.getData());
 		jcommute.run();
-//		System.out.println("Input:    " + term);
-//		System.out.println("Java:     " + jcommute.getResult());
-//		System.out.println("Nuthatch: " + commuteResult.getData());
+		// System.out.println("Input:    " + term);
+		// System.out.println("Java:     " + jcommute.getResult());
+		// System.out.println("Nuthatch: " + commuteResult.getData());
 		new StrategyBenchmark("Commute (Topdown)",
 				"topdown(try(\\Invoke(m,[x,y]) -> Invoke(m,[y,x])\\))",
 				commuteResult.getTerm(), term, runner).run();
-		new StrategyBenchmark("Commute (Bottomup)",
-				"bottomup(try(\\Invoke(m,[x,y]) -> Invoke(m,[y,x])\\))",
-				commuteResult.getTerm(), term, runner).run();
+		// new StrategyBenchmark("Commute (Bottomup)",
+		// "bottomup(try(\\Invoke(m,[x,y]) -> Invoke(m,[y,x])\\))",
+		// commuteResult.getTerm(), term, runner).run();
 
 		System.out.println();
 		System.out.println("Bottomup Build 42");
@@ -66,9 +66,9 @@ public class BenchmarkRunner {
 		new Traverse(term).run();
 		new JavaTraverse(term).run();
 		new StrategyBenchmark("TopDown", "topdown(id)", term, term, runner)
-				.run();
+		.run();
 		new StrategyBenchmark("BottomUp", "bottomup(id)", term, term, runner)
-				.run();
+		.run();
 		new StrategyBenchmark("DownUp", "downup(id)", term, term, runner).run();
 		System.out.println();
 

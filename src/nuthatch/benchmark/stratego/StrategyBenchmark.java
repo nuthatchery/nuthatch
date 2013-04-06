@@ -10,11 +10,18 @@ public class StrategyBenchmark extends StrategoBenchmark {
 	private IStrategoAppl stratCheck;
 	private IStrategoTerm termCheck;
 
-	public StrategyBenchmark(String name, String strategy, String check,
+	public StrategyBenchmark(String name, String strategy, IStrategoTerm check,
+			int n, IStrategoTerm term, StrategoRunner runner) {
+		super(name, n, term, runner);
+		this.strategy = runner.compile(strategy);
+		this.termCheck = check;
+	}
+
+	public StrategyBenchmark(String name, String strategy, IStrategoTerm check,
 			IStrategoTerm term, StrategoRunner runner) {
 		super(name, term, runner);
 		this.strategy = runner.compile(strategy);
-		this.stratCheck = runner.compile(check);
+		this.termCheck = check;
 	}
 
 	public StrategyBenchmark(String name, String strategy, String check, int n,
@@ -24,33 +31,27 @@ public class StrategyBenchmark extends StrategoBenchmark {
 		this.stratCheck = runner.compile(check);
 	}
 
-	public StrategyBenchmark(String name, String strategy, IStrategoTerm check,
+	public StrategyBenchmark(String name, String strategy, String check,
 			IStrategoTerm term, StrategoRunner runner) {
 		super(name, term, runner);
 		this.strategy = runner.compile(strategy);
-		this.termCheck = check;
+		this.stratCheck = runner.compile(check);
 	}
 
-	public StrategyBenchmark(String name, String strategy, IStrategoTerm check,
-			int n, IStrategoTerm term, StrategoRunner runner) {
-		super(name, n, term, runner);
-		this.strategy = runner.compile(strategy);
-		this.termCheck = check;
+	@Override
+	protected boolean check() {
+		if (stratCheck != null) {
+			return runner.invoke(stratCheck);
+		} else if (termCheck != null) {
+			return termCheck.equals(runner.current());
+		} else {
+			return true;
+		}
 	}
 
 	@Override
 	protected void doIt(IStrategoTerm term) {
 		invoke(strategy, term);
-	}
-
-	@Override
-	protected boolean check() {
-		if (stratCheck != null)
-			return runner.invoke(stratCheck);
-		else if (termCheck != null)
-			return termCheck.equals(runner.current());
-		else
-			return true;
 	}
 
 }

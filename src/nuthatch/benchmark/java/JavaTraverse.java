@@ -1,26 +1,21 @@
 package nuthatch.benchmark.java;
 
-import org.spoofax.interpreter.terms.IStrategoTerm;
-
 import nuthatch.benchmark.Benchmark;
+
+import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class JavaTraverse extends Benchmark {
 
 	private IStrategoTerm tree;
-
-	public JavaTraverse(IStrategoTerm tree) {
-		super("Traverse", "(Java)");
-		this.tree = tree;
-	}
 
 	public JavaTraverse(int n, IStrategoTerm tree) {
 		super("Traverse", n, "(Java)");
 		this.tree = tree;
 	}
 
-	@Override
-	protected void doIt() {
-		traverse(tree);
+	public JavaTraverse(IStrategoTerm tree) {
+		super("Traverse", "(Java)");
+		this.tree = tree;
 	}
 
 	private void traverse(IStrategoTerm tree) {
@@ -34,6 +29,11 @@ public class JavaTraverse extends Benchmark {
 	@Override
 	protected boolean check() {
 		return true;
+	}
+
+	@Override
+	protected void doIt() {
+		traverse(tree);
 	}
 
 }

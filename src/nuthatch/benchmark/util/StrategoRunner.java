@@ -41,21 +41,6 @@ public class StrategoRunner extends HybridInterpreter {
 	private final ParseTable sugarTable;
 	private final SGLR sugarParser;
 
-	private static class ConcreteIOAgent extends IOAgent {
-
-		@Override
-		public InputStream openInputStream(String fn, boolean isDefinitionFile)
-				throws FileNotFoundException {
-			if (isDefinitionFile) {
-				InputStream r = ConcreteInterpreter.class.getClassLoader()
-						.getResourceAsStream(fn);
-				return r;
-			} else {
-				return super.openInputStream(fn, isDefinitionFile);
-			}
-		}
-	}
-
 	public StrategoRunner() {
 		this(new TermFactory());
 	}
@@ -93,50 +78,6 @@ public class StrategoRunner extends HybridInterpreter {
 		}
 	}
 
-	private InputStream findLocalResource(String path) throws IOException {
-		InputStream ins = ConcreteInterpreter.class.getClassLoader()
-				.getResourceAsStream(path);
-		if (ins == null)
-			throw new IOException("Failed to load internal resource " + path);
-		return ins;
-	}
-
-	protected InputStream findLibrary(String libraryPath) throws IOException {
-		String shareDir = System.getProperty("user.home")
-				+ "/.nix-profile/share/";
-		File file = new File(shareDir + "/" + libraryPath);
-		if (file.exists()) {
-			try {
-				return new FileInputStream(file);
-			} catch (FileNotFoundException e) {
-				throw new RuntimeException(e);
-			}
-		}
-		throw new IOException("Failed to find Stratego library "
-				+ file.getAbsolutePath());
-	}
-
-	public void loadConcrete(String file, String[] path, boolean lib)
-			throws IOException, InterpreterException {
-	}
-
-	private IStrategoAppl parseAndCompile(String codeAsString,
-			String frontendStrategy, String startSymbol)
-			throws TokenExpectedException, BadTokenException, ParseException,
-			SGLRException, InterpreterErrorExit, InterpreterExit,
-			UndefinedStrategyException, InterpreterException,
-			InterruptedException {
-		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString,
-				"stdin", startSymbol);
-		IStrategoTerm old = current();
-		setCurrent(tree);
-		if (!invoke(frontendStrategy))
-			return null;
-		IStrategoAppl ret = (IStrategoAppl) current();
-		setCurrent(old);
-		return ret;
-	}
-
 	public IStrategoAppl compile(String codeAsString) throws BenchmarkError {
 		IStrategoAppl program;
 		try {
@@ -166,6 +107,67 @@ public class StrategoRunner extends HybridInterpreter {
 			}
 		} catch (InterpreterException e) {
 			throw new BenchmarkError(e);
+		}
+	}
+
+	public void loadConcrete(String file, String[] path, boolean lib)
+			throws IOException, InterpreterException {
+	}
+
+	private InputStream findLocalResource(String path) throws IOException {
+		InputStream ins = ConcreteInterpreter.class.getClassLoader()
+				.getResourceAsStream(path);
+		if (ins == null) {
+			throw new IOException("Failed to load internal resource " + path);
+		}
+		return ins;
+	}
+
+	private IStrategoAppl parseAndCompile(String codeAsString,
+			String frontendStrategy, String startSymbol)
+					throws TokenExpectedException, BadTokenException, ParseException,
+					SGLRException, InterpreterErrorExit, InterpreterExit,
+					UndefinedStrategyException, InterpreterException,
+					InterruptedException {
+		IStrategoTerm tree = (IStrategoTerm) sugarParser.parse(codeAsString,
+				"stdin", startSymbol);
+		IStrategoTerm old = current();
+		setCurrent(tree);
+		if (!invoke(frontendStrategy)) {
+			return null;
+		}
+		IStrategoAppl ret = (IStrategoAppl) current();
+		setCurrent(old);
+		return ret;
+	}
+
+	protected InputStream findLibrary(String libraryPath) throws IOException {
+		String shareDir = System.getProperty("user.home")
+				+ "/.nix-profile/share/";
+		File file = new File(shareDir + "/" + libraryPath);
+		if (file.exists()) {
+			try {
+				return new FileInputStream(file);
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		throw new IOException("Failed to find Stratego library "
+				+ file.getAbsolutePath());
+	}
+
+	private static class ConcreteIOAgent extends IOAgent {
+
+		@Override
+		public InputStream openInputStream(String fn, boolean isDefinitionFile)
+				throws FileNotFoundException {
+			if (isDefinitionFile) {
+				InputStream r = ConcreteInterpreter.class.getClassLoader()
+						.getResourceAsStream(fn);
+				return r;
+			} else {
+				return super.openInputStream(fn, isDefinitionFile);
+			}
 		}
 	}
 }
