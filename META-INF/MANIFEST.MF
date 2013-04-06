@@ -8,14 +8,15 @@ Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
 Export-Package: 
  nullness,
  nuthatch.examples,
- nuthatch.library.actions,
+ nuthatch.library,
  nuthatch.library.impl.walks,
+ nuthatch.library.impl.actions,
  nuthatch.pattern,
  nuthatch.pattern.impl,
  nuthatch.tree,
  nuthatch.tree.errors,
  nuthatch.tree.impl,
  nuthatch.tree.util,
- nuthatch.walk,
- nuthatch.walk.errors,
- nuthatch.walk.impl
+ nuthatch.walker,
+ nuthatch.walker.errors,
+ nuthatch.walker.impl

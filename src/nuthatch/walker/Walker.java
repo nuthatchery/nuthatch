@@ -1,9 +1,9 @@
-package nuthatch.walk;
+package nuthatch.walker;
 
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.errors.TypeMismatch;
+import nuthatch.walker.errors.TypeMismatch;
 
 public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	/**

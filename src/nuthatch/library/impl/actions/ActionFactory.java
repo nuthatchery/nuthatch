@@ -1,12 +1,12 @@
 package nuthatch.library.impl.actions;
 
+import nuthatch.library.Action;
+import nuthatch.library.MatchAction;
+import nuthatch.library.Walk;
 import nuthatch.library.impl.walks.Default;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Action;
-import nuthatch.walk.MatchAction;
-import nuthatch.walk.Walk;
-import nuthatch.walk.Walker;
+import nuthatch.walker.Walker;
 
 public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> {
 	@SuppressWarnings("rawtypes")
@@ -129,6 +129,11 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 */
 	public Action<W> match(Pattern<Value, Type> pat, MatchAction<Value, Type, C, W> action) {
 		return new Match<Value, Type, C, W>(pat, action);
+	}
+
+
+	public MatchBuilder<Value, Type, C, W> matchBuilder() {
+		return new MatchBuilder<>();
 	}
 
 

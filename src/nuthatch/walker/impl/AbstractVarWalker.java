@@ -1,8 +1,8 @@
-package nuthatch.walk.impl;
+package nuthatch.walker.impl;
 
+import nuthatch.library.Walk;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Walk;
 
 /**
  * This engine variant adds a few state registers.

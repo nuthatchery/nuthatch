@@ -1,7 +1,8 @@
-package nuthatch.walk.impl;
+package nuthatch.walker.impl;
 
 import java.util.Iterator;
 
+import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.Path;
@@ -9,9 +10,8 @@ import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.StandardTreeCursor;
-import nuthatch.walk.Walk;
-import nuthatch.walk.Walker;
-import nuthatch.walk.errors.ReachedTop;
+import nuthatch.walker.Walker;
+import nuthatch.walker.errors.ReachedTop;
 
 public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value, Type, E>> implements Walker<Value, Type> {
 	protected static final int parent = 0;

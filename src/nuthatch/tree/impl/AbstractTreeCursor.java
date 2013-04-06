@@ -8,7 +8,7 @@ import nuthatch.tree.Path;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.util.BranchUtil;
-import nuthatch.walk.errors.ReachedTop;
+import nuthatch.walker.errors.ReachedTop;
 
 public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<Value, Type> {
 	static class TreeCursorIterator<Value, Type, T> implements Iterator<TreeCursor<Value, Type>> {

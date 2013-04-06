@@ -1,8 +1,11 @@
-package nuthatch.walk;
+package nuthatch.library;
 
+import nuthatch.pattern.Environment;
 import nuthatch.tree.Tree;
+import nuthatch.tree.TreeCursor;
+import nuthatch.walker.Walker;
 
-public interface Action<W extends Walker<?, ?>> {
+public interface MatchAction<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> {
 	public static final int PARENT = Tree.PARENT;
 	public static final int FIRST = Tree.FIRST;
 	public static final int LAST = Tree.LAST;
@@ -21,7 +24,8 @@ public interface Action<W extends Walker<?, ?>> {
 	/**
 	 * Visit a new node.
 	 * 
-	 * This method is called whenever the walker enters a node.
+	 * This method is called whenever the walker enters a node, after a pattern
+	 * has been match.
 	 * 
 	 * The step should perform the task of visiting the current node only,
 	 * and return the next node that should be visited (rather than trying to
@@ -29,9 +33,11 @@ public interface Action<W extends Walker<?, ?>> {
 	 * 
 	 * @param walker
 	 *            The walker
+	 * @param env
+	 *            An environment containing bound variables from a pattern
 	 * @return The direction of the next node to visit, or PROCEED to leave the
 	 *         decision to the surrounding action
 	 */
-	int step(W walker);
+	int step(W walker, Environment<C> env);
 
 }

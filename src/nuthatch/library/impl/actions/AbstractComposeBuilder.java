@@ -3,8 +3,8 @@ package nuthatch.library.impl.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import nuthatch.walk.Action;
-import nuthatch.walk.Walker;
+import nuthatch.library.Action;
+import nuthatch.walker.Walker;
 
 public abstract class AbstractComposeBuilder<W extends Walker<?, ?>> {
 	protected final List<Action<W>> actions = new ArrayList<Action<W>>();

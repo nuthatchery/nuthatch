@@ -1,8 +1,8 @@
 package nuthatch.library.impl.walks;
 
-import nuthatch.walk.Action;
-import nuthatch.walk.Walk;
-import nuthatch.walk.Walker;
+import nuthatch.library.Action;
+import nuthatch.library.Walk;
+import nuthatch.walker.Walker;
 
 public class Default<W extends Walker<?, ?>> implements Walk<W> {
 

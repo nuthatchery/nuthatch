@@ -3,13 +3,13 @@ package nuthatch.examples;
 import java.util.ArrayList;
 import java.util.List;
 
+import nuthatch.library.Action;
+import nuthatch.library.Walk;
 import nuthatch.library.impl.actions.AbstractComposeWalk;
 import nuthatch.library.impl.actions.ActionFactory;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Action;
-import nuthatch.walk.Walk;
-import nuthatch.walk.impl.SimpleWalker;
+import nuthatch.walker.impl.SimpleWalker;
 
 public class ToLaTeX {
 	private static final int MODE_WALK = 1 << 0;

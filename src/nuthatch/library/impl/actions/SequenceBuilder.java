@@ -1,7 +1,7 @@
 package nuthatch.library.impl.actions;
 
-import nuthatch.walk.Action;
-import nuthatch.walk.Walker;
+import nuthatch.library.Action;
+import nuthatch.walker.Walker;
 
 final class SequenceBuilder<W extends Walker<?, ?>> extends AbstractComposeBuilder<W> {
 	@Override

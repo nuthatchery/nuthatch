@@ -1,4 +1,4 @@
-package nuthatch.walk.impl;
+package nuthatch.walker.impl;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.VarName;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.util.BranchUtil;
-import nuthatch.walk.Walk;
 
 public class EnvWalker<Value, Type, E extends EnvWalker<Value, Type, E>> extends AbstractVarWalker<Value, Type, E> {
 	private Environment<Object> env = null;

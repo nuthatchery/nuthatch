@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import nuthatch.library.Action;
+import nuthatch.library.MatchAction;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Action;
-import nuthatch.walk.MatchAction;
-import nuthatch.walk.Walker;
+import nuthatch.walker.Walker;
 
 final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements Action<W> {
 

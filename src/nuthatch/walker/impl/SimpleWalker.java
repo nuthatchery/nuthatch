@@ -1,8 +1,7 @@
-package nuthatch.walk.impl;
+package nuthatch.walker.impl;
 
-import nuthatch.tree.Tree;
+import nuthatch.library.Walk;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Walk;
 
 /**
  * A simple engine with registers.
@@ -16,11 +15,6 @@ import nuthatch.walk.Walk;
  * @param <Type>
  */
 public final class SimpleWalker<Value, Type> extends AbstractVarWalker<Value, Type, SimpleWalker<Value, Type>> {
-
-	public SimpleWalker(Tree<Value, Type> tree, Walk<SimpleWalker<Value, Type>> strat) {
-		super(tree, strat);
-	}
-
 
 	public SimpleWalker(TreeCursor<Value, Type> cursor, Walk<SimpleWalker<Value, Type>> strat) {
 		super(cursor, strat);

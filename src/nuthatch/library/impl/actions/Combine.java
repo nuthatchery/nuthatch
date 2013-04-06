@@ -2,8 +2,8 @@ package nuthatch.library.impl.actions;
 
 import java.util.Collection;
 
-import nuthatch.walk.Action;
-import nuthatch.walk.Walker;
+import nuthatch.library.Action;
+import nuthatch.walker.Walker;
 
 final class Combine<W extends Walker<?, ?>> implements Action<W> {
 

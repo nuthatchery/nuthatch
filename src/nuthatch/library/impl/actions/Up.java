@@ -1,7 +1,7 @@
 package nuthatch.library.impl.actions;
 
-import nuthatch.walk.Action;
-import nuthatch.walk.Walker;
+import nuthatch.library.Action;
+import nuthatch.walker.Walker;
 
 final class Up<W extends Walker<?, ?>> extends AbstractIfAction<W> {
 	public Up(Action<W> action) {
@@ -11,6 +11,6 @@ final class Up<W extends Walker<?, ?>> extends AbstractIfAction<W> {
 
 	@Override
 	public boolean cond(W walker) {
-		return walker.from(LAST);
+		return walker.isAtLeaf() || walker.from(LAST);
 	}
 }

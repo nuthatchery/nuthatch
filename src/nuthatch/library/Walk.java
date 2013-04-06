@@ -1,4 +1,6 @@
-package nuthatch.walk;
+package nuthatch.library;
+
+import nuthatch.walker.Walker;
 
 public interface Walk<W extends Walker<?, ?>> extends Action<W> {
 	/**

@@ -1,7 +1,7 @@
 package nuthatch.library.impl.actions;
 
-import nuthatch.walk.Walk;
-import nuthatch.walk.Walker;
+import nuthatch.library.Walk;
+import nuthatch.walker.Walker;
 
 public abstract class AbstractComposeWalk<W extends Walker<?, ?>> implements Walk<W> {
 

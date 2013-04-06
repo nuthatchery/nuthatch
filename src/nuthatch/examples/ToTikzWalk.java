@@ -1,12 +1,12 @@
 package nuthatch.examples;
 
-import nuthatch.library.impl.actions.AbstractAction;
+import nuthatch.library.AbstractAction;
+import nuthatch.library.Action;
+import nuthatch.library.Walk;
 import nuthatch.library.impl.actions.AbstractComposeBuilder;
 import nuthatch.library.impl.actions.ActionFactory;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Action;
-import nuthatch.walk.Walk;
-import nuthatch.walk.impl.SimpleWalker;
+import nuthatch.walker.impl.SimpleWalker;
 
 final class ToTikzWalk implements Walk<SimpleWalker<String, String>> {
 	StringBuilder string = new StringBuilder();
