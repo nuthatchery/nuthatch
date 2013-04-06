@@ -1,5 +1,8 @@
 package nuthatch.stratego.syntax;
 
+import static nuthatch.stratego.actions.SActionFactory.down;
+import static nuthatch.stratego.actions.SActionFactory.match;
+import static nuthatch.stratego.actions.SActionFactory.walk;
 import static nuthatch.stratego.syntax.StrategoPatterns.ConstType;
 import static nuthatch.stratego.syntax.StrategoPatterns.FunType;
 import static nuthatch.stratego.syntax.StrategoPatterns.OpDecl;
@@ -10,17 +13,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import nuthatch.library.walks.DefaultVisitor;
-import nuthatch.library.walks.Visitor;
+import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
-import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
+import nuthatch.stratego.actions.SMatchAction;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermCursor;
 import nuthatch.stratego.adapter.TermWalk;
 import nuthatch.stratego.pattern.TermPatternFactory;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Walk;
+import nuthatch.walker.Walker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -60,50 +62,52 @@ public class StrategoSignatures {
 		final Pattern<IStrategoTerm, Integer> funTypePat = FunType(pf.var("params"), pf.var("retType"));
 		final Set<String> methods = new HashSet<String>();
 
-		Visitor<TermWalk> visitor = new DefaultVisitor<TermWalk>() {
+		Walk<TermWalk> walk = walk(down(match(opDeclPat, new SMatchAction() {
 			@Override
-			public void onEntry(TermWalk e) {
-				StringBuilder builder = new StringBuilder();
-				Environment<TreeCursor<IStrategoTerm, Integer>> env = EnvironmentFactory.env();
-				if(opDeclPat.match(e, env)) {
-					builder.append("\tpublic static Pattern<IStrategoTerm, Integer> ");
-					builder.append(env.get("name").getName());
-					builder.append("(");
-					// System.err.println(env.get("def").treeToString());
-					int numChildren = 0;
-					if(constTypePat.match(env.get("def"), env)) {
-						;
-					}
-					else if(funTypePat.match(env.get("def"), env)) {
-						for(@SuppressWarnings("unused")
-						TreeCursor<IStrategoTerm, Integer> child : env.get("params")) {
-							if(numChildren > 0) {
-								builder.append(", ");
-							}
-							builder.append("Pattern<IStrategoTerm, Integer> arg");
-							builder.append(numChildren++);
-						}
-					}
-					builder.append(")");
-					builder.append(" {\n");
-					builder.append("\t\treturn pf.appl(\"");
-					builder.append(env.get("name").getName());
-					builder.append("\"");
-					for(int j = 0; j < numChildren; j++) {
-						builder.append(", ");
-						builder.append("arg");
-						builder.append(j);
-					}
-					builder.append(")");
-					builder.append(";");
-					builder.append("\n\t}\n");
-					builder.append("\n");
-					methods.add(builder.toString());
-				}
+			public void init(TermWalk walker) {
 			}
 
-		};
-		Walk<IStrategoTerm, Integer> e = new TermWalk(tree, visitor);
+
+			@Override
+			public int step(TermWalk w, Environment<TermCursor> env) {
+				StringBuilder builder = new StringBuilder();
+				builder.append("\tpublic static Pattern<IStrategoTerm, Integer> ");
+				builder.append(env.get("name").getName());
+				builder.append("(");
+				// System.err.println(env.get("def").treeToString());
+				int numChildren = 0;
+				if(constTypePat.match(env.get("def"), env)) {
+					;
+				}
+				else if(funTypePat.match(env.get("def"), env)) {
+					for(@SuppressWarnings("unused")
+					TreeCursor<IStrategoTerm, Integer> child : env.get("params")) {
+						if(numChildren > 0) {
+							builder.append(", ");
+						}
+						builder.append("Pattern<IStrategoTerm, Integer> arg");
+						builder.append(numChildren++);
+					}
+				}
+				builder.append(")");
+				builder.append(" {\n");
+				builder.append("\t\treturn pf.appl(\"");
+				builder.append(env.get("name").getName());
+				builder.append("\"");
+				for(int j = 0; j < numChildren; j++) {
+					builder.append(", ");
+					builder.append("arg");
+					builder.append(j);
+				}
+				builder.append(")");
+				builder.append(";");
+				builder.append("\n\t}\n");
+				builder.append("\n");
+				methods.add(builder.toString());
+				return PROCEED;
+			}
+		})));
+		Walker<IStrategoTerm, Integer> e = new TermWalk(tree, walk);
 		e.start();
 
 		String[] array = methods.toArray(new String[methods.size()]);

@@ -1,7 +1,8 @@
 package nuthatch.demo;
 
-import nuthatch.library.walks.DefaultVisitor;
-import nuthatch.library.walks.Visitor;
+import nuthatch.library.AbstractVisitAction;
+import nuthatch.library.Action;
+import nuthatch.stratego.actions.SActionFactory;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermWalk;
 
@@ -24,17 +25,18 @@ public class TermPrinter {
 	 * @return its string representation
 	 */
 	public static String termToString(IStrategoTerm term) {
-		Visitor<TermWalk> visitor = new DefaultVisitor<TermWalk>() {
+		Action<TermWalk> visitor = new AbstractVisitAction<TermWalk>() {
 			@Override
-			public void beforeChild(TermWalk e, int i) {
+			public int beforeChild(TermWalk e, int i) {
 				if(i != 1) {
 					e.appendToS(",");
 				}
+				return PROCEED;
 			}
 
 
 			@Override
-			public void onEntry(TermWalk e) {
+			public int down(TermWalk e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					e.appendToS("[");
 				}
@@ -53,11 +55,12 @@ public class TermPrinter {
 				else {
 					e.appendToS(e.getData().toString());
 				}
+				return PROCEED;
 			}
 
 
 			@Override
-			public void onExit(TermWalk e) {
+			public int up(TermWalk e) {
 				if(e.getType() == IStrategoTerm.LIST) {
 					e.appendToS("]");
 				}
@@ -67,9 +70,10 @@ public class TermPrinter {
 				else if(e.getType() == IStrategoTerm.APPL && e.getNumChildren() > 0) {
 					e.appendToS(")");
 				}
+				return PROCEED;
 			}
 		};
-		TermWalk e = new TermWalk(StrategoAdapter.termToTree(term), visitor);
+		TermWalk e = new TermWalk(StrategoAdapter.termToTree(term), SActionFactory.walk(visitor));
 		long t0 = System.currentTimeMillis();
 		e.start();
 		System.err.println("Engine finished in " + (System.currentTimeMillis() - t0) + "ms");

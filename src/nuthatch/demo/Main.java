@@ -1,10 +1,13 @@
 package nuthatch.demo;
 
+import static nuthatch.stratego.actions.SActionFactory.down;
+import static nuthatch.stratego.actions.SActionFactory.walk;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import nuthatch.library.walks.DefaultVisitor;
-import nuthatch.library.walks.Visitor;
+import nuthatch.library.AbstractAction;
+import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
@@ -12,9 +15,8 @@ import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.adapter.TermCursor;
 import nuthatch.stratego.adapter.TermWalk;
 import nuthatch.stratego.pattern.TermPatternFactory;
-import nuthatch.stratego.syntax.StrategoSignatures;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Walk;
+import nuthatch.walker.Walker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -28,7 +30,8 @@ public class Main {
 	public static void main(String[] args) throws IOException, InvalidParseTableException, SGLRException {
 		String inputFile = "";
 		String input = "package foo; public class Main { void f() throws Foo { throw new Foo(); } void g() { throw new Bar(); } }";
-		String parseTable = "/home/anya/magnolia/workspace/java-front/syntax/src/Java-15.tbl";
+
+		String parseTable = "/home/anya/git/nuthatch-javafront/src/nuthatch/javafront/syntax/Java-15.tbl";
 
 		try {
 			IStrategoTerm term = StrategoAdapter.parseString(input, null, parseTable);
@@ -38,16 +41,17 @@ public class Main {
 			TermPatternFactory pf = TermPatternFactory.getInstance();
 			final Pattern<IStrategoTerm, Integer> idPat = pf.appl("Id", pf.string("foo"));
 
-			Visitor<TermWalk> visitor = new DefaultVisitor<TermWalk>() {
+			Walk<TermWalk> walk = walk(down(new AbstractAction<TermWalk>() {
 				@Override
-				public void onEntry(TermWalk e) {
+				public int step(TermWalk e) {
 					Environment<TreeCursor<IStrategoTerm, Integer>> env = EnvironmentFactory.env();
 					if(idPat.match(e, env)) {
 						System.out.println("match!");
 					}
+					return PROCEED;
 				}
-			};
-			Walk<IStrategoTerm, Integer> e = new TermWalk(tree, visitor);
+			}));
+			Walker<IStrategoTerm, Integer> e = new TermWalk(tree, walk);
 			e.start();
 
 		}
@@ -79,7 +83,5 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		StrategoSignatures.sig2java(StrategoSignatures.parseSignatureFile("/home/anya/magnolia/workspace/java-front/syntax/src/Java-15.sig"), "nuthatch.stratego.javafront", "Java15");
 	}
 }
