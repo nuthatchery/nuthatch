@@ -1,12 +1,13 @@
 package nuthatch.rascal;
 
-import nuthatch.library.walks.Topdown;
+import nuthatch.library.AbstractAction;
+import nuthatch.library.Action;
+import nuthatch.library.impl.actions.ActionFactory;
 import nuthatch.rascal.adapter.PdbCursor;
 import nuthatch.rascal.adapter.UptrCursor;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walk.Action;
-import nuthatch.walk.Walk;
-import nuthatch.walk.impl.SimpleWalk;
+import nuthatch.walker.Walker;
+import nuthatch.walker.impl.SimpleWalker;
 
 import org.eclipse.imp.pdb.facts.IConstructor;
 import org.eclipse.imp.pdb.facts.INode;
@@ -17,29 +18,32 @@ import org.rascalmpl.interpreter.IEvaluatorContext;
 
 public class Nuthatch {
 	private final IValueFactory vf;
+	private final ActionFactory<IValue, Type, TreeCursor<IValue, Type>, SimpleWalker<IValue, Type>> pdbAf = ActionFactory.getInstance();
+	private final ActionFactory<String, Type, TreeCursor<String, Type>, SimpleWalker<String, Type>> uptrAf = ActionFactory.getInstance();
+
 
 	public Nuthatch(IValueFactory vf) {
 		this.vf = vf;
 
 	}
 
+
 	public IConstructor engage(IConstructor tree, final IEvaluatorContext ctx) {
-		Action<String, Type> t = new Action<String, Type>() {
+		Action<SimpleWalker<String, Type>> t = new AbstractAction<SimpleWalker<String, Type>>() {
 			@Override
-			public TreeCursor<String, Type> apply(Walk<String, Type> e) {
-				String name = e.getName();
-				if (name != null) {
+			public int step(SimpleWalker<String, Type> walker) {
+				String name = walker.getName();
+				if(name != null) {
 					ctx.getStdOut().print(name + " ");
-				} else {
-					ctx.getStdOut().print(e.getData());
 				}
-				return null;
+				else {
+					ctx.getStdOut().print(walker.getData());
+				}
+				return PROCEED;
 			}
 		};
-		Topdown<String, Type, SimpleWalk<String, Type>> topDown = new Topdown<String, Type, SimpleWalk<String, Type>>(
-				t);
-		Walk<String, Type> e = new SimpleWalk<String, Type>(new UptrCursor(
-				tree), topDown);
+		Action<SimpleWalker<String, Type>> topDown = uptrAf.down(t);
+		Walker<String, Type> e = new SimpleWalker<String, Type>(new UptrCursor(tree), uptrAf.walk(topDown));
 		e.start();
 
 		ctx.getStdOut().println();
@@ -48,23 +52,23 @@ public class Nuthatch {
 		return tree;
 	}
 
+
 	public INode engage(INode n, final IEvaluatorContext ctx) {
-		Action<IValue, Type> t = new Action<IValue, Type>() {
+		Action<SimpleWalker<IValue, Type>> t = new AbstractAction<SimpleWalker<IValue, Type>>() {
 			@Override
-			public TreeCursor<IValue, Type> apply(Walk<IValue, Type> e) {
+			public int step(SimpleWalker<IValue, Type> e) {
 				String name = e.getName();
-				if (name != null) {
+				if(name != null) {
 					ctx.getStdOut().print(e.getName() + " ");
-				} else {
+				}
+				else {
 					ctx.getStdOut().print(e.getData().toString());
 				}
-				return null;
+				return PROCEED;
 			}
 		};
-		Topdown<IValue, Type, SimpleWalk<IValue, Type>> topDown = new Topdown<IValue, Type, SimpleWalk<IValue, Type>>(
-				t);
-		Walk<IValue, Type> e = new SimpleWalk<IValue, Type>(
-				new PdbCursor(n), topDown);
+		Action<SimpleWalker<IValue, Type>> topDown = pdbAf.down(t);
+		Walker<IValue, Type> e = new SimpleWalker<IValue, Type>(new PdbCursor(n), pdbAf.walk(topDown));
 		e.start();
 
 		ctx.getStdOut().println();

@@ -6,7 +6,7 @@ import java.util.List;
 import nullness.Nullable;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.impl.AbstractTreeCursor;
-import nuthatch.walk.errors.TypeMismatch;
+import nuthatch.walker.errors.TypeMismatch;
 
 import org.eclipse.imp.pdb.facts.IConstructor;
 import org.eclipse.imp.pdb.facts.IList;
