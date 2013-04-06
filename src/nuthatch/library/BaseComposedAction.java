@@ -1,14 +1,13 @@
-package nuthatch.library.impl.actions;
+package nuthatch.library;
 
-import nuthatch.library.Action;
 import nuthatch.walker.Walker;
 
-public abstract class AbstractComposeAction<W extends Walker<?, ?>> implements Action<W> {
+public abstract class BaseComposedAction<W extends Walker<?, ?>> implements Action<W> {
 
 	protected final Action<W> action;
 
 
-	public AbstractComposeAction(Action<W> action) {
+	public BaseComposedAction(Action<W> action) {
 		this.action = action;
 	}
 

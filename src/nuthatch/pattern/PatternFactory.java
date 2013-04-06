@@ -13,7 +13,11 @@ import nuthatch.tree.TreeCursor;
 
 public class PatternFactory<Value, Type> {
 	@SuppressWarnings("rawtypes")
-	private static final PatternFactory instance = new PatternFactory();
+	protected static final PatternFactory pfInstance = new PatternFactory();
+
+
+	protected PatternFactory() {
+	}
 
 
 	public Pattern<Value, Type> ancestor(Pattern<Value, Type> ancestor) {
@@ -109,9 +113,9 @@ public class PatternFactory<Value, Type> {
 	}
 
 
-	@SuppressWarnings("rawtypes")
-	public static PatternFactory getInstance() {
-		return instance;
+	@SuppressWarnings("unchecked")
+	public static <Value, Type> PatternFactory<Value, Type> getInstance() {
+		return pfInstance;
 	}
 
 
@@ -124,8 +128,8 @@ public class PatternFactory<Value, Type> {
 	 *            Type type, for correct return type
 	 * @return The pattern factory
 	 */
-	@SuppressWarnings("cast")
+	@SuppressWarnings("unchecked")
 	public static <Value, Type> PatternFactory<Value, Type> getInstance(Class<Value> valueClass, Class<Type> typeClass) {
-		return (PatternFactory<Value, Type>) instance;
+		return pfInstance;
 	}
 }

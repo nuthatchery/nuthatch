@@ -9,8 +9,6 @@ Export-Package:
  nullness,
  nuthatch.examples,
  nuthatch.library,
- nuthatch.library.impl.walks,
- nuthatch.library.impl.actions,
  nuthatch.pattern,
  nuthatch.pattern.impl,
  nuthatch.tree,

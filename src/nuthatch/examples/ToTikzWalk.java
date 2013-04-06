@@ -1,17 +1,18 @@
 package nuthatch.examples;
 
-import nuthatch.library.AbstractAction;
 import nuthatch.library.Action;
+import nuthatch.library.ActionBuilder;
+import nuthatch.library.ActionFactory;
+import nuthatch.library.BaseAction;
+import nuthatch.library.FactoryFactory;
 import nuthatch.library.Walk;
-import nuthatch.library.impl.actions.AbstractComposeBuilder;
-import nuthatch.library.impl.actions.ActionFactory;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.impl.SimpleWalker;
 
 final class ToTikzWalk implements Walk<SimpleWalker<String, String>> {
 	StringBuilder string = new StringBuilder();
 	private Action<SimpleWalker<String, String>> action;
-	private static final ActionFactory<String, String, TreeCursor<String, String>, SimpleWalker<String, String>> AF = ActionFactory.getInstance();
+	private static final ActionFactory<String, String, TreeCursor<String, String>, SimpleWalker<String, String>> AF = FactoryFactory.getActionFactory();
 
 
 	public String getResult() {
@@ -22,9 +23,9 @@ final class ToTikzWalk implements Walk<SimpleWalker<String, String>> {
 	@Override
 	public void init(SimpleWalker<String, String> walker) {
 		string = new StringBuilder();
-		AbstractComposeBuilder<SimpleWalker<String, String>> seq = AF.sequenceBuilder();
+		ActionBuilder<SimpleWalker<String, String>> seq = AF.sequenceBuilder();
 
-		seq.add(AF.down(new AbstractAction<SimpleWalker<String, String>>() {
+		seq.add(AF.down(new BaseAction<SimpleWalker<String, String>>() {
 			@Override
 			public int step(SimpleWalker<String, String> walker) {
 				ToLaTeX.spaces(walker);
@@ -33,7 +34,7 @@ final class ToTikzWalk implements Walk<SimpleWalker<String, String>> {
 			}
 
 		}));
-		seq.add(AF.afterChild(new AbstractAction<SimpleWalker<String, String>>() {
+		seq.add(AF.afterChild(new BaseAction<SimpleWalker<String, String>>() {
 			@Override
 			public int step(SimpleWalker<String, String> walker) {
 				ToLaTeX.spaces(walker);
@@ -42,7 +43,7 @@ final class ToTikzWalk implements Walk<SimpleWalker<String, String>> {
 			}
 
 		}));
-		seq.add(AF.beforeChild(new AbstractAction<SimpleWalker<String, String>>() {
+		seq.add(AF.beforeChild(new BaseAction<SimpleWalker<String, String>>() {
 			@Override
 			public int step(SimpleWalker<String, String> walker) {
 				ToLaTeX.spaces(walker);

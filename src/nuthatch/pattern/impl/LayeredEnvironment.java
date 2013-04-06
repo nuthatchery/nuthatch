@@ -23,7 +23,7 @@ public class LayeredEnvironment<T> implements Environment<T> {
 	public LayeredEnvironment() {
 		chain = null;
 		childCount = 0;
-		map = new HashMap<String, T>();
+		map = null;
 	}
 
 
@@ -31,7 +31,7 @@ public class LayeredEnvironment<T> implements Environment<T> {
 		this.chain = chain;
 		chain.childCount++;
 		childCount = 0;
-		map = new HashMap<String, T>();
+		map = null;
 	}
 
 
@@ -52,7 +52,12 @@ public class LayeredEnvironment<T> implements Environment<T> {
 		}
 
 		Map<String, T> pop = pop();
-		map.putAll(pop);
+		if(pop != null) {
+			if(map == null) {
+				map = new HashMap<String, T>();
+			}
+			map.putAll(pop);
+		}
 	}
 
 
@@ -91,13 +96,13 @@ public class LayeredEnvironment<T> implements Environment<T> {
 
 		LayeredEnvironment<T> env = this;
 		while(env != null) {
-			if(env.map.containsKey(var)) {
+			if(env.map != null && env.map.containsKey(var)) {
 				return env.map.get(var);
 			}
 			else {
 				if(env.stack != null) {
 					for(Map<String, T> m : env.stack) {
-						if(m.containsKey(var)) {
+						if(m != null && m.containsKey(var)) {
 							return m.get(var);
 						}
 					}
@@ -117,13 +122,13 @@ public class LayeredEnvironment<T> implements Environment<T> {
 
 		LayeredEnvironment<T> env = this;
 		while(env != null) {
-			if(!env.map.isEmpty()) {
+			if(env.map != null && !env.map.isEmpty()) {
 				return false;
 			}
 			else {
 				if(env.stack != null) {
 					for(Map<String, T> m : env.stack) {
-						if(!m.isEmpty()) {
+						if(m != null && !m.isEmpty()) {
 							return false;
 						}
 					}
@@ -137,13 +142,13 @@ public class LayeredEnvironment<T> implements Environment<T> {
 
 	@Override
 	public boolean isEmptyScope() {
-		if(!map.isEmpty()) {
+		if(map != null && !map.isEmpty()) {
 			return false;
 		}
 		else {
 			if(stack != null) {
 				for(Map<String, T> m : stack) {
-					if(!m.isEmpty()) {
+					if(m != null && !m.isEmpty()) {
 						return false;
 					}
 				}
@@ -170,6 +175,10 @@ public class LayeredEnvironment<T> implements Environment<T> {
 		}
 		else if(childCount > 0) {
 			throw new ConcurrentModificationException("Tried to change an environment that has children");
+		}
+
+		if(map == null) {
+			map = new HashMap<String, T>();
 		}
 
 		map.put(var, val);
@@ -205,6 +214,6 @@ public class LayeredEnvironment<T> implements Environment<T> {
 			stack = new ArrayList<Map<String, T>>();
 		}
 		stack.add(map);
-		map = new HashMap<String, T>();
+		map = null;
 	}
 }

@@ -2,6 +2,7 @@ package nuthatch.walker.impl;
 
 import java.util.Iterator;
 
+import nuthatch.library.Action;
 import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
@@ -262,7 +263,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 		try {
 			while(!current.isAtTop()) {
 				int go = step.step(this);
-				if(go == Walk.NEXT) {
+				if(go == Action.NEXT) {
 					go = from() + 1;
 				}
 				go(go);

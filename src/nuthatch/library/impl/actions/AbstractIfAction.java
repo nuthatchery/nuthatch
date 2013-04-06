@@ -1,9 +1,10 @@
 package nuthatch.library.impl.actions;
 
 import nuthatch.library.Action;
+import nuthatch.library.BaseComposedAction;
 import nuthatch.walker.Walker;
 
-public abstract class AbstractIfAction<W extends Walker<?, ?>> extends AbstractComposeAction<W> {
+abstract class AbstractIfAction<W extends Walker<?, ?>> extends BaseComposedAction<W> {
 
 	public AbstractIfAction(Action<W> action) {
 		super(action);

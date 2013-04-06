@@ -1,16 +1,11 @@
-package nuthatch.library.impl.actions;
+package nuthatch.library;
 
-import nuthatch.library.Action;
-import nuthatch.library.MatchAction;
-import nuthatch.library.Walk;
-import nuthatch.library.impl.walks.Default;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
-public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> {
-	@SuppressWarnings("rawtypes")
-	private static final ActionFactory instance = new ActionFactory();
+public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> {
+	public static final ActionFactory<?, ?, ?, ?> actionFactory = nuthatch.library.impl.actions.StandardActionFactory.getInstance();
 
 
 	/**
@@ -21,9 +16,7 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 * @return An action that performs 'action' if the walker's came from a
 	 *         child
 	 */
-	public Action<W> afterChild(Action<W> action) {
-		return new AfterChild<W>(action);
-	}
+	public Action<W> afterChild(Action<W> action);
 
 
 	/**
@@ -33,9 +26,7 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 *            Action to be performed
 	 * @return An action that performs 'action' if walker is at a leaf.
 	 */
-	public Action<W> atLeaf(Action<W> action) {
-		return new Leaf<W>(action);
-	}
+	public Action<W> atLeaf(Action<W> action);
 
 
 	/**
@@ -45,9 +36,7 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 *            Action to be performed
 	 * @return An action that performs 'action' if walker is at the root.
 	 */
-	public Action<W> atRoot(Action<W> action) {
-		return new Root<W>(action);
-	}
+	public Action<W> atRoot(Action<W> action);
 
 
 	/**
@@ -58,9 +47,7 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 * @return An action that performs 'action' if the walker's next move is to
 	 *         a child
 	 */
-	public Action<W> beforeChild(Action<W> action) {
-		return new BeforeChild<W>(action);
-	}
+	public Action<W> beforeChild(Action<W> action);
 
 
 	/**
@@ -78,15 +65,10 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 *            The actions to be performed
 	 * @return An action that performs 'action' all the given actions.
 	 */
-	@SafeVarargs
-	public final Action<W> combine(Action<W>... actions) {
-		return new Combine<W>(actions);
-	}
+	public Action<W> combine(@SuppressWarnings("unchecked") Action<W>... actions);
 
 
-	public AbstractComposeBuilder<W> combineBuilder() {
-		return new CombineBuilder<W>();
-	}
+	public ActionBuilder<W> combineBuilder();
 
 
 	/**
@@ -96,9 +78,7 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 *            Action to be performed
 	 * @return An action that performs 'action' if walker is on the way down
 	 */
-	public Action<W> down(Action<W> action) {
-		return new Down<W>(action);
-	}
+	public Action<W> down(Action<W> action);
 
 
 	/**
@@ -110,9 +90,7 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 *            Action to be performed on the way up
 	 * @return An action that performs actions on the way up or down
 	 */
-	public Action<W> downup(Action<W> downAction, Action<W> upAction) {
-		return new Combine<W>(new Down<W>(downAction), new Up<W>(upAction));
-	}
+	public Action<W> downup(Action<W> downAction, Action<W> upAction);
 
 
 	/**
@@ -127,14 +105,13 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 *            Action to be performed if pattern matches
 	 * @return An action that performs 'action' if the pattern matches
 	 */
-	public Action<W> match(Pattern<Value, Type> pat, MatchAction<Value, Type, C, W> action) {
-		return new Match<Value, Type, C, W>(pat, action);
-	}
+	public Action<W> match(Pattern<Value, Type> pat, MatchAction<Value, Type, C, W> action);
 
 
-	public MatchBuilder<Value, Type, C, W> matchBuilder() {
-		return new MatchBuilder<>();
-	}
+	public MatchBuilder<Value, Type, C, W> matchBuilder();
+
+
+	public Action<W> nop();
 
 
 	/**
@@ -154,15 +131,10 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 *            The actions to be performed
 	 * @return An action that performs 'action' all the given actions.
 	 */
-	@SafeVarargs
-	public final Action<W> seq(Action<W>... actions) {
-		return new Combine<W>(actions);
-	}
+	public Action<W> seq(@SuppressWarnings("unchecked") Action<W>... actions);
 
 
-	public AbstractComposeBuilder<W> sequenceBuilder() {
-		return new SequenceBuilder<W>();
-	}
+	public ActionBuilder<W> sequenceBuilder();
 
 
 	/**
@@ -172,9 +144,7 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 *            Action to be performed
 	 * @return An action that performs 'action' if the walker is on its way up
 	 */
-	public Action<W> up(Action<W> action) {
-		return new Up<W>(action);
-	}
+	public Action<W> up(Action<W> action);
 
 
 	/**
@@ -188,12 +158,5 @@ public class ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W ext
 	 * @return A walk following the default path through the tree, performing
 	 *         'action'.
 	 */
-	public Walk<W> walk(Action<W> action) {
-		return new Default<W>(action);
-	}
-
-
-	public static <Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> ActionFactory<Value, Type, C, W> getInstance() {
-		return instance;
-	}
+	public Walk<W> walk(Action<W> action);
 }

@@ -25,7 +25,7 @@ public class ToString {
 				else if(w.from(LAST)) { // just finished with children, close parenthesis
 					w.appendToS(")");
 				}
-				else { // coming up from a child (not the last), insert a comma 
+				else { // coming up from a child (not the last), insert a comma
 					w.appendToS(", ");
 				}
 

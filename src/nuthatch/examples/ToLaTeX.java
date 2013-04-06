@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nuthatch.library.Action;
+import nuthatch.library.ActionFactory;
+import nuthatch.library.BaseComposedWalk;
+import nuthatch.library.FactoryFactory;
 import nuthatch.library.Walk;
-import nuthatch.library.impl.actions.AbstractComposeWalk;
-import nuthatch.library.impl.actions.ActionFactory;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.impl.SimpleWalker;
@@ -16,8 +17,7 @@ public class ToLaTeX {
 
 	private static final int MODE_VISIT = 1 << 1;
 	private static final int MODE_PREAMBLE = 1 << 2;
-	private static final ActionFactory<String, String, TreeCursor<String, String>, SimpleWalker<String, String>> AF = ActionFactory.getInstance();
-
+	private static final ActionFactory<String, String, TreeCursor<String, String>, SimpleWalker<String, String>> AF = FactoryFactory.getActionFactory();
 
 	public static void main(String[] args) {
 		int mode = 0;
@@ -37,9 +37,9 @@ public class ToLaTeX {
 			case "-bu":
 				strat = bottomup;
 				break;
-			//case "-in":
-			//	strat = inorder;
-			//	break;
+				//case "-in":
+				//	strat = inorder;
+				//	break;
 			case "-w":
 				mode |= MODE_WALK;
 				break;
@@ -119,7 +119,7 @@ public class ToLaTeX {
 	 *         walker running the step function
 	 */
 	public static String traceWalk(TreeCursor<String, String> tree, final Walk<SimpleWalker<String, String>> step) {
-		SimpleWalker<String, String> walkTracingWalker = new SimpleWalker<String, String>(tree, new AbstractComposeWalk<SimpleWalker<String, String>>(step) {
+		SimpleWalker<String, String> walkTracingWalker = new SimpleWalker<String, String>(tree, new BaseComposedWalk<SimpleWalker<String, String>>(step) {
 			@Override
 			public int step(SimpleWalker<String, String> w) {
 				TreeCursor<String, String> prev = w.getBranch(w.from());
