@@ -1,8 +1,9 @@
 package nuthatch.rascal;
 
-import nuthatch.library.AbstractAction;
 import nuthatch.library.Action;
-import nuthatch.library.impl.actions.ActionFactory;
+import nuthatch.library.ActionFactory;
+import nuthatch.library.BaseAction;
+import nuthatch.library.FactoryFactory;
 import nuthatch.rascal.adapter.PdbCursor;
 import nuthatch.rascal.adapter.UptrCursor;
 import nuthatch.tree.TreeCursor;
@@ -18,8 +19,8 @@ import org.rascalmpl.interpreter.IEvaluatorContext;
 
 public class Nuthatch {
 	private final IValueFactory vf;
-	private final ActionFactory<IValue, Type, TreeCursor<IValue, Type>, SimpleWalker<IValue, Type>> pdbAf = ActionFactory.getInstance();
-	private final ActionFactory<String, Type, TreeCursor<String, Type>, SimpleWalker<String, Type>> uptrAf = ActionFactory.getInstance();
+	private final ActionFactory<IValue, Type, TreeCursor<IValue, Type>, SimpleWalker<IValue, Type>> pdbAf = FactoryFactory.getActionFactory();
+	private final ActionFactory<String, Type, TreeCursor<String, Type>, SimpleWalker<String, Type>> uptrAf = FactoryFactory.getActionFactory();
 
 
 	public Nuthatch(IValueFactory vf) {
@@ -29,7 +30,7 @@ public class Nuthatch {
 
 
 	public IConstructor engage(IConstructor tree, final IEvaluatorContext ctx) {
-		Action<SimpleWalker<String, Type>> t = new AbstractAction<SimpleWalker<String, Type>>() {
+		Action<SimpleWalker<String, Type>> t = new BaseAction<SimpleWalker<String, Type>>() {
 			@Override
 			public int step(SimpleWalker<String, Type> walker) {
 				String name = walker.getName();
@@ -54,7 +55,7 @@ public class Nuthatch {
 
 
 	public INode engage(INode n, final IEvaluatorContext ctx) {
-		Action<SimpleWalker<IValue, Type>> t = new AbstractAction<SimpleWalker<IValue, Type>>() {
+		Action<SimpleWalker<IValue, Type>> t = new BaseAction<SimpleWalker<IValue, Type>>() {
 			@Override
 			public int step(SimpleWalker<IValue, Type> e) {
 				String name = e.getName();

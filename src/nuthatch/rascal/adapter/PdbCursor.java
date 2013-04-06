@@ -19,24 +19,27 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		super(value);
 	}
 
+
 	protected PdbCursor(PdbCursor src, boolean fullTree) {
 		super(src, fullTree);
 	}
 
+
 	protected PdbCursor(PdbCursor src, IValue replacement) {
 		super(src, replacement);
 	}
+
 
 	@Override
 	public TreeCursor<IValue, Type> copy() {
 		return new PdbCursor(this, true);
 	}
 
+
 	@Override
-	public TreeCursor<IValue, Type> copyAndReplaceSubtree(
-			TreeCursor<IValue, Type> replacement) {
+	public TreeCursor<IValue, Type> copyAndReplaceSubtree(TreeCursor<IValue, Type> replacement) {
 		if(replacement instanceof PdbCursor) {
-			IValue repl = ((PdbCursor)replacement).getCurrent();
+			IValue repl = ((PdbCursor) replacement).getCurrent();
 			if(!repl.getType().isSubtypeOf(getCurrent().getType())) {
 				throw new TypeMismatch();
 			}
@@ -47,15 +50,18 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		}
 	}
 
+
 	@Override
 	public TreeCursor<IValue, Type> copySubtree() {
 		return new PdbCursor(this, false);
 	}
 
+
 	@Override
 	public IValue getData() {
 		return getCurrent();
 	}
+
 
 	@Override
 	public String getName() {
@@ -80,6 +86,7 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		}
 	}
 
+
 	@Override
 	public int getNumChildren() {
 		IValue value = getCurrent();
@@ -100,20 +107,24 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		}
 	}
 
+
 	@Override
 	public Type getType() {
 		return getCurrent().getType();
 	}
+
 
 	@Override
 	public boolean hasData() {
 		return true;
 	}
 
+
 	@Override
 	public boolean hasName() {
 		return getName() != null;
 	}
+
 
 	@Override
 	public boolean subtreeEquals(@Nullable TreeCursor<IValue, Type> other) {
@@ -131,6 +142,7 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		}
 	}
 
+
 	@Override
 	protected IValue getChild(int i) {
 		IValue value = getCurrent();
@@ -146,6 +158,7 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		return null;
 	}
 
+
 	@Override
 	protected IValue replaceChild(IValue node, IValue child, int i) {
 		if(node instanceof INode) {
@@ -159,6 +172,5 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		}
 		return null;
 	}
-
 
 }

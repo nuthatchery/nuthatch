@@ -23,6 +23,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 	private List<IConstructor> children = null;
 	private String name;
 
+
 	public UptrCursor(IConstructor value) {
 		super(value);
 		if(!value.getType().equals(Factory.Tree)) {
@@ -30,9 +31,11 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		}
 	}
 
+
 	protected UptrCursor(UptrCursor src, boolean fullTree) {
 		super(src, fullTree);
 	}
+
 
 	protected UptrCursor(UptrCursor src, IConstructor replacement) {
 		super(src, replacement);
@@ -44,11 +47,11 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		return new UptrCursor(this, true);
 	}
 
+
 	@Override
-	public TreeCursor<String, Type> copyAndReplaceSubtree(
-			TreeCursor<String, Type> replacement) {
+	public TreeCursor<String, Type> copyAndReplaceSubtree(TreeCursor<String, Type> replacement) {
 		if(replacement instanceof UptrCursor) {
-			IConstructor repl = ((UptrCursor)replacement).getCurrent();
+			IConstructor repl = ((UptrCursor) replacement).getCurrent();
 			if(!repl.getType().isSubtypeOf(getCurrent().getType())) {
 				throw new TypeMismatch();
 			}
@@ -59,10 +62,12 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		}
 	}
 
+
 	@Override
 	public TreeCursor<String, Type> copySubtree() {
 		return new UptrCursor(this, false);
 	}
+
 
 	@Override
 	public String getData() {
@@ -72,6 +77,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		return leafValue;
 	}
 
+
 	@Override
 	public String getName() {
 		if(!isDecoded()) {
@@ -80,6 +86,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 
 		return name;
 	}
+
 
 	@Override
 	public int getNumChildren() {
@@ -100,6 +107,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		return getCurrent().getType();
 	}
 
+
 	@Override
 	public TreeCursor<String, Type> go(int i) {
 		super.go(i);
@@ -114,6 +122,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		return this;
 	}
 
+
 	@Override
 	public boolean hasData() {
 		if(!isDecoded()) {
@@ -122,6 +131,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		return leafValue != null;
 	}
 
+
 	@Override
 	public boolean hasName() {
 		if(!isDecoded()) {
@@ -129,6 +139,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		}
 		return name != null;
 	}
+
 
 	@Override
 	public boolean subtreeEquals(@Nullable TreeCursor<String, Type> other) {
@@ -145,6 +156,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 			throw new UnsupportedOperationException("Equality only supported on UptrCursor");
 		}
 	}
+
 
 	private void decodeNode() {
 		IConstructor tree = getCurrent();
@@ -170,6 +182,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 
 	}
 
+
 	private List<IConstructor> getChildren(IConstructor t) {
 		IList args = TreeAdapter.getArgs(t);
 		List<IConstructor> list = new ArrayList<IConstructor>();
@@ -185,9 +198,11 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		return list;
 	}
 
+
 	private boolean isDecoded() {
 		return prod != null;
 	}
+
 
 	@Override
 	protected IConstructor getChild(int i) {
@@ -197,6 +212,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 
 		return children.get(i);
 	}
+
 
 	@Override
 	protected IConstructor getCurrent() {
@@ -210,9 +226,9 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		return tree;
 	}
 
+
 	@Override
-	protected IConstructor replaceChild(IConstructor node, IConstructor child,
-			int i) {
+	protected IConstructor replaceChild(IConstructor node, IConstructor child, int i) {
 		return node.set(i, child);
 	}
 
