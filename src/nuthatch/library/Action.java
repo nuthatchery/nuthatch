@@ -9,6 +9,7 @@ public interface Action<W extends Walker<?, ?>> {
 	public static final int LAST = Tree.LAST;
 	public static final int NEXT = Integer.MIN_VALUE + 1;
 	public static final int PROCEED = Integer.MIN_VALUE;
+	public static final int STAY = Integer.MIN_VALUE + 2;
 
 
 	/**

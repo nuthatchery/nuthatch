@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import nuthatch.library.Action;
 import nuthatch.tree.Path;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
@@ -16,6 +17,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	private final Path path;
 	private T current;
 	private int from = 0;
+
 
 	protected AbstractTreeCursor(AbstractTreeCursor<Value, Type, T> src, boolean fullTree) {
 		this.current = src.current;
@@ -101,6 +103,10 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	@Override
 	public TreeCursor<Value, Type> go(int i) throws BranchNotFoundError {
 		assert current != null;
+
+		if(i == Action.STAY) {
+			return this;
+		}
 
 		if(i == 1 && stack.isEmpty()) { // we can go down from top
 			stack.add(current);
