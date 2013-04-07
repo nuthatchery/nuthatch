@@ -8,6 +8,11 @@ import nuthatch.examples.exprlang.ExprWalker;
 import nuthatch.library.BaseWalk;
 
 public class Simplify extends BaseWalk<ExprWalker> {
+	public void alternative() {
+
+	}
+
+
 	@Override
 	public int step(ExprWalker w) {
 		if(up(w)) {

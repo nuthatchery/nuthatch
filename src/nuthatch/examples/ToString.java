@@ -1,32 +1,31 @@
 package nuthatch.examples;
 
+import static nuthatch.library.JoinPoints.down;
+import static nuthatch.library.JoinPoints.leaf;
+import static nuthatch.library.JoinPoints.up;
+import nuthatch.library.BaseWalk;
 import nuthatch.library.Walk;
 import nuthatch.walker.impl.SimpleWalker;
 
 public class ToString {
 	public static void main(String[] args) {
-		// Walk which outputs the tree in a term-like representation. The walker has a built-int
-		// variable (or register) 'S', which is basically a string builder suitable for accumulating a string
-		Walk<SimpleWalker<String, String>> toTerm = new Walk<SimpleWalker<String, String>>() {
-			@Override
-			public void init(SimpleWalker<String, String> walker) {
-
-			}
-
-
+		// Walk which outputs the tree in a term-like representation. The result are accumulated in the
+		// stringbuffer 's'.
+		final StringBuffer s = new StringBuffer();
+		Walk<SimpleWalker<String, String>> toTerm = new BaseWalk<SimpleWalker<String, String>>() {
 			@Override
 			public int step(SimpleWalker<String, String> w) {
-				if(w.isAtLeaf()) { // we're at a leaf, print data value
-					w.appendToS(w.getData().toString());
+				if(leaf(w)) { // we're at a leaf, print data value
+					s.append(w.getData().toString());
 				}
-				else if(w.from(PARENT)) { // first time we see this node, print constructor name
-					w.appendToS(w.getName() + "(");
+				else if(down(w)) { // first time we see this node, print constructor name
+					s.append(w.getName() + "(");
 				}
-				else if(w.from(LAST)) { // just finished with children, close parenthesis
-					w.appendToS(")");
+				else if(up(w)) { // just finished with children, close parenthesis
+					s.append(")");
 				}
 				else { // coming up from a child (not the last), insert a comma
-					w.appendToS(", ");
+					s.append(", ");
 				}
 
 				return NEXT;
@@ -38,6 +37,6 @@ public class ToString {
 		// run it
 		toTermWalker.start();
 		// print the contents of S
-		System.out.println(toTermWalker.getS());
+		System.out.println(s.toString());
 	}
 }
