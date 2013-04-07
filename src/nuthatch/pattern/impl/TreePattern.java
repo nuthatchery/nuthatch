@@ -25,7 +25,7 @@ public class TreePattern<Value, Type> extends MinimalAbstractPattern<Value, Type
 
 	@Override
 	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
-		return pattern.equals(tree);
+		return pattern.subtreeEquals(tree);
 	}
 
 }
