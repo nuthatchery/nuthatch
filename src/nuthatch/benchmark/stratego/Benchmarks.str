@@ -1,0 +1,71 @@
+module Benchmarks
+    
+signature
+  sorts Expr
+  constructors
+  
+    Nil: List(a)
+    Cons: a * List(a) -> List(a)
+    Invoke: Expr * List(Expr) -> Expr
+    
+    : ()
+    : a -> (a)
+    : a * b -> (a, b)
+    
+strategies
+
+main = commute; bottomup42; topdown; bottomup; downup; collect
+
+commute = topdown(try(\Invoke(m,[x,y]) -> Invoke(m,[y,x])\))
+
+bottomup42 = bottomup(!42)
+
+topdown = topdown(id)
+
+bottomup = bottomup(id)
+
+downup = downup(id, id)
+
+collect = collect-all(is-string)
+
+try(s) = s <+ id
+
+bottomup(s) = all(bottomup(s)); s
+
+topdown(s) = s; all(topdown(s))
+
+downup(s, t) = s; all(downup(s, t)); t
+
+
+// collect
+
+  collect-all(s) =
+    collect-all(s, conc)
+
+  collect-all(s,un) =
+    rec x(
+      ![<s> | <crush(![],un,x)>]
+      <+ crush(![],un,x)
+    )
+
+ conc =
+    \ (l1, l2) -> <at-end(!l2)> l1 \
+    <+ \ "" # (xs) -> <concat> xs \
+
+ concat =
+    rec x([] + \ [l | ls] -> <at-end(<x> ls)> l\ )
+
+ at-end(s) = 
+    rec x([id | x] + []; s)
+
+
+ crush(nul, sum, s) : 
+    _#(xs) -> <foldr(nul,sum, s)> xs
+    
+    
+ foldr(s1, s2, f)  = 
+    []; s1 + 
+    \ [y|ys] -> <s2> (<f> y, <foldr(s1, s2, f)> ys) \
+    
+  is-string	 = ?x; prim("SSL_is_string", x)
+    

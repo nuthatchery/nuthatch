@@ -5,3 +5,4 @@ working
 *.jar
 *.war
 *.ear
+*.dep

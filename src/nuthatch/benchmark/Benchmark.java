@@ -1,7 +1,7 @@
 package nuthatch.benchmark;
 
 public abstract class Benchmark implements Runnable {
-	public static final int N = 1000;
+	public static int N = 5000;
 	private String name;
 
 	private int n;
@@ -26,7 +26,7 @@ public abstract class Benchmark implements Runnable {
 		}
 		t = System.currentTimeMillis() - t;
 		System.out.printf(
-				"%-18s %10s: %5dms, %d iterations, %5.0fµs per iteration%n",
+				"%-18s %12s: %6dms, %d iterations, %5.0fµs per iteration%n",
 				name, variant, t, n, 1000.0 * t / n);
 		if (!check()) {
 			System.out.println("  WARNING: check failed");
