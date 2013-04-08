@@ -5,6 +5,7 @@ import java.util.Iterator;
 import nuthatch.library.Action;
 import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
+import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.Path;
 import nuthatch.tree.Tree;
@@ -248,6 +249,13 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 			children[i++] = clone(child, top, strategy);
 		}
  */	}
+
+
+	@Override
+	public void replace(Pattern<Value, Type> pattern, Environment<? extends TreeCursor<Value, Type>> env) throws NotBuildableException {
+		TreeCursor<Value, Type> build = pattern.build(current, env);
+		current = current.copyAndReplaceSubtree(build);
+	}
 
 
 	@Override

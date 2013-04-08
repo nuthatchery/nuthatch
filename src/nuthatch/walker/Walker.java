@@ -1,6 +1,7 @@
 package nuthatch.walker;
 
 import nuthatch.pattern.Environment;
+import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.errors.TypeMismatch;
@@ -63,6 +64,20 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 * 
 	 */
 	void nest();
+
+
+	/**
+	 * Replace current node.
+	 * 
+	 * The current node and its children are replace by the subtree
+	 * obtained by building the pattern using the provided environment.
+	 * 
+	 * @param tree
+	 *            Replacement pattern
+	 * @throws NotBuildableException
+	 *             if the replacement pattern cannot be build
+	 */
+	void replace(Pattern<Value, Type> pattern, Environment<? extends TreeCursor<Value, Type>> env) throws NotBuildableException;
 
 
 	/**

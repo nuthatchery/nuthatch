@@ -18,6 +18,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	@SuppressWarnings("rawtypes")
 	private static final NopAction nopAction = new NopAction();
 
+
 	/**
 	 * Create an 'after child' joinpoint action for the default tree walk.
 	 * 
@@ -156,6 +157,18 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	@SuppressWarnings("unchecked")
 	public Action<W> nop() {
 		return nopAction;
+	}
+
+
+	@Override
+	public MatchAction<Value, Type, C, W> replace(C replacement) {
+		return new ReplaceByTree<Value, Type, C, W>(replacement);
+	}
+
+
+	@Override
+	public MatchAction<Value, Type, C, W> replace(Pattern<Value, Type> replacement) {
+		return new ReplaceByPattern<Value, Type, C, W>(replacement);
 	}
 
 

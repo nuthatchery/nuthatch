@@ -115,6 +115,19 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 
 
 	/**
+	 * Create a replacement action.
+	 * 
+	 * The result will be a MatchAction which, given an environment,
+	 * replaces the current node with a new the replacement.
+	 * 
+	 * @param replacement
+	 *            A replacement tree cursor
+	 * @return A match action that performs the replacement
+	 */
+	public MatchAction<Value, Type, C, W> replace(C replacement);
+
+
+	/**
 	 * Create a sequential combined action.
 	 * 
 	 * When the resulting action is run, all the arguments actions will be
@@ -159,4 +172,7 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 	 *         'action'.
 	 */
 	public Walk<W> walk(Action<W> action);
+
+
+	MatchAction<Value, Type, C, W> replace(Pattern<Value, Type> replacement);
 }

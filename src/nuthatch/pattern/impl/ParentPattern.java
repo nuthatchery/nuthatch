@@ -17,7 +17,7 @@ public class ParentPattern<Value, Type> implements Pattern<Value, Type> {
 
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<? extends T> env) throws NotBuildableException {
 		throw new UnsupportedOperationException();
 	}
 
