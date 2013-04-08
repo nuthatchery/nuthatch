@@ -25,11 +25,13 @@ public class TermPrinter {
 	 * @return its string representation
 	 */
 	public static String termToString(IStrategoTerm term) {
+		final StringBuilder s = new StringBuilder();
+
 		Action<SWalker> visitor = new BaseVisitAction<SWalker>() {
 			@Override
 			public int beforeChild(SWalker e, int i) {
 				if(i != 1) {
-					e.appendToS(",");
+					s.append(",");
 				}
 				return PROCEED;
 			}
@@ -38,22 +40,22 @@ public class TermPrinter {
 			@Override
 			public int down(SWalker e) {
 				if(e.getType() == IStrategoTerm.LIST) {
-					e.appendToS("[");
+					s.append("[");
 				}
 				else if(e.getType() == IStrategoTerm.TUPLE) {
-					e.appendToS("(");
+					s.append("(");
 				}
 				else if(e.getType() == IStrategoTerm.STRING) {
-					e.appendToS(e.getData().toString());
+					s.append(e.getData().toString());
 				}
 				else if(e.getType() == IStrategoTerm.APPL) {
-					e.appendToS(e.getName());
+					s.append(e.getName());
 					if(e.getNumChildren() > 0) {
-						e.appendToS("(");
+						s.append("(");
 					}
 				}
 				else {
-					e.appendToS(e.getData().toString());
+					s.append(e.getData().toString());
 				}
 				return PROCEED;
 			}
@@ -62,13 +64,13 @@ public class TermPrinter {
 			@Override
 			public int up(SWalker e) {
 				if(e.getType() == IStrategoTerm.LIST) {
-					e.appendToS("]");
+					s.append("]");
 				}
 				else if(e.getType() == IStrategoTerm.TUPLE) {
-					e.appendToS(")");
+					s.append(")");
 				}
 				else if(e.getType() == IStrategoTerm.APPL && e.getNumChildren() > 0) {
-					e.appendToS(")");
+					s.append(")");
 				}
 				return PROCEED;
 			}
@@ -77,7 +79,7 @@ public class TermPrinter {
 		long t0 = System.currentTimeMillis();
 		e.start();
 		System.err.println("Engine finished in " + (System.currentTimeMillis() - t0) + "ms");
-		String s1 = e.getS();
+		String s1 = s.toString();
 		t0 = System.currentTimeMillis();
 		String s2 = term.toString();
 		System.err.println("toString() finished in " + (System.currentTimeMillis() - t0) + "ms");
