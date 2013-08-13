@@ -44,7 +44,7 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 			return false;
 		}
 		else {
-			env.put(name, (T) tree.copy());
+			env.put(name, (T) tree.copySubtree());
 		}
 		return true;
 	}
