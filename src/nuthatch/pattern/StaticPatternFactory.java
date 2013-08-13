@@ -34,8 +34,12 @@ public class StaticPatternFactory {
 	/**
 	 * @see PatternFactory#and(Pattern, Pattern)
 	 */
-	public static final <Value, Type> Pattern<Value, Type> and(Pattern<Value, Type> a, Pattern<Value, Type> b) {
-		return PF.and(a, b);
+	@SafeVarargs
+	public static final <Value, Type> Pattern<Value, Type> and(Pattern<Value, Type> a, Pattern<Value, Type>... bs) {
+		for(Pattern<Value, Type> b : bs) {
+			a = PF.and(a, b);
+		}
+		return a;
 	}
 
 
@@ -108,8 +112,12 @@ public class StaticPatternFactory {
 	/**
 	 * @see PatternFactory#or(Pattern, Pattern)
 	 */
-	public static <Value, Type> Pattern<Value, Type> or(Pattern<Value, Type> a, Pattern<Value, Type> b) {
-		return PF.or(a, b);
+	@SafeVarargs
+	public static <Value, Type> Pattern<Value, Type> or(Pattern<Value, Type> a, Pattern<Value, Type>... bs) {
+		for(Pattern<Value, Type> b : bs) {
+			a = PF.or(a, b);
+		}
+		return a;
 	}
 
 
