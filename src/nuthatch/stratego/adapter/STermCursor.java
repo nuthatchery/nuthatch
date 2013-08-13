@@ -57,6 +57,12 @@ public class STermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStr
 
 
 	@Override
+	public STermCursor getBranch(int i) {
+		return (STermCursor) copy().go(i);
+	}
+
+
+	@Override
 	public IStrategoTerm getData() {
 		return getCurrent();
 	}

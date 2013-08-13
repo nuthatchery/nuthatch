@@ -3,9 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Nuthatch/J+Stratego
 Bundle-SymbolicName: nuthatch_stratego
 Bundle-Version: 0.99.0.qualifier
-Require-Bundle: org.spoofax.jsglr;bundle-version="0.3.0",
- org.spoofax.terms;bundle-version="1.0.0",
- nuthatch;bundle-version="0.99.0"
+Require-Bundle: org.spoofax.jsglr;bundle-version="0.3.0";visibility:=reexport,
+ org.spoofax.terms;bundle-version="1.0.0";visibility:=reexport,
+ nuthatch;bundle-version="0.99.0";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
 Export-Package: nuthatch.stratego.actions,
