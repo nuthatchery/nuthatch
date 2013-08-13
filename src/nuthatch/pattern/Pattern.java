@@ -39,4 +39,10 @@ public interface Pattern<Value, Type> {
 	 */
 	<T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env);
 
+
+	/**
+	 * @return True if this pattern only accesses a subtree during matching
+	 *         (never follows parent branches).
+	 */
+	boolean subTreeOnly();
 }

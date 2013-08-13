@@ -45,6 +45,12 @@ public class Var<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 
 
 	@Override
+	public boolean subTreeOnly() {
+		return true;
+	}
+
+
+	@Override
 	public String toString() {
 		if(data != null) {
 			return data.toString();

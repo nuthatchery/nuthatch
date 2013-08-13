@@ -32,4 +32,10 @@ public class ParentPattern<Value, Type> implements Pattern<Value, Type> {
 		return pattern.match(cursor, env);
 	}
 
+
+	@Override
+	public boolean subTreeOnly() {
+		return false;
+	}
+
 }

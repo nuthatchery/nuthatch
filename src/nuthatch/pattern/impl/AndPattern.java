@@ -30,4 +30,10 @@ public class AndPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 		return a.match(tree, env) && b.match(tree, env);
 	}
 
+
+	@Override
+	public boolean subTreeOnly() {
+		return a.subTreeOnly() && b.subTreeOnly();
+	}
+
 }

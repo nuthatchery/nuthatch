@@ -49,4 +49,10 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 		return true;
 	}
 
+
+	@Override
+	public boolean subTreeOnly() {
+		return true;
+	}
+
 }

@@ -32,4 +32,10 @@ public class NotPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 		return result;
 	}
 
+
+	@Override
+	public boolean subTreeOnly() {
+		return a.subTreeOnly();
+	}
+
 }

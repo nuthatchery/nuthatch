@@ -19,6 +19,11 @@ public abstract class AbstractPattern<Value, Type> extends MinimalAbstractPatter
 	}
 
 
-	protected abstract <T extends TreeCursor<Value, Type>> boolean doMatch(T tree, Environment<T> env);
+	@Override
+	public boolean subTreeOnly() {
+		return true;
+	}
 
+
+	protected abstract <T extends TreeCursor<Value, Type>> boolean doMatch(T tree, Environment<T> env);
 }

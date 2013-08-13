@@ -28,4 +28,10 @@ public class TreePattern<Value, Type> extends MinimalAbstractPattern<Value, Type
 		return pattern.subtreeEquals(tree);
 	}
 
+
+	@Override
+	public boolean subTreeOnly() {
+		return true;
+	}
+
 }

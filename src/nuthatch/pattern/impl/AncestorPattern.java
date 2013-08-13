@@ -34,4 +34,10 @@ public class AncestorPattern<Value, Type> implements Pattern<Value, Type> {
 		return false;
 	}
 
+
+	@Override
+	public boolean subTreeOnly() {
+		return false;
+	}
+
 }
