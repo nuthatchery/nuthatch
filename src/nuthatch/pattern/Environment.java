@@ -2,7 +2,7 @@ package nuthatch.pattern;
 
 import java.util.Iterator;
 
-public interface Environment<T> extends Iterable<String> {
+public interface Environment<Key, Value> extends Iterable<Key> {
 	/**
 	 * Begin a transaction.
 	 * 
@@ -23,7 +23,7 @@ public interface Environment<T> extends Iterable<String> {
 	 * 
 	 * @return An environment with the empty scope at the top.
 	 */
-	Environment<T> enterScope();
+	Environment<Key, Value> enterScope();
 
 
 	/**
@@ -33,7 +33,7 @@ public interface Environment<T> extends Iterable<String> {
 	 * 
 	 * @return An environment with tall the top-level bindings discarded
 	 */
-	Environment<T> exitScope();
+	Environment<Key, Value> exitScope();
 
 
 	/**
@@ -43,7 +43,7 @@ public interface Environment<T> extends Iterable<String> {
 	 *            Name of the variable
 	 * @return The value, or null if not found
 	 */
-	T get(String var);
+	Value get(Key var);
 
 
 	/**
@@ -64,7 +64,7 @@ public interface Environment<T> extends Iterable<String> {
 	 * @see java.lang.Iterable#iterator()
 	 */
 	@Override
-	Iterator<String> iterator();
+	Iterator<Key> iterator();
 
 
 	/**
@@ -75,7 +75,7 @@ public interface Environment<T> extends Iterable<String> {
 	 * @param value
 	 *            The value
 	 */
-	void put(String var, T value);
+	void put(Key var, Value value);
 
 
 	/**

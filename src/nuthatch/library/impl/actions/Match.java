@@ -54,7 +54,7 @@ final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walk
 	@Override
 	public int step(W walk) {
 		for(Entry<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> entry : patterns.entrySet()) {
-			Environment<C> env = EnvironmentFactory.env();
+			Environment<?, C> env = EnvironmentFactory.env();
 			if(walk.match(entry.getKey(), env)) {
 				int r = entry.getValue().step(walk, env);
 				if(r != PROCEED) {

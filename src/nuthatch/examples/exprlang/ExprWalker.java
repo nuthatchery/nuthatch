@@ -9,7 +9,7 @@ import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.walker.impl.AbstractWalker;
 
 public class ExprWalker extends AbstractWalker<Expr, Type, ExprWalker> {
-	Environment<ExprCursor> env;
+	Environment<String, ExprCursor> env;
 
 
 	public ExprWalker(TreeCursor<Expr, Type> cursor, Walk<ExprWalker> step) {
@@ -17,7 +17,7 @@ public class ExprWalker extends AbstractWalker<Expr, Type, ExprWalker> {
 	}
 
 
-	public Environment<ExprCursor> getEnv() {
+	public Environment<String, ExprCursor> getEnv() {
 		if(env == null) {
 			env = EnvironmentFactory.env();
 		}

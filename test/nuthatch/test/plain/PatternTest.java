@@ -20,7 +20,7 @@ public class PatternTest {
 	TreeCursor<String, String> bar = barTree.makeCursor();
 	TreeCursor<String, String> baz = bazTree.makeCursor();
 	PatternFactory<String, String> pf = PatternFactory.getInstance(String.class, String.class);
-	Environment<TreeCursor<String, String>> env;
+	Environment<String, TreeCursor<String, String>> env;
 
 
 	@Test

@@ -20,7 +20,7 @@ public class EnvTest {
 
 	@Test
 	public final void doubleScopedPutGet() {
-		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
+		Environment<String, TreeCursor<String, String>> env = EnvironmentFactory.env();
 		env = env.enterScope();
 		env.put("foo", foo);
 		env.put("bar", bar);
@@ -52,7 +52,7 @@ public class EnvTest {
 
 	@Test
 	public final void scopedPutGet() {
-		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
+		Environment<String, TreeCursor<String, String>> env = EnvironmentFactory.env();
 		env = env.enterScope();
 		env.put("foo", foo);
 		env.put("bar", bar);
@@ -69,7 +69,7 @@ public class EnvTest {
 
 	@Test
 	public final void transPutGetCommit() {
-		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
+		Environment<String, TreeCursor<String, String>> env = EnvironmentFactory.env();
 		env.begin();
 		env.put("foo", foo);
 		env.put("bar", bar);
@@ -86,7 +86,7 @@ public class EnvTest {
 
 	@Test
 	public final void transPutGetRollback() {
-		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
+		Environment<String, TreeCursor<String, String>> env = EnvironmentFactory.env();
 		env.begin();
 		env.put("foo", foo);
 		env.put("bar", bar);
@@ -103,7 +103,7 @@ public class EnvTest {
 
 	@Test
 	public final void unscopedPutGet() {
-		Environment<TreeCursor<String, String>> env = EnvironmentFactory.env();
+		Environment<String, TreeCursor<String, String>> env = EnvironmentFactory.env();
 		env.put("foo", foo);
 		env.put("bar", bar);
 

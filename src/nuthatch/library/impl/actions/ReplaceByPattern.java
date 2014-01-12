@@ -22,7 +22,7 @@ class ReplaceByPattern<Value, Type, C extends TreeCursor<Value, Type>, W extends
 
 
 	@Override
-	public int step(W walker, Environment<C> env) {
+	public int step(W walker, Environment<?, C> env) {
 		walker.replace(pattern, env);
 		return PROCEED;
 	}

@@ -29,14 +29,15 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<? extends T> env) throws NotBuildableException {
+	public <K, T extends TreeCursor<Value, Type>> T build(T tree, Environment<K, ? extends T> env) throws NotBuildableException {
 		throw new UnsupportedOperationException();
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
-		TreeCursor<Value, Type> binding = env.get(name);
+	public <K, T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<K, T> env) {
+		TreeCursor<Value, Type> binding = env.get((K) name);
 		if(binding != null) {
 			return tree.subtreeEquals(binding);
 		}
@@ -44,7 +45,7 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 			return false;
 		}
 		else {
-			env.put(name, (T) tree.copySubtree());
+			env.put((K) name, (T) tree.copySubtree());
 		}
 		return true;
 	}

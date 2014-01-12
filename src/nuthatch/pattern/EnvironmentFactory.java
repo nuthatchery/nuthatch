@@ -8,7 +8,7 @@ public class EnvironmentFactory {
 	 *            The type of values in the environment
 	 * @return A new environment
 	 */
-	public static <T> Environment<T> env() {
-		return new LayeredEnvironment<T>();
+	public static <K, V> Environment<K, V> env() {
+		return new LayeredEnvironment<K, V>();
 	}
 }

@@ -16,7 +16,7 @@ import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.util.BranchUtil;
 
 public class EnvWalker<Value, Type, E extends EnvWalker<Value, Type, E>> extends AbstractVarWalker<Value, Type, E> {
-	private Environment<Object> env = null;
+	private Environment<String, Object> env = null;
 	private List<Map<String, Object>> subtreeScoping;
 	private Map<String, Object> subtreeVars;
 	private Map<String, Object> globalVars;

@@ -7,13 +7,13 @@ import nuthatch.tree.TreeCursor;
 public class AnyPattern<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<? extends T> env) throws NotBuildableException {
+	public <K, T extends TreeCursor<Value, Type>> T build(T tree, Environment<K, ? extends T> env) throws NotBuildableException {
 		throw new NotBuildableException("any");
 	}
 
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
+	public <K, T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<K, T> env) {
 		return true;
 	}
 

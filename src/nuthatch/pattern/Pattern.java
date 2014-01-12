@@ -18,7 +18,7 @@ public interface Pattern<Value, Type> {
 	 *             if the pattern contains elements that are not buildable, such
 	 *             as And, Or, Any, etc.
 	 */
-	<T extends TreeCursor<Value, Type>> T build(T tree, Environment<? extends T> env) throws NotBuildableException;
+	<K, T extends TreeCursor<Value, Type>> T build(T tree, Environment<K, ? extends T> env) throws NotBuildableException;
 
 
 	/**
@@ -37,7 +37,7 @@ public interface Pattern<Value, Type> {
 	 *            An environment
 	 * @return true if the match succeeded
 	 */
-	<T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env);
+	<K, T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<K, T> env);
 
 
 	/**
