@@ -15,7 +15,6 @@ import nuthatch.stratego.adapter.STermCursor;
 import nuthatch.stratego.adapter.SWalker;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.pattern.impl.TermPatternFactory;
-import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
@@ -44,8 +43,8 @@ public class Main {
 			Walk<SWalker> walk = walk(down(new BaseAction<SWalker>() {
 				@Override
 				public int step(SWalker e) {
-					Environment<TreeCursor<IStrategoTerm, Integer>> env = EnvironmentFactory.env();
-					if(idPat.match(e, env)) {
+					Environment<STermCursor> env = EnvironmentFactory.env();
+					if(e.match(idPat, env)) {
 						System.out.println("match!");
 					}
 					return PROCEED;
