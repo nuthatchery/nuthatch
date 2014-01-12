@@ -29,7 +29,7 @@ class ReplaceByTree<Value, Type, C extends TreeCursor<Value, Type>, W extends Wa
 
 
 	@Override
-	public int step(W walker, Environment<?, C> env) {
+	public int step(W walker, Environment<C> env) {
 		walker.replace(cursor);
 		return Action.PROCEED;
 	}

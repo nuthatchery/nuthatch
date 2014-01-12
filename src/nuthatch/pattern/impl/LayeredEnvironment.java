@@ -13,10 +13,10 @@ import nuthatch.pattern.Environment;
  * This class is not thread safe.
  * 
  */
-public class LayeredEnvironment<K, V> implements Environment<K, V> {
-	private final LayeredEnvironment<K, V> chain;
-	private Map<K, V> map;
-	private List<Map<K, V>> stack;
+public class LayeredEnvironment<V> implements Environment<V> {
+	private final LayeredEnvironment<V> chain;
+	private Map<Object, V> map;
+	private List<Map<Object, V>> stack;
 	private int childCount;
 
 
@@ -27,7 +27,7 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 	}
 
 
-	protected LayeredEnvironment(LayeredEnvironment<K, V> chain) {
+	protected LayeredEnvironment(LayeredEnvironment<V> chain) {
 		this.chain = chain;
 		chain.childCount++;
 		childCount = 0;
@@ -51,10 +51,10 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		Map<K, V> pop = pop();
+		Map<Object, V> pop = pop();
 		if(pop != null) {
 			if(map == null) {
-				map = new HashMap<K, V>();
+				map = new HashMap<Object, V>();
 			}
 			map.putAll(pop);
 		}
@@ -62,17 +62,17 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 
 
 	@Override
-	public Environment<K, V> enterScope() {
+	public Environment<V> enterScope() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		return new LayeredEnvironment<K, V>(this);
+		return new LayeredEnvironment<V>(this);
 	}
 
 
 	@Override
-	public Environment<K, V> exitScope() {
+	public Environment<V> exitScope() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
@@ -89,19 +89,19 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 
 
 	@Override
-	public V get(K var) {
+	public <K> V get(K var) {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		LayeredEnvironment<K, V> env = this;
+		LayeredEnvironment<V> env = this;
 		while(env != null) {
 			if(env.map != null && env.map.containsKey(var)) {
 				return env.map.get(var);
 			}
 			else {
 				if(env.stack != null) {
-					for(Map<K, V> m : env.stack) {
+					for(Map<Object, V> m : env.stack) {
 						if(m != null && m.containsKey(var)) {
 							return m.get(var);
 						}
@@ -120,14 +120,14 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
 
-		LayeredEnvironment<K, V> env = this;
+		LayeredEnvironment<V> env = this;
 		while(env != null) {
 			if(env.map != null && !env.map.isEmpty()) {
 				return false;
 			}
 			else {
 				if(env.stack != null) {
-					for(Map<K, V> m : env.stack) {
+					for(Map<Object, V> m : env.stack) {
 						if(m != null && !m.isEmpty()) {
 							return false;
 						}
@@ -147,7 +147,7 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 		}
 		else {
 			if(stack != null) {
-				for(Map<K, V> m : stack) {
+				for(Map<Object, V> m : stack) {
 					if(m != null && !m.isEmpty()) {
 						return false;
 					}
@@ -159,7 +159,7 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 
 
 	@Override
-	public Iterator<K> iterator() {
+	public Iterator<Object> iterator() {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
@@ -169,7 +169,7 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 
 
 	@Override
-	public void put(K var, V val) {
+	public <K> void put(K var, V val) {
 		if(childCount < 0) {
 			throw new RuntimeException("This environment has been abandoned!");
 		}
@@ -178,7 +178,7 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 		}
 
 		if(map == null) {
-			map = new HashMap<K, V>();
+			map = new HashMap<Object, V>();
 		}
 
 		map.put(var, val);
@@ -195,7 +195,7 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 	}
 
 
-	protected Map<K, V> pop() {
+	protected Map<Object, V> pop() {
 		if(stack == null) {
 			throw new RuntimeException("Trying to end a transaction before any was started");
 		}
@@ -211,7 +211,7 @@ public class LayeredEnvironment<K, V> implements Environment<K, V> {
 
 	protected void push() {
 		if(stack == null) {
-			stack = new ArrayList<Map<K, V>>();
+			stack = new ArrayList<Map<Object, V>>();
 		}
 		stack.add(map);
 		map = null;

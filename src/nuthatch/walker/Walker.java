@@ -56,7 +56,7 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	boolean isRunning();
 
 
-	boolean match(Pattern<Value, Type> pat, Environment<?, ? extends TreeCursor<Value, Type>> env);
+	boolean match(Pattern<Value, Type> pat, Environment<? extends TreeCursor<Value, Type>> env);
 
 
 	/**
@@ -77,7 +77,7 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 * @throws NotBuildableException
 	 *             if the replacement pattern cannot be build
 	 */
-	void replace(Pattern<Value, Type> pattern, Environment<?, ? extends TreeCursor<Value, Type>> env) throws NotBuildableException;
+	void replace(Pattern<Value, Type> pattern, Environment<? extends TreeCursor<Value, Type>> env) throws NotBuildableException;
 
 
 	/**

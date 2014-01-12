@@ -234,8 +234,8 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean match(Pattern<Value, Type> pat, Environment<?, ? extends TreeCursor<Value, Type>> env) {
-		return pat.match(current, (Environment<?, TreeCursor<Value, Type>>) env);
+	public boolean match(Pattern<Value, Type> pat, Environment<? extends TreeCursor<Value, Type>> env) {
+		return pat.match(current, (Environment<TreeCursor<Value, Type>>) env);
 	}
 
 
@@ -252,7 +252,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
-	public void replace(Pattern<Value, Type> pattern, Environment<?, ? extends TreeCursor<Value, Type>> env) throws NotBuildableException {
+	public void replace(Pattern<Value, Type> pattern, Environment<? extends TreeCursor<Value, Type>> env) throws NotBuildableException {
 		TreeCursor<Value, Type> build = pattern.build(current, env);
 		current = current.copyAndReplaceSubtree(build);
 	}

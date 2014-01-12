@@ -38,6 +38,6 @@ public interface MatchAction<Value, Type, C extends TreeCursor<Value, Type>, W e
 	 * @return The direction of the next node to visit, or PROCEED to leave the
 	 *         decision to the surrounding action
 	 */
-	int step(W walker, Environment<?, C> env);
+	int step(W walker, Environment<C> env);
 
 }
