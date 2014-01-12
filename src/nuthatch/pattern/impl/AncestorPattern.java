@@ -17,13 +17,13 @@ public class AncestorPattern<Value, Type> implements Pattern<Value, Type> {
 
 
 	@Override
-	public <K, T extends TreeCursor<Value, Type>> T build(T tree, Environment< ? extends T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
 		throw new NotBuildableException("ancestor");
 	}
 
 
 	@Override
-	public <K, T extends TreeCursor<Value, Type>> boolean match(T tree, Environment< T> env) {
+	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		T copy = (T) tree.copy();
 		while(!copy.isAtRoot()) {
 			copy.go(Tree.PARENT);

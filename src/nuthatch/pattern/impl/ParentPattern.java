@@ -17,13 +17,13 @@ public class ParentPattern<Value, Type> implements Pattern<Value, Type> {
 
 
 	@Override
-	public <K, T extends TreeCursor<Value, Type>> T build(T tree, Environment< ? extends T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
 		throw new UnsupportedOperationException();
 	}
 
 
 	@Override
-	public <K, T extends TreeCursor<Value, Type>> boolean match(T tree, Environment< T> env) {
+	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		if(tree.isAtRoot() || tree.isAtTop()) {
 			return false;
 		}

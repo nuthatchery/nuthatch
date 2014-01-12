@@ -34,13 +34,13 @@ public class NodePattern<Value, Type> extends AbstractPattern<Value, Type> {
 
 
 	@Override
-	public <K, T extends TreeCursor<Value, Type>> T build(T tree, Environment< ? extends T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
 		throw new UnsupportedOperationException();
 	}
 
 
 	@Override
-	public <K, T extends TreeCursor<Value, Type>> boolean doMatch(T tree, Environment< T> env) {
+	public <T extends TreeCursor<Value, Type>> boolean doMatch(T tree, Environment<T> env) {
 		if(name != null && !name.equals(tree.getName())) {
 			return false;
 		}

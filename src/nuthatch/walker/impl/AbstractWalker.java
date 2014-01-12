@@ -253,7 +253,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 	@Override
 	public void replace(Pattern<Value, Type> pattern, Environment<? extends TreeCursor<Value, Type>> env) throws NotBuildableException {
-		TreeCursor<Value, Type> build = pattern.build(current, env);
+		TreeCursor<Value, Type> build = pattern.build(current, (Environment<TreeCursor<Value, Type>>) env);
 		current = current.copyAndReplaceSubtree(build);
 	}
 

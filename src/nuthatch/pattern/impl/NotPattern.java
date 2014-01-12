@@ -19,13 +19,13 @@ public class NotPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 
 
 	@Override
-	public <K, T extends TreeCursor<Value, Type>> T build(T tree, Environment< ? extends T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
 		throw new NotBuildableException("not");
 	}
 
 
 	@Override
-	public <K, T extends TreeCursor<Value, Type>> boolean match(T tree, Environment< T> env) {
+	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		env.begin();
 		boolean result = !a.match(tree, env);
 		env.rollback();
