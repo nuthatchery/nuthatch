@@ -1,5 +1,6 @@
 package nuthatch.library;
 
+import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
@@ -108,7 +109,7 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 	public Action<W> match(Pattern<Value, Type> pat, MatchAction<Value, Type, C, W> action);
 
 
-	public MatchBuilder<Value, Type, C, W> matchBuilder();
+	public MatchBuilder<Value, Type, C, W> matchBuilder(BuildContext<Value, Type> context);
 
 
 	public Action<W> nop();

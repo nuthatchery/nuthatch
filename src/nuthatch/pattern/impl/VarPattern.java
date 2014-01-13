@@ -1,5 +1,6 @@
 package nuthatch.pattern.impl;
 
+import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.VarName;
@@ -29,8 +30,14 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(T tree, Environment<T> env) throws NotBuildableException {
-		throw new UnsupportedOperationException();
+	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException {
+		T t = env.get(name);
+		if(t != null) {
+			return t;
+		}
+		else {
+			throw new NotBuildableException("Variable " + name + " not bound");
+		}
 	}
 
 

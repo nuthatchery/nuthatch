@@ -12,7 +12,7 @@ import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
-final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements Action<W> {
+final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements Action<W>, MatchAction<Value, Type, C, W> {
 
 	private Map<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> patterns;
 	private boolean matchOnlyOne;
@@ -57,7 +57,7 @@ final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walk
 			Environment<C> env = EnvironmentFactory.env();
 			if(walk.match(entry.getKey(), env)) {
 				int r = entry.getValue().step(walk, env);
-				if(r != PROCEED) {
+				if(r != Action.PROCEED) {
 					return r;
 				}
 				if(matchOnlyOne) {
@@ -65,6 +65,23 @@ final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walk
 				}
 			}
 		}
-		return PROCEED;
+		return Action.PROCEED;
+	}
+
+
+	@Override
+	public int step(W walk, Environment<C> env) {
+		for(Entry<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> entry : patterns.entrySet()) {
+			if(walk.match(entry.getKey(), env)) {
+				int r = entry.getValue().step(walk, env);
+				if(r != Action.PROCEED) {
+					return r;
+				}
+				if(matchOnlyOne) {
+					break;
+				}
+			}
+		}
+		return Action.PROCEED;
 	}
 }

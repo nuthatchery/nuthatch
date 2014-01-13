@@ -7,6 +7,7 @@ import nuthatch.library.MatchAction;
 import nuthatch.library.MatchBuilder;
 import nuthatch.library.Walk;
 import nuthatch.library.impl.walks.Default;
+import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
@@ -148,8 +149,8 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 
 	@Override
-	public MatchBuilder<Value, Type, C, W> matchBuilder() {
-		return new MatchActionBuilder<>();
+	public MatchBuilder<Value, Type, C, W> matchBuilder(BuildContext<Value, Type> context) {
+		return new MatchActionBuilder<>(context);
 	}
 
 
