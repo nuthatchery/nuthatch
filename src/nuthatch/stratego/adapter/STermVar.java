@@ -1,14 +1,13 @@
 package nuthatch.stratego.adapter;
 
-import nuthatch.pattern.Environment;
 import nuthatch.pattern.impl.Var;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
 public class STermVar extends Var<IStrategoTerm, Integer> {
 
-	public STermVar(Environment<?> env) {
-		super(env);
+	public STermVar(String name) {
+		super(name);
 	}
 
 

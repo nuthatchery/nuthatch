@@ -10,6 +10,7 @@ import nuthatch.library.Walk;
 import nuthatch.pattern.Pattern;
 import nuthatch.stratego.adapter.STermCursor;
 import nuthatch.stratego.adapter.SWalker;
+import nuthatch.stratego.pattern.StrategoBuildContext;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
@@ -100,7 +101,7 @@ public class SActionFactory {
 
 
 	public static MatchBuilder<IStrategoTerm, Integer, STermCursor, SWalker> matchBuilder() {
-		return factory.matchBuilder();
+		return factory.matchBuilder(new StrategoBuildContext());
 	}
 
 
