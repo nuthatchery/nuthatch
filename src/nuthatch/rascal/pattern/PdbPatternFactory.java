@@ -2,6 +2,7 @@ package nuthatch.rascal.pattern;
 
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.StaticPatternFactory;
+import nuthatch.rascal.pattern.impl.ListVarPattern;
 import nuthatch.rascal.pattern.impl.ValuesPatternFactory;
 
 import org.eclipse.imp.pdb.facts.IInteger;
@@ -11,13 +12,23 @@ import org.eclipse.imp.pdb.facts.IString;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.type.Type;
 
-public class PdbPatternFactory extends StaticPatternFactory {
+/**
+ * @author anya
+ * 
+ */
+public class PdbPatternFactory {
 	public static final ValuesPatternFactory PF = ValuesPatternFactory.getInstance();
 
-	public static final Pattern<IValue, Type> _ = (Pattern<IValue, Type>) _();
+	public static final Pattern<IValue, Type> _ = (Pattern<IValue, Type>) StaticPatternFactory._();
 
 
 	private PdbPatternFactory() {
+	}
+
+
+	@SafeVarargs
+	public static Pattern<IValue, Type> and(Pattern<IValue, Type> pat, Pattern<IValue, Type>... pats) {
+		return StaticPatternFactory.and(pat, pats);
 	}
 
 
@@ -33,6 +44,11 @@ public class PdbPatternFactory extends StaticPatternFactory {
 	 */
 	public static final Pattern<IValue, Type> cons(String name, Pattern<IValue, Type>... children) {
 		return PF.cons(name, children);
+	}
+
+
+	public static final Pattern<IValue, Type> cons(Type consType, Pattern<IValue, Type>... children) {
+		return PF.cons(consType, children);
 	}
 
 
@@ -99,8 +115,69 @@ public class PdbPatternFactory extends StaticPatternFactory {
 	 *      nuthatch.pattern.Pattern<org.eclipse.imp.pdb.facts
 	 *      .IValue,org.eclipse.imp.pdb.facts.type.Type>[])
 	 */
+	@SafeVarargs
 	public static final Pattern<IValue, Type> list(Type listType, Pattern<IValue, Type>... children) {
 		return PF.list(listType, children);
+	}
+
+
+	/**
+	 * List element matching.
+	 * 
+	 * Matches if target is a list with an element matching 'element', with the
+	 * given prefix and suffix.
+	 * 
+	 * If there are multiple possible matches, the first one is always chosen.
+	 * 
+	 * @param prefix
+	 *            An optional prefix pattern, or null. Should match a list.
+	 * @param element
+	 *            Pattern for the element.
+	 * @param suffix
+	 *            An optional suffix pattern, or null. Should match a list.
+	 * @return The pattern
+	 */
+	public static final Pattern<IValue, Type> listElement(Pattern<IValue, Type> prefix, Pattern<IValue, Type> element, Pattern<IValue, Type> suffix) {
+		return PF.listElement(null, prefix, element, suffix);
+	}
+
+
+	/**
+	 * List element matching.
+	 * 
+	 * Matches if target is a list with an element matching 'element', with the
+	 * given prefix and suffix.
+	 * 
+	 * If there are multiple possible matches, the first one is always chosen.
+	 * 
+	 * @param listType
+	 *            Optional list type, or null
+	 * @param prefix
+	 *            An optional prefix pattern, or null. Should match a list.
+	 * @param element
+	 *            Pattern for the element.
+	 * @param suffix
+	 *            An optional suffix pattern, or null. Should match a list.
+	 * @return The pattern
+	 */
+	public static final Pattern<IValue, Type> listElement(Type listType, Pattern<IValue, Type> prefix, Pattern<IValue, Type> element, Pattern<IValue, Type> suffix) {
+		return PF.listElement(listType, prefix, element, suffix);
+	}
+
+
+	public static Pattern<IValue, Type> listvar(String s) {
+		return new ListVarPattern(s);
+	}
+
+
+	public static Pattern<IValue, Type> not(Pattern<IValue, Type> pat) {
+		return StaticPatternFactory.not(pat);
+	}
+
+
+	@SafeVarargs
+	public static Pattern<IValue, Type> or(Pattern<IValue, Type> pat, Pattern<IValue, Type>... pats) {
+		return StaticPatternFactory.or(pat, pats);
 	}
 
 
@@ -182,5 +259,10 @@ public class PdbPatternFactory extends StaticPatternFactory {
 
 	public static Pattern<IValue, Type> var(String s) {
 		return (Pattern<IValue, Type>) StaticPatternFactory.var(s);
+	}
+
+
+	public static Pattern<IValue, Type> var(String s, Pattern<IValue, Type> pat) {
+		return StaticPatternFactory.var(s, pat);
 	}
 }

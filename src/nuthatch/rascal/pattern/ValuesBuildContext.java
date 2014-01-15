@@ -46,6 +46,9 @@ public class ValuesBuildContext implements BuildContext<IValue, Type> {
 				// Type consType = tf.constructor(ts, type, name, childTypes);
 				return (T) new PdbCursor(vf.constructor(consType, childValues));
 			}
+			else if(type != null && type.isConstructor()) {
+				return (T) new PdbCursor(vf.constructor(type, childValues));
+			}
 			else if((type != null && type.isList()) || "[]".equals(name)) {
 				return (T) new PdbCursor(vf.list(childValues));
 			}
@@ -56,4 +59,8 @@ public class ValuesBuildContext implements BuildContext<IValue, Type> {
 		throw new IllegalArgumentException();
 	}
 
+
+	public IValueFactory getValueFactory() {
+		return vf;
+	}
 }

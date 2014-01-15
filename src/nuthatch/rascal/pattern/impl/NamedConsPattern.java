@@ -10,7 +10,7 @@ import nuthatch.tree.TreeCursor;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.type.Type;
 
-public class ConsPattern extends AbstractPattern<IValue, Type> {
+public class NamedConsPattern extends AbstractPattern<IValue, Type> {
 
 	private final String name;
 	private final Type type;
@@ -18,7 +18,7 @@ public class ConsPattern extends AbstractPattern<IValue, Type> {
 	private final boolean subTreeOnly;
 
 
-	public ConsPattern(String name, Type type, Pattern<IValue, Type>[] children) {
+	public NamedConsPattern(String name, Type type, Pattern<IValue, Type>[] children) {
 		if(type != null && !type.isAbstractData()) {
 			throw new IllegalArgumentException("Type should be an ADT");
 		}

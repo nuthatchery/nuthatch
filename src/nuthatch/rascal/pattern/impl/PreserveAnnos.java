@@ -41,6 +41,18 @@ public class PreserveAnnos extends MinimalAbstractPattern<IValue, Type> {
 
 
 	@Override
+	public <T extends TreeCursor<IValue, Type>> boolean isBound(Environment<T> env) {
+		return pat.isBound(env);
+	}
+
+
+	@Override
+	public boolean isVariable() {
+		return pat.isVariable();
+	}
+
+
+	@Override
 	public <T extends TreeCursor<IValue, Type>> boolean match(T tree, Environment<T> env) {
 		return pat.match(tree, env);
 	}
@@ -48,6 +60,7 @@ public class PreserveAnnos extends MinimalAbstractPattern<IValue, Type> {
 
 	@Override
 	public boolean subTreeOnly() {
-		return true;
+		return pat.subTreeOnly();
 	}
+
 }

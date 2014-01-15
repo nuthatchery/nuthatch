@@ -22,13 +22,19 @@ public class ValuesPatternFactory {
 
 	@SafeVarargs
 	public final Pattern<IValue, Type> cons(String name, Pattern<IValue, Type>... children) {
-		return new ConsPattern(name, null, children);
+		return new NamedConsPattern(name, null, children);
 	}
 
 
 	@SafeVarargs
 	public final Pattern<IValue, Type> cons(String name, Type type, Pattern<IValue, Type>... children) {
-		return new ConsPattern(name, type, children);
+		return new NamedConsPattern(name, type, children);
+	}
+
+
+	@SafeVarargs
+	public final Pattern<IValue, Type> cons(Type consType, Pattern<IValue, Type>... children) {
+		return new TypedConsPattern(consType, children);
 	}
 
 
@@ -61,6 +67,11 @@ public class ValuesPatternFactory {
 	@SafeVarargs
 	public final Pattern<IValue, Type> list(Type listType, Pattern<IValue, Type>... children) {
 		return new ListPattern(listType, children);
+	}
+
+
+	public Pattern<IValue, Type> listElement(Type listType, Pattern<IValue, Type> prefix, Pattern<IValue, Type> element, Pattern<IValue, Type> suffix) {
+		return new ListElementPattern(listType, prefix, element, suffix);
 	}
 
 
@@ -100,7 +111,6 @@ public class ValuesPatternFactory {
 	}
 
 
-	@SuppressWarnings("unchecked")
 	public static ValuesPatternFactory getInstance() {
 		return vpfInstance;
 	}
