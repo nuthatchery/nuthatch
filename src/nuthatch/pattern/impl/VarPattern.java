@@ -41,6 +41,18 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 	}
 
 
+	@Override
+	public <T extends TreeCursor<Value, Type>> boolean isBound(Environment<T> env) {
+		return env.get(name) != null;
+	}
+
+
+	@Override
+	public boolean isVariable() {
+		return true;
+	}
+
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {

@@ -1,56 +1,53 @@
-package nuthatch.pattern.impl;
+package nuthatch.pattern;
 
 import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
-import nuthatch.tree.Tree;
+import nuthatch.pattern.impl.MinimalAbstractPattern;
 import nuthatch.tree.TreeCursor;
 
-public class ParentPattern<Value, Type> implements Pattern<Value, Type> {
+public abstract class PatternBuildAction<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 
-	private final Pattern<Value, Type> pattern;
+	private final Pattern<Value, Type> pat;
 
 
-	public ParentPattern(Pattern<Value, Type> pattern) {
-		this.pattern = pattern;
+	public PatternBuildAction(Pattern<Value, Type> pat) {
+		this.pat = pat;
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException {
-		throw new UnsupportedOperationException();
+		return (T) build(pat.build(context, env));
 	}
+
+
+	public abstract TreeCursor<Value, Type> build(TreeCursor<Value, Type> tree);
 
 
 	@Override
 	public <T extends TreeCursor<Value, Type>> boolean isBound(Environment<T> env) {
-		// TODO Auto-generated method stub
-		return false;
+		return pat.isBound(env);
 	}
 
 
 	@Override
 	public boolean isVariable() {
-		// TODO Auto-generated method stub
-		return false;
+		return pat.isVariable();
 	}
 
 
 	@Override
 	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
-		if(tree.isAtRoot() || tree.isAtTop()) {
-			return false;
-		}
-		T cursor = (T) tree.getBranch(Tree.PARENT);
-
-		return pattern.match(cursor, env);
+		return pat.match(tree, env);
 	}
 
 
 	@Override
 	public boolean subTreeOnly() {
-		return false;
+		return pat.subTreeOnly();
 	}
 
 }

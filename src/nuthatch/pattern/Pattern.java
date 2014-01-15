@@ -1,6 +1,5 @@
 package nuthatch.pattern;
 
-import nuthatch.tree.TreeBuildingCursor;
 import nuthatch.tree.TreeCursor;
 
 public interface Pattern<Value, Type> {
@@ -9,6 +8,7 @@ public interface Pattern<Value, Type> {
 	 * Build a tree from a pattern.
 	 * 
 	 * The built tree replaces the current node of the cursor (if any).
+	 * 
 	 * @param context
 	 *            TODO
 	 * @param env
@@ -20,6 +20,18 @@ public interface Pattern<Value, Type> {
 	 *             as And, Or, Any, etc.
 	 */
 	<T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException;
+
+
+	/**
+	 * @return True if this is a variable pattern and the variable is bound
+	 */
+	<T extends TreeCursor<Value, Type>> boolean isBound(Environment<T> env);
+
+
+	/**
+	 * @return True if this is a variable pattern
+	 */
+	boolean isVariable();
 
 
 	/**

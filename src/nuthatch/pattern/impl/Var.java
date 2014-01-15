@@ -35,6 +35,18 @@ public class Var<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 
 
 	@Override
+	public <T extends TreeCursor<Value, Type>> boolean isBound(Environment<T> env) {
+		return data != null;
+	}
+
+
+	@Override
+	public boolean isVariable() {
+		return true;
+	}
+
+
+	@Override
 	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
 		if(data == null) {
 			if(type == null || type.equals(tree.getType())) {
@@ -69,5 +81,4 @@ public class Var<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 			return "var";
 		}
 	}
-
 }
