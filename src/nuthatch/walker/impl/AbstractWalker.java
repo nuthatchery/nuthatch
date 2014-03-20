@@ -10,6 +10,7 @@ import nuthatch.pattern.Pattern;
 import nuthatch.tree.Path;
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
+import nuthatch.tree.TreeHandle;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.StandardTreeCursor;
 import nuthatch.walker.Walker;
@@ -88,8 +89,20 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
-	public TreeCursor<Value, Type> getBranch(int i) {
-		return current.getBranch(i);
+	public TreeCursor<Value, Type> getBranchCursor(int i) {
+		return current.getBranchCursor(i);
+	}
+
+
+	@Override
+	public TreeHandle<Value, Type> getBranchHandle(int i) {
+		return current.getBranchHandle(i);
+	}
+
+
+	@Override
+	public TreeCursor<Value, Type> getCursor() {
+		return current.getCursor();
 	}
 
 
@@ -102,6 +115,12 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	@Override
 	public int getFromBranch() {
 		return current.getFromBranch();
+	}
+
+
+	@Override
+	public TreeHandle<Value, Type> getHandle() {
+		return current.getHandle();
 	}
 
 
@@ -283,7 +302,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
-	public boolean subtreeEquals(TreeCursor<Value, Type> other) {
+	public boolean subtreeEquals(TreeHandle<Value, Type> other) {
 		return current.subtreeEquals(other);
 	}
 

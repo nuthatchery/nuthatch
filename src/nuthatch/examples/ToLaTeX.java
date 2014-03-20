@@ -122,7 +122,7 @@ public class ToLaTeX {
 		SimpleWalker<String, String> walkTracingWalker = new SimpleWalker<String, String>(tree, new BaseComposedWalk<SimpleWalker<String, String>>(step) {
 			@Override
 			public int step(SimpleWalker<String, String> w) {
-				TreeCursor<String, String> prev = w.getBranch(w.from());
+				TreeCursor<String, String> prev = w.getBranchCursor(w.from());
 				int branch = w.getFromBranch();
 				if(w.from(Tree.PARENT)) {
 					if(!w.isRoot()) {

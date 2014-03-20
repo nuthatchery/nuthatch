@@ -1,9 +1,8 @@
 package nuthatch.tree;
 
-import nullness.Nullable;
 import nuthatch.tree.errors.BranchNotFoundError;
 
-public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type>> {
+public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type>>, TreeHandle<Value, Type> {
 	/**
 	 * Branch number of the first child.
 	 */
@@ -48,6 +47,8 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	 * The new cursor will be attached to the same tree, but its own position
 	 * and root
 	 * 
+	 * Same as getCursor().
+	 * 
 	 * @return A copy of this cursor rooted at the current node
 	 */
 	TreeCursor<Value, Type> copySubtree();
@@ -63,16 +64,7 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	 *            The branch index.
 	 * @return A new tree cursor
 	 */
-	TreeCursor<Value, Type> getBranch(int i) throws BranchNotFoundError;
-
-
-	/**
-	 * Get the data stored at this node.
-	 * 
-	 * @return The data value
-	 */
-	@Nullable
-	Value getData();
+	TreeCursor<Value, Type> getBranchCursor(int i) throws BranchNotFoundError;
 
 
 	/**
@@ -84,28 +76,20 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 
 
 	/**
+	 * Get a handle to the subtree rooted at the current node.
+	 * 
+	 * @return A handle to the current node of the cursor
+	 * 
+	 */
+	TreeHandle<Value, Type> getHandle();
+
+
+	/**
 	 * Get the last element of the path.
 	 * 
 	 * @return getPath().getElement(getPath().size()-1)
 	 */
 	int getLastPathElement();
-
-
-	/**
-	 * Get the (constructor) name of this node.
-	 * 
-	 * @return The name
-	 */
-	@Nullable
-	String getName();
-
-
-	/**
-	 * Get the number of children of this node.
-	 * 
-	 * @return The number of children
-	 */
-	int getNumChildren();
 
 
 	/**
@@ -147,14 +131,6 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 
 
 	/**
-	 * Get the type of this node.
-	 * 
-	 * @return The type
-	 */
-	Type getType();
-
-
-	/**
 	 * Follow branch i.
 	 * 
 	 * @param i
@@ -165,58 +141,6 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	 * @see {@link #hasBranch(int)}
 	 */
 	TreeCursor<Value, Type> go(int i) throws BranchNotFoundError;
-
-
-	/**
-	 * Check if the given branch exists.
-	 * 
-	 * @param i
-	 *            The branch number
-	 * @return True if getBranch(i) will succeed
-	 */
-	boolean hasBranch(int i);
-
-
-	/**
-	 * Check if this node has data associated with it.
-	 * 
-	 * @return True if getData() != null
-	 */
-	boolean hasData();
-
-
-	/**
-	 * Check if this node has a name associated with it.
-	 * 
-	 * @return True if getName() != null
-	 */
-	boolean hasName();
-
-
-	/**
-	 * Check if this node has the given name associated with it.
-	 * 
-	 * @return True if name.equals(getName())
-	 */
-	boolean hasName(String name);
-
-
-	/**
-	 * Check if this node has the given type
-	 * 
-	 * @param type
-	 *            A type
-	 * @return True if type.equals(getType())
-	 */
-	boolean hasType(Type type);
-
-
-	/**
-	 * Check if this node is a leaf.
-	 * 
-	 * @return True if this node has no children
-	 */
-	boolean isAtLeaf();
 
 
 	/**
@@ -234,22 +158,4 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	 */
 	boolean isAtTop();
 
-
-	/**
-	 * Equality on subtrees rooted at the current node.
-	 * 
-	 * @param other
-	 *            The other cursor, or null
-	 * @return True if the subtrees rooted at this and the other node are equal
-	 * @throws UnsupportedOperationException
-	 *             if other is of a different type, and the implementation only
-	 *             supports comparison with the same type
-	 */
-	boolean subtreeEquals(@Nullable TreeCursor<Value, Type> other);
-
-
-	/**
-	 * @return Result of toString() on current subtree
-	 */
-	String treeToString();
 }

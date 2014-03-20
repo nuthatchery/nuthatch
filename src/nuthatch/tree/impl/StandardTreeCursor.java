@@ -2,6 +2,7 @@ package nuthatch.tree.impl;
 
 import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
+import nuthatch.tree.TreeHandle;
 
 public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, Type, Tree<Value, Type>> {
 
@@ -44,8 +45,26 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 
 
 	@Override
+	public TreeHandle<Value, Type> getBranchHandle(int i) {
+		return new StandardTreeHandle<Value, Type>(getCurrent().getBranch(i + 1));
+	}
+
+
+	@Override
+	public TreeCursor<Value, Type> getCursor() {
+		return copySubtree();
+	}
+
+
+	@Override
 	public Value getData() {
 		return getCurrent().getData();
+	}
+
+
+	@Override
+	public TreeHandle<Value, Type> getHandle() {
+		return new StandardTreeHandle<Value, Type>(getCurrent());
 	}
 
 
@@ -80,12 +99,15 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 
 
 	@Override
-	public boolean subtreeEquals(TreeCursor<Value, Type> other) {
+	public boolean subtreeEquals(TreeHandle<Value, Type> other) {
 		if(this == other) {
 			return true;
 		}
 		else if(other == null) {
 			return false;
+		}
+		else if(other instanceof StandardTreeHandle<?, ?>) {
+			return getCurrent().equals(((StandardTreeHandle<?, ?>) other).getCurrent());
 		}
 		else if(other instanceof StandardTreeCursor<?, ?>) {
 			return getCurrent().equals(((StandardTreeCursor<?, ?>) other).getCurrent());

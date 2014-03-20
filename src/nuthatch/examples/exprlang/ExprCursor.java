@@ -1,6 +1,7 @@
 package nuthatch.examples.exprlang;
 
 import nuthatch.tree.TreeCursor;
+import nuthatch.tree.TreeHandle;
 import nuthatch.tree.impl.AbstractTreeCursor;
 
 public class ExprCursor extends AbstractTreeCursor<Expr, Type, Expr> {
@@ -38,8 +39,28 @@ public class ExprCursor extends AbstractTreeCursor<Expr, Type, Expr> {
 
 
 	@Override
+	public TreeHandle<Expr, Type> getBranchHandle(int i) {
+		ExprCursor copy = copy();
+		copy.go(i);
+		return copy;
+	}
+
+
+	@Override
+	public TreeCursor<Expr, Type> getCursor() {
+		return copySubtree();
+	}
+
+
+	@Override
 	public Expr getData() {
 		return getCurrent();
+	}
+
+
+	@Override
+	public TreeHandle<Expr, Type> getHandle() {
+		return copySubtree();
 	}
 
 
@@ -74,7 +95,7 @@ public class ExprCursor extends AbstractTreeCursor<Expr, Type, Expr> {
 
 
 	@Override
-	public boolean subtreeEquals(TreeCursor<Expr, Type> other) {
+	public boolean subtreeEquals(TreeHandle<Expr, Type> other) {
 		return getCurrent().equals(other.getData());
 	}
 

@@ -7,20 +7,20 @@ import java.util.List;
 import nuthatch.library.Action;
 import nuthatch.tree.Path;
 import nuthatch.tree.TreeCursor;
+import nuthatch.tree.TreeHandle;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.util.BranchUtil;
 import nuthatch.walker.errors.ReachedTop;
 
-public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<Value, Type> {
+public abstract class AbstractTreeCursor<Value, Type, T> extends AbstractTreeHandle<Value, Type, T> implements TreeCursor<Value, Type> {
 	private final List<T> stack;
 
 	private final Path path;
-	private T current;
 	private int from = 0;
 
 
 	protected AbstractTreeCursor(AbstractTreeCursor<Value, Type, T> src, boolean fullTree) {
-		this.current = src.current;
+		super(src.current);
 		this.from = src.from;
 		if(fullTree) {
 			this.stack = new ArrayList<T>(src.stack);
@@ -35,7 +35,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 
 	protected AbstractTreeCursor(AbstractTreeCursor<Value, Type, T> src, T replacement) {
-		this.current = replacement;
+		super(replacement);
 		this.stack = new ArrayList<T>(src.stack);
 		this.path = src.path.copy();
 		this.from = src.from;
@@ -46,7 +46,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 
 	protected AbstractTreeCursor(T tree) {
-		this.current = tree;
+		super(tree);
 		this.stack = new ArrayList<T>();
 		this.stack.add(current);
 		this.path = new StandardPath();
@@ -54,14 +54,34 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 
 	@Override
-	public TreeCursor<Value, Type> getBranch(int i) {
+	public TreeCursor<Value, Type> getBranchCursor(int i) {
 		return copy().go(i);
+	}
+
+
+	@Override
+	public TreeHandle<Value, Type> getBranchHandle(int i) {
+		TreeCursor<Value, Type> copy = copy();
+		copy.go(i);
+		return copy;
+	}
+
+
+	@Override
+	public TreeCursor<Value, Type> getCursor() {
+		return copySubtree();
 	}
 
 
 	@Override
 	public int getFromBranch() {
 		return from;
+	}
+
+
+	@Override
+	public TreeHandle<Value, Type> getHandle() {
+		return copySubtree();
 	}
 
 
@@ -150,30 +170,6 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 
 
 	@Override
-	public boolean hasBranch(int i) {
-		return BranchUtil.normalBranch(i, getNumChildren()) >= 0;
-	}
-
-
-	@Override
-	public boolean hasName(String name) {
-		return name.equals(getName());
-	}
-
-
-	@Override
-	public boolean hasType(Type type) {
-		return type.equals(getType());
-	}
-
-
-	@Override
-	public boolean isAtLeaf() {
-		return getNumChildren() == 0;
-	}
-
-
-	@Override
 	public boolean isAtRoot() {
 		return path.size() == 0;
 	}
@@ -191,12 +187,6 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	}
 
 
-	@Override
-	public String treeToString() {
-		return current.toString();
-	}
-
-
 	/**
 	 * Return the child at index i.
 	 * 
@@ -207,6 +197,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 	protected abstract T getChild(int i);
 
 
+	@Override
 	protected T getCurrent() {
 		return current;
 	}
@@ -263,4 +254,5 @@ public abstract class AbstractTreeCursor<Value, Type, T> implements TreeCursor<V
 		}
 
 	}
+
 }

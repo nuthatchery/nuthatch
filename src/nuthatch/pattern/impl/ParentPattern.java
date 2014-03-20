@@ -42,7 +42,7 @@ public class ParentPattern<Value, Type> implements Pattern<Value, Type> {
 		if(tree.isAtRoot() || tree.isAtTop()) {
 			return false;
 		}
-		T cursor = (T) tree.getBranch(Tree.PARENT);
+		T cursor = (T) tree.getBranchCursor(Tree.PARENT);
 
 		return pattern.match(cursor, env);
 	}
