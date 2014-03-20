@@ -38,8 +38,8 @@ public class ValuesWalker extends AbstractWalker<IValue, Type, ValuesWalker> {
 
 
 	@Override
-	public PdbCursor getBranch(int i) throws BranchNotFoundError {
-		return (PdbCursor) super.getBranch(i);
+	public PdbCursor getBranchCursor(int i) throws BranchNotFoundError {
+		return (PdbCursor) super.getBranchCursor(i);
 	}
 
 

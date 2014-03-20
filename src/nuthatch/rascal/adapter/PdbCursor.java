@@ -2,6 +2,7 @@ package nuthatch.rascal.adapter;
 
 import nullness.Nullable;
 import nuthatch.tree.TreeCursor;
+import nuthatch.tree.TreeHandle;
 import nuthatch.tree.impl.AbstractTreeCursor;
 import nuthatch.walker.errors.TypeMismatch;
 
@@ -127,7 +128,7 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 
 
 	@Override
-	public boolean subtreeEquals(@Nullable TreeCursor<IValue, Type> other) {
+	public boolean subtreeEquals(@Nullable TreeHandle<IValue, Type> other) {
 		if(this == other) {
 			return true;
 		}

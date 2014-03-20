@@ -5,6 +5,7 @@ import java.util.List;
 
 import nullness.Nullable;
 import nuthatch.tree.TreeCursor;
+import nuthatch.tree.TreeHandle;
 import nuthatch.tree.impl.AbstractTreeCursor;
 import nuthatch.walker.errors.TypeMismatch;
 
@@ -142,7 +143,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 
 
 	@Override
-	public boolean subtreeEquals(@Nullable TreeCursor<String, Type> other) {
+	public boolean subtreeEquals(@Nullable TreeHandle<String, Type> other) {
 		if(this == other) {
 			return true;
 		}
