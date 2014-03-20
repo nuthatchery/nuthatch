@@ -37,8 +37,8 @@ public class SWalker extends AbstractWalker<IStrategoTerm, Integer, SWalker> {
 
 
 	@Override
-	public STermCursor getBranch(int i) throws BranchNotFoundError {
-		return (STermCursor) super.getBranch(i);
+	public STermCursor getBranchCursor(int i) throws BranchNotFoundError {
+		return (STermCursor) super.getBranchCursor(i);
 	}
 
 

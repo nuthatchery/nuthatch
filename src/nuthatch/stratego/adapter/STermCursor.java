@@ -1,6 +1,7 @@
 package nuthatch.stratego.adapter;
 
 import nuthatch.tree.TreeCursor;
+import nuthatch.tree.TreeHandle;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.AbstractTreeCursor;
 
@@ -57,7 +58,7 @@ public class STermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStr
 
 
 	@Override
-	public STermCursor getBranch(int i) {
+	public STermCursor getBranchCursor(int i) {
 		return (STermCursor) copy().go(i);
 	}
 
@@ -110,7 +111,7 @@ public class STermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStr
 
 
 	@Override
-	public boolean subtreeEquals(TreeCursor<IStrategoTerm, Integer> other) {
+	public boolean subtreeEquals(TreeHandle<IStrategoTerm, Integer> other) {
 		if(other instanceof STermCursor) {
 			return getCurrent().equals(((STermCursor) other).getCurrent());
 		}
