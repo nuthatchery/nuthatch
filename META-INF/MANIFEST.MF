@@ -11,3 +11,4 @@ Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
 Export-Package: nuthatch.rascal.adapter,
  nuthatch.rascal.pattern,
  nuthatch.rascal.pattern.impl
+Import-Package: org.nuthatchery.pgf.rules.actions
