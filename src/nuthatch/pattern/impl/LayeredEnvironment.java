@@ -216,4 +216,5 @@ public class LayeredEnvironment<V> implements Environment<V> {
 		stack.add(map);
 		map = null;
 	}
+
 }
