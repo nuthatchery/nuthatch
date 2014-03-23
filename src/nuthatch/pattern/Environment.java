@@ -19,7 +19,7 @@ public interface Environment<Value> extends Iterable<Object> {
 	/**
 	 * Enter a new scope.
 	 * 
-	 * May return the same or a different object.
+	 * Always returns a new object.
 	 * 
 	 * @return An environment with the empty scope at the top.
 	 */
@@ -29,7 +29,7 @@ public interface Environment<Value> extends Iterable<Object> {
 	/**
 	 * Exit a scope, abandoning all bindings in the current scope.
 	 * 
-	 * May return the same or a different object.
+	 * Returns a different object.
 	 * 
 	 * @return An environment with tall the top-level bindings discarded
 	 */
