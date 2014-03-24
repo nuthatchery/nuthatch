@@ -1,9 +1,5 @@
 package nuthatch.pattern;
 
-import nuthatch.pattern.BuildContext;
-import nuthatch.pattern.Environment;
-import nuthatch.pattern.NotBuildableException;
-import nuthatch.pattern.Pattern;
 import nuthatch.pattern.impl.MinimalAbstractPattern;
 import nuthatch.tree.TreeCursor;
 
