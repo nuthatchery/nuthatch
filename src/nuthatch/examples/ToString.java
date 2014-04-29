@@ -16,7 +16,7 @@ public class ToString {
 			@Override
 			public int step(SimpleWalker<String, String> w) {
 				if(leaf(w)) { // we're at a leaf, print data value
-					s.append(w.getData().toString());
+					s.append(w.getData());
 				}
 				else if(down(w)) { // first time we see this node, print constructor name
 					s.append(w.getName() + "(");
