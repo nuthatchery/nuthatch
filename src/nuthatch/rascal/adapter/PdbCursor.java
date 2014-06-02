@@ -89,7 +89,7 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 
 
 	@Override
-	public int getNumChildren() {
+	public int getArity() {
 		IValue value = getCurrent();
 		if(value instanceof INode) {
 			return ((INode) value).arity();

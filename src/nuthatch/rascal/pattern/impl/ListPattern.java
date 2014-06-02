@@ -75,7 +75,7 @@ public class ListPattern extends AbstractPattern<IValue, Type> {
 			if(children.length == 1 && children[0] instanceof ListVarPattern) {
 				return children[0].match(tree, env);
 			}
-			if(tree.getNumChildren() != children.length) {
+			if(tree.getArity() != children.length) {
 				return false;
 			}
 			for(int i = 0; i < children.length; i++) {

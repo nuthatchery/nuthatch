@@ -90,7 +90,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 
 
 	@Override
-	public int getNumChildren() {
+	public int getArity() {
 		if(!isDecoded()) {
 			decodeNode();
 		}

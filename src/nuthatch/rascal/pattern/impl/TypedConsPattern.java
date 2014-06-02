@@ -69,7 +69,7 @@ public class TypedConsPattern extends AbstractPattern<IValue, Type> {
 			return false;
 		}
 		if(children != null) {
-			if(tree.getNumChildren() != children.length) {
+			if(tree.getArity() != children.length) {
 				return false;
 			}
 			for(int i = 0; i < children.length; i++) {
