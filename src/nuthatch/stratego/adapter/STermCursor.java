@@ -82,7 +82,7 @@ public class STermCursor extends AbstractTreeCursor<IStrategoTerm, Integer, IStr
 
 
 	@Override
-	public int getNumChildren() {
+	public int getArity() {
 		return getCurrent().getSubtermCount();
 	}
 

@@ -50,7 +50,7 @@ public class TermPrinter {
 				}
 				else if(e.getType() == IStrategoTerm.APPL) {
 					s.append(e.getName());
-					if(e.getNumChildren() > 0) {
+					if(e.getArity() > 0) {
 						s.append("(");
 					}
 				}
@@ -69,7 +69,7 @@ public class TermPrinter {
 				else if(e.getType() == IStrategoTerm.TUPLE) {
 					s.append(")");
 				}
-				else if(e.getType() == IStrategoTerm.APPL && e.getNumChildren() > 0) {
+				else if(e.getType() == IStrategoTerm.APPL && e.getArity() > 0) {
 					s.append(")");
 				}
 				return PROCEED;
