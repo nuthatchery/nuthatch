@@ -37,7 +37,7 @@ public interface TreeHandle<Value, Type> {
 	 * 
 	 * @return The number of children
 	 */
-	int getNumChildren();
+	int getArity();
 
 
 	/**

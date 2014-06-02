@@ -34,6 +34,12 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 
 
 	/**
+	 * @return An environment local to the current step of the walk.
+	 */
+	Environment<? extends TreeCursor<Value, Type>> getLocalEnv();
+
+
+	/**
 	 * Check if current node is a leaf.
 	 * 
 	 * @return True if current node has no children
@@ -56,6 +62,28 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	boolean isRunning();
 
 
+	/**
+	 * Uses the local step environment.
+	 * 
+	 * The environment is untouched if this method returns false.
+	 * 
+	 * @param pat
+	 *            A pattern
+	 * @return True if the pattern matched.
+	 */
+	boolean match(Pattern<Value, Type> pat);
+
+
+	/**
+	 * The environment is untouched if this method returns false.
+	 * 
+	 * @param pat
+	 *            A pattern
+	 * @param env
+	 *            An environment. Variables may be bound as a side effect on the
+	 *            environment.
+	 * @return True if the pattern matched.
+	 */
 	boolean match(Pattern<Value, Type> pat, Environment<? extends TreeCursor<Value, Type>> env);
 
 
@@ -70,10 +98,26 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 * Replace current node.
 	 * 
 	 * The current node and its children are replace by the subtree
+	 * obtained by building the pattern using the local environment.
+	 * 
+	 * @param tree
+	 *            Replacement pattern
+	 * @throws NotBuildableException
+	 *             if the replacement pattern cannot be build
+	 */
+	void replace(Pattern<Value, Type> pattern) throws NotBuildableException;
+
+
+	/**
+	 * Replace current node.
+	 * 
+	 * The current node and its children are replace by the subtree
 	 * obtained by building the pattern using the provided environment.
 	 * 
 	 * @param tree
 	 *            Replacement pattern
+	 * @param env
+	 *            The environment. Will not be changed by this method.
 	 * @throws NotBuildableException
 	 *             if the replacement pattern cannot be build
 	 */

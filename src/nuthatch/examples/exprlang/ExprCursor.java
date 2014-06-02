@@ -71,7 +71,7 @@ public class ExprCursor extends AbstractTreeCursor<Expr, Type, Expr> {
 
 
 	@Override
-	public int getNumChildren() {
+	public int getArity() {
 		return getCurrent().arity();
 	}
 

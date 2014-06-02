@@ -75,7 +75,7 @@ public class StandardTreeCursor<Value, Type> extends AbstractTreeCursor<Value, T
 
 
 	@Override
-	public int getNumChildren() {
+	public int getArity() {
 		return getCurrent().numChildren();
 	}
 

@@ -37,7 +37,7 @@ public class StandardTreeHandle<Value, Type> extends AbstractTreeHandle<Value, T
 
 
 	@Override
-	public int getNumChildren() {
+	public int getArity() {
 		return getCurrent().numChildren();
 	}
 

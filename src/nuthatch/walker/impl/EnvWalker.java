@@ -78,7 +78,7 @@ public class EnvWalker<Value, Type, E extends EnvWalker<Value, Type, E>> extends
 
 	@Override
 	public TreeCursor<Value, Type> go(int i) throws BranchNotFoundError {
-		int j = BranchUtil.normalBranch(i, getNumChildren());
+		int j = BranchUtil.normalBranch(i, getArity());
 		if(j == 0) {
 			int k = subtreeScoping.size();
 			if(k > 0) {

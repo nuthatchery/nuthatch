@@ -5,6 +5,7 @@ import java.util.Iterator;
 import nuthatch.library.Action;
 import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
+import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.Path;
@@ -31,6 +32,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	 */
 	private TreeCursor<Value, Type> current;
 	private final Walk<AbstractWalker<Value, Type, E>> step;
+	private Environment<? extends TreeCursor<Value, Type>> localEnv = null;
 
 
 	public AbstractWalker(Tree<Value, Type> tree, Walk<E> step) {
@@ -80,11 +82,17 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	@Override
 	public boolean from(int i) {
 		if(i == last) {
-			return current.getFromBranch() == current.getNumChildren();
+			return current.getFromBranch() == current.getArity();
 		}
 		else {
 			return current.getFromBranch() == i;
 		}
+	}
+
+
+	@Override
+	public int getArity() {
+		return current.getArity();
 	}
 
 
@@ -131,14 +139,17 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
-	public String getName() {
-		return current.getName();
+	public Environment<? extends TreeCursor<Value, Type>> getLocalEnv() {
+		if(localEnv == null) {
+			localEnv = EnvironmentFactory.env();
+		}
+		return localEnv;
 	}
 
 
 	@Override
-	public int getNumChildren() {
-		return current.getNumChildren();
+	public String getName() {
+		return current.getName();
 	}
 
 
@@ -253,6 +264,13 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public boolean match(Pattern<Value, Type> pat) {
+		return pat.match(current, (Environment<TreeCursor<Value, Type>>) getLocalEnv());
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public boolean match(Pattern<Value, Type> pat, Environment<? extends TreeCursor<Value, Type>> env) {
 		return pat.match(current, (Environment<TreeCursor<Value, Type>>) env);
 	}
@@ -270,6 +288,15 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
  */	}
 
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public void replace(Pattern<Value, Type> pattern) throws NotBuildableException {
+		TreeCursor<Value, Type> build = pattern.build(null, (Environment<TreeCursor<Value, Type>>) getLocalEnv());
+		current = current.copyAndReplaceSubtree(build);
+	}
+
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public void replace(Pattern<Value, Type> pattern, Environment<? extends TreeCursor<Value, Type>> env) throws NotBuildableException {
 		TreeCursor<Value, Type> build = pattern.build(null, (Environment<TreeCursor<Value, Type>>) env);
@@ -289,6 +316,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 		current = rootCursor.copy();
 		try {
 			while(!current.isAtTop()) {
+				localEnv = null;
 				int go = step.step(this);
 				if(go == Action.NEXT) {
 					go = from() + 1;

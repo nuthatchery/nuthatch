@@ -14,7 +14,7 @@ public abstract class AbstractTreeHandle<Value, Type, T> implements TreeHandle<V
 
 	@Override
 	public boolean hasBranch(int i) {
-		return BranchUtil.normalBranch(i, getNumChildren()) >= 0;
+		return BranchUtil.normalBranch(i, getArity()) >= 0;
 	}
 
 
@@ -32,7 +32,7 @@ public abstract class AbstractTreeHandle<Value, Type, T> implements TreeHandle<V
 
 	@Override
 	public boolean isAtLeaf() {
-		return getNumChildren() == 0;
+		return getArity() == 0;
 	}
 
 

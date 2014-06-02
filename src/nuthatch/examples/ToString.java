@@ -3,18 +3,19 @@ package nuthatch.examples;
 import static nuthatch.library.JoinPoints.down;
 import static nuthatch.library.JoinPoints.leaf;
 import static nuthatch.library.JoinPoints.up;
-import nuthatch.library.BaseWalk;
-import nuthatch.library.Walk;
-import nuthatch.walker.impl.SimpleWalker;
+import nuthatch.library.Action;
+import nuthatch.library.BaseAction;
 
 public class ToString {
 	public static void main(String[] args) {
 		// Walk which outputs the tree in a term-like representation. The result are accumulated in the
 		// stringbuffer 's'.
+		StringTreeActionFactory actions = StringTreeActionFactory.getInstance();
+
 		final StringBuffer s = new StringBuffer();
-		Walk<SimpleWalker<String, String>> toTerm = new BaseWalk<SimpleWalker<String, String>>() {
+		Action<StringTreeWalker> toTerm = new BaseAction<StringTreeWalker>() {
 			@Override
-			public int step(SimpleWalker<String, String> w) {
+			public int step(StringTreeWalker w) {
 				if(leaf(w)) { // we're at a leaf, print data value
 					s.append(w.getData());
 				}
@@ -33,7 +34,7 @@ public class ToString {
 		};
 
 		// instantiate walker with an example tree and the above step function
-		SimpleWalker<String, String> toTermWalker = new SimpleWalker<String, String>(ExampleTree.TREE.makeCursor(), toTerm);
+		StringTreeWalker toTermWalker = new StringTreeWalker(ExampleTree.TREE, actions.walk(toTerm));
 		// run it
 		toTermWalker.start();
 		// print the contents of S

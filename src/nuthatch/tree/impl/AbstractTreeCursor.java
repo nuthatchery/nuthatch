@@ -39,8 +39,8 @@ public abstract class AbstractTreeCursor<Value, Type, T> extends AbstractTreeHan
 		this.stack = new ArrayList<T>(src.stack);
 		this.path = src.path.copy();
 		this.from = src.from;
-		if(from > getNumChildren()) {
-			from = getNumChildren();
+		if(from > getArity()) {
+			from = getArity();
 		}
 	}
 
@@ -135,7 +135,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> extends AbstractTreeHan
 
 		}
 
-		i = BranchUtil.normalBranch(i, getNumChildren());
+		i = BranchUtil.normalBranch(i, getArity());
 
 		if(i == 0) {
 			if(path.size() != 0) {
@@ -225,7 +225,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> extends AbstractTreeHan
 
 		TreeCursorIterator(AbstractTreeCursor<Value, Type, T> cursor) {
 			subtreeCursor = cursor.copySubtree();
-			numChildren = cursor.getNumChildren();
+			numChildren = cursor.getArity();
 			if(numChildren > 0) {
 				this.subtreeCursor.go(1);
 			}
