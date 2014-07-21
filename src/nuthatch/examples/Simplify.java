@@ -47,7 +47,7 @@ public class Simplify extends BaseWalk<ExprWalker> {
 
 		walker = new ExprWalker(new ExprCursor(e), af.walk(action));
 		walker.start();
-		System.out.println("Result: " + walker.treeToString());
 
+		System.out.println("Result: " + walker.treeToString());
 	}
 }

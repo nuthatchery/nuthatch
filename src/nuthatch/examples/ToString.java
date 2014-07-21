@@ -10,9 +10,9 @@ public class ToString {
 	public static void main(String[] args) {
 		// Walk which outputs the tree in a term-like representation. The result are accumulated in the
 		// stringbuffer 's'.
-		StringTreeActionFactory actions = StringTreeActionFactory.getInstance();
+		StringTreeActionFactory af = StringTreeActionFactory.getInstance();
 
-		final StringBuffer s = new StringBuffer();
+		final StringBuilder s = new StringBuilder();
 		Action<StringTreeWalker> toTerm = new BaseAction<StringTreeWalker>() {
 			@Override
 			public int step(StringTreeWalker w) {
@@ -34,10 +34,49 @@ public class ToString {
 		};
 
 		// instantiate walker with an example tree and the above step function
-		StringTreeWalker toTermWalker = new StringTreeWalker(ExampleTree.TREE, actions.walk(toTerm));
+		StringTreeWalker toTermWalker = new StringTreeWalker(ExampleTree.TREE, af.walk(toTerm));
 		// run it
 		toTermWalker.start();
 		// print the contents of S
 		System.out.println(s.toString());
+
+		final StringBuilder t = new StringBuilder();
+
+		Action<StringTreeWalker> appendData = new BaseAction<StringTreeWalker>() {
+			@Override
+			public int step(StringTreeWalker walker) {
+				t.append(walker.getData());
+				return 0;
+			}
+		};
+		Action<StringTreeWalker> appendName = new BaseAction<StringTreeWalker>() {
+			@Override
+			public int step(StringTreeWalker walker) {
+				t.append(walker.getName() + "(");
+				return 0;
+			}
+		};
+		Action<StringTreeWalker> appendEnd = new BaseAction<StringTreeWalker>() {
+			@Override
+			public int step(StringTreeWalker walker) {
+				t.append(")");
+				return 0;
+			}
+		};
+		Action<StringTreeWalker> appendComma = new BaseAction<StringTreeWalker>() {
+			@Override
+			public int step(StringTreeWalker walker) {
+				t.append(", ");
+				return 0;
+			}
+		};
+		toTerm = af.combine(af.atLeaf(appendData), af.down(appendName), af.up(appendEnd), af.up(af.beforeChild(appendComma)));
+
+		toTermWalker = new StringTreeWalker(ExampleTree.TREE, af.walk(toTerm));
+		// run it
+		toTermWalker.start();
+		// print the contents of S
+		System.out.println(s.toString());
+
 	}
 }
