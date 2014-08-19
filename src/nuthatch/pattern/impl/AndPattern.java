@@ -4,7 +4,6 @@ import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
-import nuthatch.tree.TreeBuildingCursor;
 import nuthatch.tree.TreeCursor;
 
 public class AndPattern<Value, Type> extends MinimalAbstractPattern<Value, Type> {
@@ -22,14 +21,22 @@ public class AndPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type, T> context, Environment<T> env) throws NotBuildableException {
 		throw new NotBuildableException("and");
 	}
 
 
 	@Override
 	public <T extends TreeCursor<Value, Type>> boolean match(T tree, Environment<T> env) {
-		return a.match(tree, env) && b.match(tree, env);
+		env.begin();
+		if(a.match(tree, env) && b.match(tree, env)) {
+			env.commit();
+			return true;
+		}
+		else {
+			env.rollback();
+			return false;
+		}
 	}
 
 
