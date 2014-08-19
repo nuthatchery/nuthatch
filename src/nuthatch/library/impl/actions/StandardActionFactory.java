@@ -48,6 +48,19 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 
 	/**
+	 * Create atNonLeaf conditional action.
+	 * 
+	 * @param action
+	 *            Action to be performed
+	 * @return An action that performs 'action' if walker is not at a leaf.
+	 */
+	@Override
+	public Action<W> atNonLeaf(Action<W> action) {
+		return new Leaf<W>(action, true);
+	}
+
+
+	/**
 	 * Create atRoot conditional action.
 	 * 
 	 * @param action

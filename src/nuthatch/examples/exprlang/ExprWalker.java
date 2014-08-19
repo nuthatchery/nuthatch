@@ -8,6 +8,11 @@ import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.walker.impl.AbstractWalker;
 
 public class ExprWalker extends AbstractWalker<Expr, Type, ExprWalker> {
+	public ExprWalker(Expr expr, Walk<ExprWalker> step) {
+		super(new ExprCursor(expr), step);
+	}
+
+
 	public ExprWalker(TreeCursor<Expr, Type> cursor, Walk<ExprWalker> step) {
 		super(cursor, step);
 	}

@@ -46,37 +46,37 @@ public class ToString {
 			@Override
 			public int step(StringTreeWalker walker) {
 				t.append(walker.getData());
-				return 0;
+				return NEXT;
 			}
 		};
 		Action<StringTreeWalker> appendName = new BaseAction<StringTreeWalker>() {
 			@Override
 			public int step(StringTreeWalker walker) {
 				t.append(walker.getName() + "(");
-				return 0;
+				return NEXT;
 			}
 		};
 		Action<StringTreeWalker> appendEnd = new BaseAction<StringTreeWalker>() {
 			@Override
 			public int step(StringTreeWalker walker) {
 				t.append(")");
-				return 0;
+				return NEXT;
 			}
 		};
 		Action<StringTreeWalker> appendComma = new BaseAction<StringTreeWalker>() {
 			@Override
 			public int step(StringTreeWalker walker) {
 				t.append(", ");
-				return 0;
+				return NEXT;
 			}
 		};
-		toTerm = af.combine(af.atLeaf(appendData), af.down(appendName), af.up(appendEnd), af.up(af.beforeChild(appendComma)));
+		toTerm = af.seq(af.atLeaf(appendData), af.down(appendName), af.afterChild((af.beforeChild(appendComma))), af.up(appendEnd));
 
 		toTermWalker = new StringTreeWalker(ExampleTree.TREE, af.walk(toTerm));
 		// run it
 		toTermWalker.start();
 		// print the contents of S
-		System.out.println(s.toString());
+		System.out.println(t.toString());
 
 	}
 }

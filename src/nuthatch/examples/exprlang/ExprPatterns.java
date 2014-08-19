@@ -34,6 +34,16 @@ public class ExprPatterns {
 	}
 
 
+	public static final Pattern<Expr, Type> Let(Pattern<Expr, Type> x, Pattern<Expr, Type> e1, Pattern<Expr, Type> e2) {
+		return PF.nodeWithChildren("Var", x, e1, e2);
+	}
+
+
+	public static final Expr Let(Var x, Expr e1, Expr e2) {
+		return new Let(x, e1, e2);
+	}
+
+
 	public static final Expr Mul(Expr e1, Expr e2) {
 		return new Mul(e1, e2);
 	}
@@ -56,5 +66,10 @@ public class ExprPatterns {
 
 	public static final Pattern<Expr, Type> var(String name) {
 		return PF.var(name);
+	}
+
+
+	public static final Var Var(String s) {
+		return new Var(s);
 	}
 }

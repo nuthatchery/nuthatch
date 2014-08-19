@@ -175,5 +175,15 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 	public Walk<W> walk(Action<W> action);
 
 
+	/**
+	 * Create atNonLeaf conditional action.
+	 * 
+	 * @param action
+	 *            Action to be performed
+	 * @return An action that performs 'action' if walker is not at a leaf.
+	 */
+	Action<W> atNonLeaf(Action<W> action);
+
+
 	MatchAction<Value, Type, C, W> replace(Pattern<Value, Type> replacement);
 }
