@@ -8,7 +8,7 @@ import nuthatch.tree.TreeCursor;
 public class AnyPattern<Value, Type> extends MinimalAbstractPattern<Value, Type> {
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type, T> context, Environment<T> env) throws NotBuildableException {
 		throw new NotBuildableException("any");
 	}
 

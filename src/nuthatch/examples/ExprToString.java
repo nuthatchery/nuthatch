@@ -7,7 +7,7 @@ import nuthatch.library.Action;
 import nuthatch.library.BaseAction;
 
 public class ExprToString {
-	public static void main(String[] args) {
+	public static String exprToString(Expr expr) {
 		// Walk which outputs the tree in a term-like representation. The result are accumulated in the
 		// stringbuffer 's'.
 		ExprActionFactory af = ExprActionFactory.getInstance();
@@ -17,7 +17,14 @@ public class ExprToString {
 		Action<ExprWalker> appendData = new BaseAction<ExprWalker>() {
 			@Override
 			public int step(ExprWalker walker) {
-				t.append(walker.getData());
+				if(walker.hasName()) {
+					t.append(walker.getName() + "(");
+					t.append(walker.getData());
+					t.append(")");
+				}
+				else {
+					t.append(walker.getData());
+				}
 				return NEXT;
 			}
 		};
@@ -42,16 +49,19 @@ public class ExprToString {
 				return NEXT;
 			}
 		};
+
 		Action<ExprWalker> toTerm = af.seq(af.atLeaf(appendData), af.down(appendName), af.afterChild((af.beforeChild(appendComma))), af.up(appendEnd));
 
-		for(Expr e : new Expr[] { ExampleExpr.expr1, ExampleExpr.expr2, ExampleExpr.expr3, ExampleExpr.expr4 }) {
-			ExprWalker toTermWalker = new ExprWalker(e, af.walk(toTerm));
-			t.delete(0, t.length());
-			// run it
-			toTermWalker.start();
-			// print the contents of S
-			System.out.println(t.toString());
-		}
-
+		ExprWalker toTermWalker = new ExprWalker(expr, af.walk(toTerm));
+		toTermWalker.start();
+		return t.toString();
 	}
+
+
+	public static void main(String[] args) {
+		for(Expr e : new Expr[] { ExampleExpr.expr1, ExampleExpr.expr2, ExampleExpr.expr3, ExampleExpr.expr4 }) {
+			System.out.println(exprToString(e));
+		}
+	}
+
 }

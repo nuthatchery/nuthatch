@@ -3,6 +3,7 @@ package nuthatch.pattern;
 import nuthatch.pattern.impl.AncestorPattern;
 import nuthatch.pattern.impl.AndPattern;
 import nuthatch.pattern.impl.AnyPattern;
+import nuthatch.pattern.impl.FromPattern;
 import nuthatch.pattern.impl.NodePattern;
 import nuthatch.pattern.impl.NotPattern;
 import nuthatch.pattern.impl.OrPattern;
@@ -38,6 +39,11 @@ public class PatternFactory<Value, Type> {
 	@SafeVarargs
 	public final Pattern<Value, Type> children(Pattern<Value, Type>... children) {
 		return nodeWithChildren(null, null, null, children);
+	}
+
+
+	public Pattern<Value, Type> from(int b) {
+		return new FromPattern<Value, Type>(b);
 	}
 
 

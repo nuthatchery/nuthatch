@@ -8,6 +8,8 @@ public class ExprPatterns {
 
 	public static final Pattern<Expr, Type> zero = PF.nodeWithChildren("0");
 
+	public static final Pattern<Expr, Type> _ = PF.any();
+
 
 	public static final Expr Add(Expr e1, Expr e2) {
 		return new Add(e1, e2);
@@ -29,13 +31,28 @@ public class ExprPatterns {
 	}
 
 
+	public static final Pattern<Expr, Type> ancestor(Pattern<Expr, Type> ancestor) {
+		return PF.ancestor(ancestor);
+	}
+
+
+	public static final Pattern<Expr, Type> and(Pattern<Expr, Type> a, Pattern<Expr, Type> b) {
+		return PF.and(a, b);
+	}
+
+
+	public static final Pattern<Expr, Type> from(int b) {
+		return PF.from(b);
+	}
+
+
 	public static final Expr Int(int i) {
 		return new Int(i);
 	}
 
 
 	public static final Pattern<Expr, Type> Let(Pattern<Expr, Type> x, Pattern<Expr, Type> e1, Pattern<Expr, Type> e2) {
-		return PF.nodeWithChildren("Var", x, e1, e2);
+		return PF.nodeWithChildren("Let", x, e1, e2);
 	}
 
 
@@ -64,12 +81,48 @@ public class ExprPatterns {
 	}
 
 
+	public static final Pattern<Expr, Type> not(Pattern<Expr, Type> a) {
+		return PF.not(a);
+	}
+
+
+	public static final Pattern<Expr, Type> or(Pattern<Expr, Type> a, Pattern<Expr, Type> b) {
+		return PF.or(a, b);
+	}
+
+
+	public static final Pattern<Expr, Type> parent(Pattern<Expr, Type> parent) {
+		return PF.parent(parent);
+	}
+
+
+	public static final Pattern<Expr, Type> type(Type type) {
+		return PF.nodeType(type);
+	}
+
+
 	public static final Pattern<Expr, Type> var(String name) {
 		return PF.var(name);
+	}
+
+
+	public static final Pattern<Expr, Type> var(String name, Pattern<Expr, Type> expr) {
+		return PF.var(name, expr);
+	}
+
+
+	public static final Pattern<Expr, Type> Var() {
+		return PF.nodeType(Type.VAR);
+	}
+
+
+	public static final Pattern<Expr, Type> Var(Pattern<Expr, Type> name) {
+		return and(Var(), name);
 	}
 
 
 	public static final Var Var(String s) {
 		return new Var(s);
 	}
+
 }

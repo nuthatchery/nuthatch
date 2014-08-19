@@ -95,6 +95,14 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 
 
 	/**
+	 * @param b
+	 *            A branch number
+	 * @return An action that override the next step with b.
+	 */
+	public Action<W> go(int b);
+
+
+	/**
 	 * Create matching conditional action.
 	 * 
 	 * The variables in the patterns will be bound in the environment given to
@@ -109,9 +117,12 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 	public Action<W> match(Pattern<Value, Type> pat, MatchAction<Value, Type, C, W> action);
 
 
-	public MatchBuilder<Value, Type, C, W> matchBuilder(BuildContext<Value, Type> context);
+	public MatchBuilder<Value, Type, C, W> matchBuilder(BuildContext<Value, Type, C> context);
 
 
+	/**
+	 * @return An action that does nothing.
+	 */
 	public Action<W> nop();
 
 
@@ -173,6 +184,16 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 	 *         'action'.
 	 */
 	public Walk<W> walk(Action<W> action);
+
+
+	/**
+	 * Execute an action as a match action, dropping the environment.
+	 * 
+	 * @param action
+	 *            An action
+	 * @return A corresponding match action
+	 */
+	MatchAction<Value, Type, C, W> action(Action<W> action);
 
 
 	/**

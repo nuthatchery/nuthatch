@@ -19,7 +19,7 @@ public interface Pattern<Value, Type> {
 	 *             if the pattern contains elements that are not buildable, such
 	 *             as And, Or, Any, etc.
 	 */
-	<T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException;
+	<T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type, T> context, Environment<T> env) throws NotBuildableException;
 
 
 	/**

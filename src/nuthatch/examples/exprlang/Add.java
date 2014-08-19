@@ -3,7 +3,7 @@ package nuthatch.examples.exprlang;
 public class Add extends Expr {
 
 	public Add(Expr e1, Expr e2) {
-		super("Add", Type.INT, new Expr[] { e1, e2 });
+		super("Add", Type.APPLY, new Expr[] { e1, e2 });
 
 	}
 

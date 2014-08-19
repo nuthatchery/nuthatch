@@ -30,7 +30,7 @@ public class VarPattern<Value, Type> extends MinimalAbstractPattern<Value, Type>
 
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type, T> context, Environment<T> env) throws NotBuildableException {
 		T t = env.get(name);
 		if(t != null) {
 			return t;

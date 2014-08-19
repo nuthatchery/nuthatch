@@ -2,7 +2,7 @@ package nuthatch.pattern;
 
 import nuthatch.tree.TreeCursor;
 
-public interface BuildContext<Value, Type> {
+public interface BuildContext<Value, Type, Cursor extends TreeCursor<Value, Type>> {
 
 	/**
 	 * Create a new tree node.
@@ -19,6 +19,6 @@ public interface BuildContext<Value, Type> {
 	 *            Children, or null
 	 * @return Cursor for the new node
 	 */
-	<T extends TreeCursor<Value, Type>> T create(String name, Type type, Value value, T[] children);
+	Cursor create(String name, Type type, Value value, Cursor[] children);
 
 }

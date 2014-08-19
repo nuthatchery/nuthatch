@@ -15,10 +15,10 @@ import nuthatch.walker.Walker;
 final class MatchActionBuilder<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements MatchBuilder<Value, Type, C, W> {
 
 	private Map<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> map = new HashMap<>();
-	protected BuildContext<Value, Type> context;
+	protected BuildContext<Value, Type, C> context;
 
 
-	public MatchActionBuilder(BuildContext<Value, Type> context) {
+	public MatchActionBuilder(BuildContext<Value, Type, C> context) {
 		this.context = context;
 	}
 

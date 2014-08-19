@@ -6,7 +6,7 @@ public class Var extends Expr {
 
 
 	public Var(String s) {
-		super(s, Type.INT, new Expr[] {});
+		super("Var", Type.VAR, new Expr[] {});
 		name = s;
 	}
 

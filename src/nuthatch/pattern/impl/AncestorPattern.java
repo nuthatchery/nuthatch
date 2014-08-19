@@ -18,7 +18,7 @@ public class AncestorPattern<Value, Type> implements Pattern<Value, Type> {
 
 
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type, T> context, Environment<T> env) throws NotBuildableException {
 		throw new NotBuildableException("ancestor");
 	}
 
@@ -40,6 +40,8 @@ public class AncestorPattern<Value, Type> implements Pattern<Value, Type> {
 		T copy = (T) tree.copy();
 		while(!copy.isAtRoot()) {
 			copy.go(Tree.PARENT);
+			int fromBranch = copy.getFromBranch();
+
 			if(pattern.match(copy, env)) {
 				return true;
 			}

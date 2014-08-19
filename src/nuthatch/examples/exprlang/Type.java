@@ -4,6 +4,8 @@ public class Type {
 	String typeName;
 	public static final Type INT = new Type("int");
 	public static final Type BOOL = new Type("bool");
+	public static final Type VAR = new Type("var");
+	public static final Type APPLY = new Type("apply");
 
 
 	public Type(String name) {

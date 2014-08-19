@@ -6,7 +6,7 @@ public class Int extends Expr {
 
 
 	public Int(int i) {
-		super(String.valueOf(i), Type.INT, new Expr[] {});
+		super("Int", Type.INT, new Expr[] {});
 		value = i;
 	}
 

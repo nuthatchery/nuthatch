@@ -8,6 +8,7 @@ import nuthatch.library.MatchBuilder;
 import nuthatch.library.Walk;
 import nuthatch.library.impl.walks.Default;
 import nuthatch.pattern.BuildContext;
+import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
@@ -18,6 +19,31 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 	@SuppressWarnings("rawtypes")
 	private static final NopAction nopAction = new NopAction();
+
+
+	/**
+	 * Execute an action as a match action, dropping the environment.
+	 * 
+	 * @param action
+	 *            An action
+	 * @return A corresponding match action
+	 */
+	@Override
+	public MatchAction<Value, Type, C, W> action(final Action<W> action) {
+		return new MatchAction<Value, Type, C, W>() {
+
+			@Override
+			public void init(W walker) {
+				action.init(walker);
+			}
+
+
+			@Override
+			public int step(W walker, Environment<C> env) {
+				return action.step(walker);
+			}
+		};
+	}
 
 
 	/**
@@ -143,6 +169,12 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	}
 
 
+	@Override
+	public Action<W> go(int branch) {
+		return new GoAction<W>(branch);
+	}
+
+
 	/**
 	 * Create matching conditional action.
 	 * 
@@ -162,7 +194,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 
 	@Override
-	public MatchBuilder<Value, Type, C, W> matchBuilder(BuildContext<Value, Type> context) {
+	public MatchBuilder<Value, Type, C, W> matchBuilder(BuildContext<Value, Type, C> context) {
 		return new MatchActionBuilder<>(context);
 	}
 
@@ -246,9 +278,24 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	}
 
 
-	@SuppressWarnings("unchecked")
 	public static <Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> StandardActionFactory<Value, Type, C, W> getInstance() {
 		return instance;
+	}
+
+
+	private static final class GoAction<W extends Walker<?, ?>> extends BaseAction<W> {
+		private final int branch;
+
+
+		public GoAction(int branch) {
+			this.branch = branch;
+		}
+
+
+		@Override
+		public int step(W walker) {
+			return branch;
+		}
 	}
 
 

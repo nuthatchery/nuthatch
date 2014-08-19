@@ -15,7 +15,7 @@ public abstract class PatternBuildAction<Value, Type> extends MinimalAbstractPat
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type, T> context, Environment<T> env) throws NotBuildableException {
 		return (T) build(pat.build(context, env));
 	}
 
