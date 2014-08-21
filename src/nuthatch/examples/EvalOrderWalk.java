@@ -15,10 +15,8 @@ import nuthatch.library.Walk;
 
 public class EvalOrderWalk implements Walk<XmplWalker> {
 	final Action<XmplWalker> userAction;
-
-
-
 	final Action<XmplWalker> action;
+
 	public EvalOrderWalk(Action<XmplWalker> action) {
 		this.userAction = action;
 
