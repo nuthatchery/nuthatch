@@ -8,12 +8,20 @@ import nuthatch.library.Action;
 import nuthatch.library.BaseAction;
 
 public class Printer {
+	public static Action<XmplWalker> printAction = new BaseAction<XmplWalker>(){
+		@Override
+		public int step(XmplWalker walker) {
+			System.out.println(Printer.toTerm(walker.getData()));
+			return PROCEED;
+		}
+	};
+
+
 	public static void main(String[] args) {
 		for(Expr e : new Expr[] { ExampleExpr.expr1, ExampleExpr.expr2, ExampleExpr.expr3, ExampleExpr.expr4 }) {
 			System.out.println(toTerm(e));
 		}
 	}
-
 
 	public static String toTerm(XmplNode expr) {
 		// Walk which outputs the tree in a term-like representation. The result are accumulated in the

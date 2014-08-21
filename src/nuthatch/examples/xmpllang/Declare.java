@@ -3,7 +3,7 @@ package nuthatch.examples.xmpllang;
 public class Declare extends Stat {
 
 	public Declare(Var x, Expr e, Stat s) {
-		super("Let", new XmplNode[] { x, e, s });
+		super("Declare", new XmplNode[] { x, e, s });
 
 	}
 

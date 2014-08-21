@@ -8,6 +8,7 @@ import nuthatch.examples.xmpllang.full.XmplActionFactory;
 import nuthatch.examples.xmpllang.full.XmplCursor;
 import nuthatch.examples.xmpllang.full.XmplWalker;
 import nuthatch.library.Action;
+import nuthatch.library.ActionBuilder;
 import nuthatch.library.BaseAction;
 import nuthatch.library.MatchBuilder;
 import nuthatch.library.Walk;
@@ -18,7 +19,7 @@ public class EvalOrderWalk {
 
 
 		final int[] i = new int[]{0};
-		Action<XmplWalker> myAction= new BaseAction<XmplWalker>(){
+		Action<XmplWalker> printAction = new BaseAction<XmplWalker>(){
 			@Override
 			public int step(XmplWalker walker) {
 				System.out.printf("  %3d: %s\n", i[0]++, Printer.toTerm(walker.getData()));
@@ -26,10 +27,24 @@ public class EvalOrderWalk {
 			}
 		};
 
+		ActionBuilder<XmplWalker> as = af.sequenceBuilder();
+
+		as.add(af.match(and(Var(var("x")), //
+				ancestor(and(Let(Var(var("x")), var("e"), _), from(3)))), //
+				af.replace(var("e")))); // replace by binding from matching Let
+		as.add(af.match(and(Var(var("x")), //
+				ancestor(and(Declare(Var(var("x")), var("e"), _), from(3)))), //
+				af.replace(var("e")))); // replace by binding from matching Let
+		as.add(af.down(af.match(Let(_, _, _), af.action(af.go(2)))));
+		// Drop all Lets on the way up
+		as.add(af.up(af.match(Let(_, _, var("e")), af.replace(var("e")))));
+		as.add(af.up(af.match(Declare(_, _, var("s")), af.replace(var("s")))));
+		Action<XmplWalker> inline = as.done();
+
 		for(Stat e : ExampleStat.allStats) {
 			i[0] = 0;
 			System.out.println(Printer.toTerm(e) + ":");
-			XmplWalker walker = new XmplWalker(e, new OrderedWalk(myAction));
+			XmplWalker walker = new XmplWalker(e, new OrderedWalk(af.seq(printAction, inline)));
 			// run it
 			walker.start();
 			System.out.println(" => " + Printer.toTerm(walker.getData()));
@@ -52,11 +67,13 @@ public class EvalOrderWalk {
 
 			mb.add(Let(_, _, _), af.combine(
 					af.down(af.go(2)), // skip first child on way down
-					af.from(1, userAction))); // perform action after visiting expression
+					af.from(2, userAction), // perform action after visiting expression
+					af.from(3, userAction))); // also perform action after visiting body
 
 			mb.add(Declare(_, _, _), af.combine(
-					af.down(af.go(2)), // skip first child on way down
-					af.from(1, userAction)));// perform action after visiting expression
+					af.down(af.go(2)),        // skip first child on way down
+					af.from(2, userAction),   // perform action after visiting expression
+					af.from(3, userAction))); // also perform action after visiting body
 
 			mb.add(If(_, _, _), af.combine(
 					af.from(1, userAction), // perform action after visiting condition
