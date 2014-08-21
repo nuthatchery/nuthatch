@@ -13,7 +13,67 @@ import nuthatch.library.BaseAction;
 import nuthatch.library.MatchBuilder;
 import nuthatch.library.Walk;
 
-public class EvalOrderWalk {
+public class EvalOrderWalk implements Walk<XmplWalker> {
+	final Action<XmplWalker> userAction;
+
+
+
+	final Action<XmplWalker> action;
+	public EvalOrderWalk(Action<XmplWalker> action) {
+		this.userAction = action;
+
+		XmplActionFactory af = XmplActionFactory.getInstance();
+		MatchBuilder<XmplNode, Type, XmplCursor, XmplWalker> mb = af.matchBuilder();
+
+		mb.add(Let(_, _, _), af.combine(
+				af.down(af.go(2)), // skip first child on way down
+				af.from(2, userAction), // perform action after visiting expression
+				af.from(3, userAction))); // also perform action after visiting body
+
+		mb.add(Declare(_, _, _), af.combine(
+				af.down(af.go(2)),        // skip first child on way down
+				af.from(2, userAction),   // perform action after visiting expression
+				af.from(3, userAction))); // also perform action after visiting body
+
+		mb.add(If(_, _, _), af.combine(
+				af.from(1, userAction), // perform action after visiting condition
+				af.from(2, af.go(PARENT)))); // skip else-branch if we took then-branch
+
+		mb.add(While(_, _), af.combine(
+				af.from(1, userAction), // perform action after visiting condition
+				af.from(2, userAction))); // also perform action after visiting body
+
+		mb.add(Assign(_, _), af.combine(//
+				af.down(af.go(2)), // skip first child on way down
+				af.from(2, userAction))); // perform action after visiting expression
+
+		mb.add(Seq(___), af.nop()); // don't visit sequences explicitly
+
+		mb.add(isExpr(), af.up(userAction));// any other expression, perform action on the way up
+		mb.add(isStat(), af.up(userAction));// any other statement, perform action on the way up
+
+		this.action = mb.first(); // do the first case that matches
+	}
+
+
+	@Override
+	public void init(XmplWalker walker) {
+		action.init(walker);
+	}
+
+
+	@Override
+	public int step(XmplWalker walker) {
+		int step = action.step(walker);
+		if(step == PROCEED) {
+			return NEXT;
+		}
+		else {
+			return step;
+		}
+	}
+
+
 	public static void main(String[] args) {
 		XmplActionFactory af = XmplActionFactory.getInstance();
 
@@ -44,7 +104,7 @@ public class EvalOrderWalk {
 		for(Stat e : ExampleStat.allStats) {
 			i[0] = 0;
 			System.out.println(Printer.toTerm(e) + ":");
-			XmplWalker walker = new XmplWalker(e, new OrderedWalk(af.seq(printAction, inline)));
+			XmplWalker walker = new XmplWalker(e, new EvalOrderWalk(af.seq(printAction, inline)));
 			// run it
 			walker.start();
 			System.out.println(" => " + Printer.toTerm(walker.getData()));
@@ -53,67 +113,5 @@ public class EvalOrderWalk {
 		}
 	}
 
-
-	static class OrderedWalk implements Walk<XmplWalker> {
-		final Action<XmplWalker> userAction;
-		final Action<XmplWalker> action;
-
-
-		public OrderedWalk(Action<XmplWalker> action) {
-			this.userAction = action;
-
-			XmplActionFactory af = XmplActionFactory.getInstance();
-			MatchBuilder<XmplNode, Type, XmplCursor, XmplWalker> mb = af.matchBuilder();
-
-			mb.add(Let(_, _, _), af.combine(
-					af.down(af.go(2)), // skip first child on way down
-					af.from(2, userAction), // perform action after visiting expression
-					af.from(3, userAction))); // also perform action after visiting body
-
-			mb.add(Declare(_, _, _), af.combine(
-					af.down(af.go(2)),        // skip first child on way down
-					af.from(2, userAction),   // perform action after visiting expression
-					af.from(3, userAction))); // also perform action after visiting body
-
-			mb.add(If(_, _, _), af.combine(
-					af.from(1, userAction), // perform action after visiting condition
-					af.from(2, af.go(PARENT)))); // skip else-branch if we took then-branch
-
-			mb.add(While(_, _), af.combine(
-					af.from(1, userAction), // perform action after visiting condition
-					af.from(2, userAction))); // also perform action after visiting body
-
-			mb.add(Assign(_, _), af.combine(//
-					af.down(af.go(2)), // skip first child on way down
-					af.from(2, userAction))); // perform action after visiting expression
-
-			mb.add(Seq(___), af.nop()); // don't visit sequences explicitly
-
-			mb.add(isExpr(), af.up(userAction));// any other expression, perform action on the way up
-			mb.add(isStat(), af.up(userAction));// any other statement, perform action on the way up
-
-			this.action = mb.first(); // do the first case that matches
-		}
-
-
-		@Override
-		public void init(XmplWalker walker) {
-			action.init(walker);
-		}
-
-
-		@Override
-		public int step(XmplWalker walker) {
-			int step = action.step(walker);
-			if(step == PROCEED) {
-				return NEXT;
-			}
-			else {
-				return step;
-			}
-		}
-
-	}
-
-
 }
+
