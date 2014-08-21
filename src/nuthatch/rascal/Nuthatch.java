@@ -4,7 +4,7 @@ import nuthatch.library.Action;
 import nuthatch.library.ActionFactory;
 import nuthatch.library.BaseAction;
 import nuthatch.library.FactoryFactory;
-import nuthatch.rascal.adapter.PdbCursor;
+import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.rascal.adapter.UptrCursor;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
@@ -69,7 +69,7 @@ public class Nuthatch {
 			}
 		};
 		Action<SimpleWalker<IValue, Type>> topDown = pdbAf.down(t);
-		Walker<IValue, Type> e = new SimpleWalker<IValue, Type>(new PdbCursor(n), pdbAf.walk(topDown));
+		Walker<IValue, Type> e = new SimpleWalker<IValue, Type>(new ValuesCursor(n), pdbAf.walk(topDown));
 		e.start();
 
 		ctx.getStdOut().println();

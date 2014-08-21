@@ -4,7 +4,7 @@ import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
-import nuthatch.rascal.adapter.PdbCursor;
+import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.rascal.pattern.ValuesBuildContext;
 import nuthatch.tree.TreeCursor;
 
@@ -72,15 +72,15 @@ public class ListElementPattern implements Pattern<IValue, Type> {
 			int i = 0;
 			if(pre != null) {
 				for(IValue v : pre) {
-					childValues[i++] = new PdbCursor(v);
+					childValues[i++] = new ValuesCursor(v);
 				}
 			}
 
-			childValues[i++] = new PdbCursor(ele);
+			childValues[i++] = new ValuesCursor(ele);
 
 			if(suf != null) {
 				for(IValue v : suf) {
-					childValues[i++] = new PdbCursor(v);
+					childValues[i++] = new ValuesCursor(v);
 				}
 			}
 
@@ -111,8 +111,8 @@ public class ListElementPattern implements Pattern<IValue, Type> {
 				T copy = subTreeOnly ? (T) tree.copySubtree() : (T) tree.copy();
 				copy.go(i + 1);
 				if(element.match(copy, env)) {
-					if(prefix == null || prefix.match((T) new PdbCursor(list.sublist(0, i)), env)) {
-						if(suffix == null || suffix.match((T) new PdbCursor(list.sublist(i + 1, list.length() - i - 1)), env)) {
+					if(prefix == null || prefix.match((T) new ValuesCursor(list.sublist(0, i)), env)) {
+						if(suffix == null || suffix.match((T) new ValuesCursor(list.sublist(i + 1, list.length() - i - 1)), env)) {
 							env.commit();
 							return true;
 						}

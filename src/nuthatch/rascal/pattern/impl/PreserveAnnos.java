@@ -5,7 +5,7 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.impl.MinimalAbstractPattern;
-import nuthatch.rascal.adapter.PdbCursor;
+import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.tree.TreeCursor;
 
 import org.eclipse.imp.pdb.facts.IValue;
@@ -32,7 +32,7 @@ public class PreserveAnnos extends MinimalAbstractPattern<IValue, Type> {
 
 		if(patValue.isAnnotatable() && annoValue.isAnnotatable()) {
 			patValue = patValue.asAnnotatable().joinAnnotations(annoValue.asAnnotatable().getAnnotations());
-			return (T) new PdbCursor(patValue);
+			return (T) new ValuesCursor(patValue);
 		}
 		else {
 			return patBuild;

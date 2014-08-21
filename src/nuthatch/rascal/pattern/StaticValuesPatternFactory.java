@@ -3,7 +3,6 @@ package nuthatch.rascal.pattern;
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.StaticPatternFactory;
 import nuthatch.rascal.pattern.impl.ListVarPattern;
-import nuthatch.rascal.pattern.impl.ValuesPatternFactory;
 
 import org.eclipse.imp.pdb.facts.IInteger;
 import org.eclipse.imp.pdb.facts.IRational;
@@ -16,13 +15,13 @@ import org.eclipse.imp.pdb.facts.type.Type;
  * @author anya
  * 
  */
-public class PdbPatternFactory {
-	public static final ValuesPatternFactory PF = ValuesPatternFactory.getInstance();
+public class StaticValuesPatternFactory {
+	public static final nuthatch.rascal.pattern.impl.ValuesPatternFactory PF = nuthatch.rascal.pattern.impl.ValuesPatternFactory.getInstance();
 
 	public static final Pattern<IValue, Type> _ = (Pattern<IValue, Type>) StaticPatternFactory._();
 
 
-	private PdbPatternFactory() {
+	private StaticValuesPatternFactory() {
 	}
 
 

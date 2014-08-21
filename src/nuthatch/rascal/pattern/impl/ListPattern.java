@@ -8,7 +8,7 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.impl.AbstractPattern;
-import nuthatch.rascal.adapter.PdbCursor;
+import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.tree.TreeCursor;
 
 import org.eclipse.imp.pdb.facts.IList;
@@ -50,7 +50,7 @@ public class ListPattern extends AbstractPattern<IValue, Type> {
 		for(Pattern<IValue, Type> child : children) {
 			if(child instanceof ListVarPattern) {
 				for(IValue v : ((IList) child.build(context, env).getData())) {
-					childValues.add((T) new PdbCursor(v));
+					childValues.add((T) new ValuesCursor(v));
 				}
 			}
 			else {

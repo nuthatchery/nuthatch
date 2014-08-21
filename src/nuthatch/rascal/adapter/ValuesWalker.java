@@ -10,42 +10,42 @@ import org.eclipse.imp.pdb.facts.type.Type;
 
 public class ValuesWalker extends AbstractWalker<IValue, Type, ValuesWalker> {
 	public ValuesWalker(IValue term, Walk<ValuesWalker> step) {
-		super(new PdbCursor(term), step);
+		super(new ValuesCursor(term), step);
 	}
 
 
-	public ValuesWalker(PdbCursor cursor, Walk<ValuesWalker> step) {
+	public ValuesWalker(ValuesCursor cursor, Walk<ValuesWalker> step) {
 		super(cursor, step);
 	}
 
 
 	@Override
-	public PdbCursor copy() {
-		return (PdbCursor) super.copy();
+	public ValuesCursor copy() {
+		return (ValuesCursor) super.copy();
 	}
 
 
 	@Override
-	public PdbCursor copyAndReplaceSubtree(TreeCursor<IValue, Type> replacement) {
-		return (PdbCursor) super.copyAndReplaceSubtree(replacement);
+	public ValuesCursor copyAndReplaceSubtree(TreeCursor<IValue, Type> replacement) {
+		return (ValuesCursor) super.copyAndReplaceSubtree(replacement);
 	}
 
 
 	@Override
-	public PdbCursor copySubtree() {
-		return (PdbCursor) super.copySubtree();
+	public ValuesCursor copySubtree() {
+		return (ValuesCursor) super.copySubtree();
 	}
 
 
 	@Override
-	public PdbCursor getBranchCursor(int i) throws BranchNotFoundError {
-		return (PdbCursor) super.getBranchCursor(i);
+	public ValuesCursor getBranchCursor(int i) throws BranchNotFoundError {
+		return (ValuesCursor) super.getBranchCursor(i);
 	}
 
 
 	@Override
 	protected ValuesWalker subWalk(TreeCursor<IValue, Type> cursor, Walk<ValuesWalker> step) {
-		return new ValuesWalker((PdbCursor) cursor, step);
+		return new ValuesWalker((ValuesCursor) cursor, step);
 	}
 
 }

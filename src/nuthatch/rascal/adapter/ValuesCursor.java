@@ -14,37 +14,37 @@ import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.type.Type;
 
-public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
+public class ValuesCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 
-	public PdbCursor(IValue value) {
+	public ValuesCursor(IValue value) {
 		super(value);
 	}
 
 
-	protected PdbCursor(PdbCursor src, boolean fullTree) {
+	protected ValuesCursor(ValuesCursor src, boolean fullTree) {
 		super(src, fullTree);
 	}
 
 
-	protected PdbCursor(PdbCursor src, IValue replacement) {
+	protected ValuesCursor(ValuesCursor src, IValue replacement) {
 		super(src, replacement);
 	}
 
 
 	@Override
 	public TreeCursor<IValue, Type> copy() {
-		return new PdbCursor(this, true);
+		return new ValuesCursor(this, true);
 	}
 
 
 	@Override
 	public TreeCursor<IValue, Type> copyAndReplaceSubtree(TreeCursor<IValue, Type> replacement) {
-		if(replacement instanceof PdbCursor) {
-			IValue repl = ((PdbCursor) replacement).getCurrent();
+		if(replacement instanceof ValuesCursor) {
+			IValue repl = ((ValuesCursor) replacement).getCurrent();
 			if(!repl.getType().isSubtypeOf(getCurrent().getType())) {
 				throw new TypeMismatch();
 			}
-			return new PdbCursor(this, repl);
+			return new ValuesCursor(this, repl);
 		}
 		else {
 			throw new UnsupportedOperationException("Replacing with different cursor type");
@@ -54,7 +54,7 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 
 	@Override
 	public TreeCursor<IValue, Type> copySubtree() {
-		return new PdbCursor(this, false);
+		return new ValuesCursor(this, false);
 	}
 
 
@@ -135,11 +135,11 @@ public class PdbCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 		else if(other == null) {
 			return false;
 		}
-		else if(other instanceof PdbCursor) {
-			return getCurrent().isEqual(((PdbCursor) other).getCurrent());
+		else if(other instanceof ValuesCursor) {
+			return getCurrent().isEqual(((ValuesCursor) other).getCurrent());
 		}
 		else {
-			throw new UnsupportedOperationException("Equality only supported on PdbCursor");
+			throw new UnsupportedOperationException("Equality only supported on ValuesCursor");
 		}
 	}
 
