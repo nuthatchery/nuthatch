@@ -1,9 +1,9 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang;
 
 public class Let extends Expr {
 
 	public Let(Var x, Expr e1, Expr e2) {
-		super("Let", Type.APPLY, new Expr[] { x, e1, e2 });
+		super("Let", Type.EXPR, new Expr[] { x, e1, e2 });
 
 	}
 

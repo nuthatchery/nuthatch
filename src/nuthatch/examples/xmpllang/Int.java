@@ -1,13 +1,13 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang;
 
-public class Var extends Expr {
+public class Int extends Expr {
 
-	private String name;
+	private int value;
 
 
-	public Var(String s) {
-		super("Var", Type.VAR, new Expr[] {});
-		name = s;
+	public Int(int i) {
+		super("Int", Type.INT, new Expr[] {});
+		value = i;
 	}
 
 
@@ -22,13 +22,8 @@ public class Var extends Expr {
 		if(getClass() != obj.getClass()) {
 			return false;
 		}
-		Var other = (Var) obj;
-		if(name == null) {
-			if(other.name != null) {
-				return false;
-			}
-		}
-		else if(!name.equals(other.name)) {
+		Int other = (Int) obj;
+		if(value != other.value) {
 			return false;
 		}
 		return true;
@@ -39,20 +34,20 @@ public class Var extends Expr {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + value;
 		return result;
 	}
 
 
 	@Override
 	public String toString() {
-		return String.valueOf(name);
+		return "Int("+ String.valueOf(value) +")";
 	}
 
 
 	@Override
 	protected Expr copy() {
-		return new Var(name);
+		return new Int(value);
 	}
 
 }

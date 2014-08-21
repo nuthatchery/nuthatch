@@ -1,5 +1,7 @@
 package nuthatch.pattern;
 
+import java.util.Comparator;
+
 import nuthatch.pattern.impl.AncestorPattern;
 import nuthatch.pattern.impl.AndPattern;
 import nuthatch.pattern.impl.AnyPattern;
@@ -48,7 +50,7 @@ public class PatternFactory<Value, Type> {
 
 
 	public Pattern<Value, Type> node(String name, Type type, Value data) {
-		return new NodePattern<Value, Type>(name, type, data, null);
+		return new NodePattern<Value, Type>(name, type, data, null, null);
 	}
 
 
@@ -67,15 +69,20 @@ public class PatternFactory<Value, Type> {
 	}
 
 
+	public Pattern<Value, Type> nodeType(Type type, Comparator<Type> comparator) {
+		return new NodePattern<Value, Type>(null, type, null, null, comparator);
+	}
+
+
 	@SafeVarargs
 	public final Pattern<Value, Type> nodeWithChildren(String name, Pattern<Value, Type>... children) {
-		return new NodePattern<Value, Type>(name, null, null, children);
+		return new NodePattern<Value, Type>(name, null, null, children, null);
 	}
 
 
 	@SafeVarargs
 	public final Pattern<Value, Type> nodeWithChildren(String name, Type type, Value data, Pattern<Value, Type>... children) {
-		return new NodePattern<Value, Type>(name, type, data, children);
+		return new NodePattern<Value, Type>(name, type, data, children, null);
 	}
 
 

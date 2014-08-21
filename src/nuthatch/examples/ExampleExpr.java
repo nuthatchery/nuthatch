@@ -1,7 +1,7 @@
 package nuthatch.examples;
 
-import static nuthatch.examples.exprlang.ExprPatterns.*;
-import nuthatch.examples.exprlang.Expr;
+import static nuthatch.examples.xmpllang.expronly.ExprPatterns.*;
+import nuthatch.examples.xmpllang.Expr;
 
 public class ExampleExpr {
 	static final String x = "x";

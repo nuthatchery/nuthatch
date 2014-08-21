@@ -1,8 +1,7 @@
 package nuthatch.library.impl.actions;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
 import nuthatch.library.Action;
 import nuthatch.library.MatchAction;
@@ -10,22 +9,30 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.EnvironmentFactory;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
+import nuthatch.util.Pair;
 import nuthatch.walker.Walker;
 
+/**
+ * Note: this class searches the patterns in order, this could certainly be
+ * improved.
+ * 
+ * Because of this, the behaviour of {@link nuthatch.library.MatchBuilder#one()}
+ * and {@link nuthatch.library.MatchBuilder#one()} is the same.
+ */
 final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements Action<W>, MatchAction<Value, Type, C, W> {
 
-	private Map<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> patterns;
-	private boolean matchOnlyOne;
+	private List<Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>>> patterns;
+	private boolean matchOnlyOne; // pick the first match
 
 
-	public Match(Map<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> patterns) {
+	public Match(List<Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>>> patterns) {
 		this(patterns, false);
 	}
 
 
-	public Match(Map<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> patterns, boolean matchOnlyOne) {
+	public Match(List<Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>>> patterns, boolean matchOnlyOne) {
 		super();
-		this.patterns = new HashMap<>(patterns);
+		this.patterns = new ArrayList<>(patterns);
 		this.matchOnlyOne = matchOnlyOne;
 	}
 
@@ -37,26 +44,26 @@ final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walk
 
 	public Match(Pattern<Value, Type> pattern, MatchAction<Value, Type, C, W> ifMatched, boolean matchOnlyOne) {
 		super();
-		this.patterns = new HashMap<>();
-		this.patterns.put(pattern, ifMatched);
+		this.patterns = new ArrayList<>();
+		this.patterns.add(new Pair<>(pattern, ifMatched));
 		this.matchOnlyOne = matchOnlyOne;
 	}
 
 
 	@Override
 	public void init(W walker) {
-		for(MatchAction<Value, Type, C, W> a : patterns.values()) {
-			a.init(walker);
+		for(Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> a : patterns) {
+			a.getSecond().init(walker);
 		}
 	}
 
 
 	@Override
 	public int step(W walk) {
-		for(Entry<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> entry : patterns.entrySet()) {
+		for(Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> entry : patterns) {
 			Environment<C> env = EnvironmentFactory.env();
-			if(walk.match(entry.getKey(), env)) {
-				int r = entry.getValue().step(walk, env);
+			if(walk.match(entry.getFirst(), env)) {
+				int r = entry.getSecond().step(walk, env);
 				if(r != Action.PROCEED) {
 					return r;
 				}
@@ -71,9 +78,9 @@ final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walk
 
 	@Override
 	public int step(W walk, Environment<C> env) {
-		for(Entry<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> entry : patterns.entrySet()) {
-			if(walk.match(entry.getKey(), env)) {
-				int r = entry.getValue().step(walk, env);
+		for(Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> entry : patterns) {
+			if(walk.match(entry.getFirst(), env)) {
+				int r = entry.getSecond().step(walk, env);
 				if(r != Action.PROCEED) {
 					return r;
 				}

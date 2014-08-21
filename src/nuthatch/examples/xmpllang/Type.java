@@ -1,11 +1,23 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang;
+
+import java.util.Comparator;
 
 public class Type {
 	String typeName;
 	public static final Type INT = new Type("int");
 	public static final Type BOOL = new Type("bool");
 	public static final Type VAR = new Type("var");
-	public static final Type APPLY = new Type("apply");
+	public static final Type EXPR = new Type("expr");
+	public static final Type STAT = new Type("stat");
+
+
+	public static final Comparator<Type> isSubtype = new Comparator<Type>() {
+
+		@Override
+		public int compare(Type o1, Type o2) {
+			return o1.isSubtypeOf(o2) ? 0 : 1;
+		}
+	};
 
 
 	public Type(String name) {
@@ -43,6 +55,11 @@ public class Type {
 		int result = 1;
 		result = prime * result + ((typeName == null) ? 0 : typeName.hashCode());
 		return result;
+	}
+
+
+	public boolean isSubtypeOf(Type t) {
+		return t == this || (t == EXPR && (this == INT || this == BOOL || this == VAR));
 	}
 
 

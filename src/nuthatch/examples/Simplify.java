@@ -1,13 +1,13 @@
 package nuthatch.examples;
 
-import static nuthatch.examples.exprlang.ExprPatterns.Add;
-import static nuthatch.examples.exprlang.ExprPatterns.Int;
-import static nuthatch.examples.exprlang.ExprPatterns.var;
+import static nuthatch.examples.xmpllang.expronly.ExprPatterns.Add;
+import static nuthatch.examples.xmpllang.expronly.ExprPatterns.Int;
+import static nuthatch.examples.xmpllang.expronly.ExprPatterns.var;
 import static nuthatch.library.JoinPoints.up;
-import nuthatch.examples.exprlang.Expr;
-import nuthatch.examples.exprlang.ExprCursor;
-import nuthatch.examples.exprlang.ExprWalker;
-import nuthatch.examples.exprlang.Type;
+import nuthatch.examples.xmpllang.Expr;
+import nuthatch.examples.xmpllang.Type;
+import nuthatch.examples.xmpllang.expronly.ExprCursor;
+import nuthatch.examples.xmpllang.expronly.ExprWalker;
 import nuthatch.library.Action;
 import nuthatch.library.ActionFactory;
 import nuthatch.library.BaseWalk;
@@ -24,7 +24,7 @@ public class Simplify extends BaseWalk<ExprWalker> {
 			if(w.match(Add(var("x"), Int(0)))) {
 				w.replace(var("x"));
 			}
-			//	else if(w.match(Mul(var("x"), Int(0)))) {
+			//	else if(w.match(Seq(var("x"), Int(0)))) {
 			//		w.replace(Int(0));
 			//	}
 		}
@@ -34,7 +34,7 @@ public class Simplify extends BaseWalk<ExprWalker> {
 
 	public static void main(String[] args) {
 		Expr e = Add(Int(5), Add(Add(Int(7), Int(3)), Int(0)));
-		//e = Mul(Int(1), Mul(Int(1), Mul(Int(1), Int(0))));
+		//e = Seq(Int(1), Seq(Int(1), Seq(Int(1), Int(0))));
 		System.out.println("Input:  " + e);
 
 		ExprWalker walker = new ExprWalker(new ExprCursor(e), new Simplify());

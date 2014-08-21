@@ -1,7 +1,7 @@
 package nuthatch.library.impl.actions;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import nuthatch.library.Action;
 import nuthatch.library.MatchAction;
@@ -10,11 +10,12 @@ import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
+import nuthatch.util.Pair;
 import nuthatch.walker.Walker;
 
 final class MatchActionBuilder<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements MatchBuilder<Value, Type, C, W> {
 
-	private Map<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> map = new HashMap<>();
+	private List<Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>>> patterns = new ArrayList<>();
 	protected BuildContext<Value, Type, C> context;
 
 
@@ -24,14 +25,20 @@ final class MatchActionBuilder<Value, Type, C extends TreeCursor<Value, Type>, W
 
 
 	@Override
+	public void add(Pattern<Value, Type> pattern, Action<W> action) {
+		patterns.add(new Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>>(pattern, new StandardActionFactory.NoMatchAction<Value, Type, C, W>(action)));
+	}
+
+
+	@Override
 	public void add(Pattern<Value, Type> pattern, MatchAction<Value, Type, C, W> action) {
-		map.put(pattern, action);
+		patterns.add(new Pair<>(pattern, action));
 	}
 
 
 	@Override
 	public void add(Pattern<Value, Type> pattern, final Pattern<Value, Type> replacement) {
-		map.put(pattern, new MatchAction<Value, Type, C, W>() {
+		patterns.add(new Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>>(pattern, new MatchAction<Value, Type, C, W>() {
 
 			@Override
 			public void init(W walker) {
@@ -43,31 +50,44 @@ final class MatchActionBuilder<Value, Type, C extends TreeCursor<Value, Type>, W
 				walker.replace(replacement.build(context, env));
 				return PROCEED;
 			}
-		});
+		}));
 	}
 
 
 	@Override
 	public Action<W> all() {
-		return new Match<Value, Type, C, W>(map, false);
+		return new Match<Value, Type, C, W>(patterns, false);
 	}
 
 
 	@Override
 	public MatchAction<Value, Type, C, W> allEnv() {
-		return new Match<Value, Type, C, W>(map, false);
+		return new Match<Value, Type, C, W>(patterns, false);
+	}
+
+
+	@Override
+	public Action<W> first() {
+		return new Match<Value, Type, C, W>(patterns, true);
+	}
+
+
+	@Override
+	public MatchAction<Value, Type, C, W> firstEnv() {
+		return new Match<Value, Type, C, W>(patterns, true);
+
 	}
 
 
 	@Override
 	public Action<W> one() {
-		return new Match<Value, Type, C, W>(map, true);
+		return new Match<Value, Type, C, W>(patterns, true);
 	}
 
 
 	@Override
 	public MatchAction<Value, Type, C, W> oneEnv() {
-		return new Match<Value, Type, C, W>(map, true);
+		return new Match<Value, Type, C, W>(patterns, true);
 
 	}
 }

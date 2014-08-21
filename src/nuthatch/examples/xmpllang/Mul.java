@@ -1,9 +1,9 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang;
 
 public class Mul extends Expr {
 
 	public Mul(Expr e1, Expr e2) {
-		super("Mul", Type.APPLY, new Expr[] { e1, e2 });
+		super("Seq", Type.EXPR, new Expr[] { e1, e2 });
 
 	}
 

@@ -1,5 +1,7 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang.expronly;
 
+import nuthatch.examples.xmpllang.Expr;
+import nuthatch.examples.xmpllang.Type;
 import nuthatch.library.ActionFactory;
 import nuthatch.library.FactoryFactory;
 import nuthatch.library.Walk;

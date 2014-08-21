@@ -21,6 +21,17 @@ public interface MatchBuilder<Value, Type, C extends TreeCursor<Value, Type>, W 
 	 * @param action
 	 *            The action to be taken if the patten matches
 	 */
+	void add(Pattern<Value, Type> pattern, Action<W> action);
+
+
+	/**
+	 * Add a new pattern and action.
+	 * 
+	 * @param pattern
+	 *            The pattern
+	 * @param action
+	 *            The action to be taken if the patten matches
+	 */
 	void add(Pattern<Value, Type> pattern, MatchAction<Value, Type, C, W> action);
 
 
@@ -50,7 +61,23 @@ public interface MatchBuilder<Value, Type, C extends TreeCursor<Value, Type>, W 
 
 
 	/**
-	 * @return An action that will execute the actions for only one matching
+	 * @return An action that will execute the actions for only the first
+	 *         matching
+	 *         pattern
+	 */
+	Action<W> first();
+
+
+	/**
+	 * @return An action that propagates the surrounding environment and will
+	 *         execute the actions for only the first matching pattern
+	 */
+	MatchAction<Value, Type, C, W> firstEnv();
+
+
+	/**
+	 * @return An action that will execute the actions for only one arbitrary
+	 *         matching
 	 *         pattern
 	 */
 	Action<W> one();
@@ -58,7 +85,9 @@ public interface MatchBuilder<Value, Type, C extends TreeCursor<Value, Type>, W 
 
 	/**
 	 * @return An action that propagates the surrounding environment and will
-	 *         execute the actions for only one matchin pattern
+	 *         execute the actions for only one arbitraty matching pattern
 	 */
 	MatchAction<Value, Type, C, W> oneEnv();
+
+
 }

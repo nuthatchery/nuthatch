@@ -19,6 +19,7 @@ public class ToLaTeX {
 	private static final int MODE_PREAMBLE = 1 << 2;
 	private static final ActionFactory<String, String, TreeCursor<String, String>, SimpleWalker<String, String>> AF = FactoryFactory.getActionFactory();
 
+
 	public static void main(String[] args) {
 		int mode = 0;
 		TraceVisit traceVisit = new TraceVisit();
@@ -37,9 +38,9 @@ public class ToLaTeX {
 			case "-bu":
 				strat = bottomup;
 				break;
-				//case "-in":
-				//	strat = inorder;
-				//	break;
+			//case "-in":
+			//	strat = inorder;
+			//	break;
 			case "-w":
 				mode |= MODE_WALK;
 				break;

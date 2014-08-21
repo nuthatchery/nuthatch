@@ -1,5 +1,12 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang.expronly;
 
+import nuthatch.examples.xmpllang.Add;
+import nuthatch.examples.xmpllang.Expr;
+import nuthatch.examples.xmpllang.Int;
+import nuthatch.examples.xmpllang.Let;
+import nuthatch.examples.xmpllang.Mul;
+import nuthatch.examples.xmpllang.Type;
+import nuthatch.examples.xmpllang.Var;
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.PatternFactory;
 
@@ -67,17 +74,17 @@ public class ExprPatterns {
 
 
 	public static final Pattern<Expr, Type> Mul(Expr e1, Pattern<Expr, Type> e2) {
-		return PF.nodeWithChildren("Mul", PF.tree(new ExprCursor(e1)), e2);
+		return PF.nodeWithChildren("Seq", PF.tree(new ExprCursor(e1)), e2);
 	}
 
 
 	public static final Pattern<Expr, Type> Mul(Pattern<Expr, Type> e1, Expr e2) {
-		return PF.nodeWithChildren("Mul", e1, PF.tree(new ExprCursor(e2)));
+		return PF.nodeWithChildren("Seq", e1, PF.tree(new ExprCursor(e2)));
 	}
 
 
 	public static final Pattern<Expr, Type> Mul(Pattern<Expr, Type> e1, Pattern<Expr, Type> e2) {
-		return PF.nodeWithChildren("Mul", e1, e2);
+		return PF.nodeWithChildren("Seq", e1, e2);
 	}
 
 

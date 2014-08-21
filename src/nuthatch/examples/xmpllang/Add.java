@@ -1,9 +1,9 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang;
 
 public class Add extends Expr {
 
 	public Add(Expr e1, Expr e2) {
-		super("Add", Type.APPLY, new Expr[] { e1, e2 });
+		super("Add", Type.EXPR, new Expr[] { e1, e2 });
 
 	}
 

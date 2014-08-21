@@ -1,5 +1,7 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang.expronly;
 
+import nuthatch.examples.xmpllang.Expr;
+import nuthatch.examples.xmpllang.Type;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.TreeHandle;
 import nuthatch.tree.impl.AbstractTreeCursor;
@@ -39,6 +41,12 @@ public class ExprCursor extends AbstractTreeCursor<Expr, Type, Expr> {
 
 
 	@Override
+	public int getArity() {
+		return getCurrent().arity();
+	}
+
+
+	@Override
 	public TreeHandle<Expr, Type> getBranchHandle(int i) {
 		ExprCursor copy = copy();
 		copy.go(i);
@@ -67,12 +75,6 @@ public class ExprCursor extends AbstractTreeCursor<Expr, Type, Expr> {
 	@Override
 	public String getName() {
 		return getCurrent().getName();
-	}
-
-
-	@Override
-	public int getArity() {
-		return getCurrent().arity();
 	}
 
 

@@ -1,5 +1,7 @@
 package nuthatch.library.impl.actions;
 
+import java.util.Comparator;
+
 import nuthatch.library.Action;
 import nuthatch.library.ActionBuilder;
 import nuthatch.library.BaseAction;
@@ -30,19 +32,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public MatchAction<Value, Type, C, W> action(final Action<W> action) {
-		return new MatchAction<Value, Type, C, W>() {
-
-			@Override
-			public void init(W walker) {
-				action.init(walker);
-			}
-
-
-			@Override
-			public int step(W walker, Environment<C> env) {
-				return action.step(walker);
-			}
-		};
+		return new NoMatchAction<Value, Type, C, W>(action);
 	}
 
 
@@ -56,7 +46,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public Action<W> afterChild(Action<W> action) {
-		return new AfterChild<W>(action);
+		return new CondActions.AfterChild<W>(action);
 	}
 
 
@@ -69,7 +59,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public Action<W> atLeaf(Action<W> action) {
-		return new Leaf<W>(action);
+		return new CondActions.Leaf<W>(action);
 	}
 
 
@@ -82,7 +72,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public Action<W> atNonLeaf(Action<W> action) {
-		return new Leaf<W>(action, true);
+		return new CondActions.Leaf<W>(action, true);
 	}
 
 
@@ -95,7 +85,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public Action<W> atRoot(Action<W> action) {
-		return new Root<W>(action);
+		return new CondActions.Root<W>(action);
 	}
 
 
@@ -109,7 +99,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public Action<W> beforeChild(Action<W> action) {
-		return new BeforeChild<W>(action);
+		return new CondActions.BeforeChild<W>(action);
 	}
 
 
@@ -150,7 +140,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public Action<W> down(Action<W> action) {
-		return new Down<W>(action);
+		return new CondActions.Down<W>(action);
 	}
 
 
@@ -165,13 +155,37 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public Action<W> downup(Action<W> downAction, Action<W> upAction) {
-		return new Combine<W>(new Down<W>(downAction), new Up<W>(upAction));
+		return new Combine<W>(new CondActions.Down<W>(downAction), new CondActions.Up<W>(upAction));
+	}
+
+
+	@Override
+	public Action<W> from(int branch, Action<W> action) {
+		return new CondActions.From(branch, action);
 	}
 
 
 	@Override
 	public Action<W> go(int branch) {
 		return new GoAction<W>(branch);
+	}
+
+
+	@Override
+	public Action<W> hasArity(int arity, Action<W> action) {
+		return new CondActions.HasArity<>(arity, action);
+	}
+
+
+	@Override
+	public Action<W> hasType(Type type, Action<W> action) {
+		return new CondActions.HasType<Type, W>(type, action);
+	}
+
+
+	@Override
+	public Action<W> hasType(Type type, Comparator<Type> comp, Action<W> action) {
+		return new CondActions.HasTypeComp<Type, W>(type, comp, action);
 	}
 
 
@@ -257,7 +271,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	 */
 	@Override
 	public Action<W> up(Action<W> action) {
-		return new Up<W>(action);
+		return new CondActions.Up<W>(action);
 	}
 
 
@@ -283,7 +297,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	}
 
 
-	private static final class GoAction<W extends Walker<?, ?>> extends BaseAction<W> {
+	static final class GoAction<W extends Walker<?, ?>> extends BaseAction<W> {
 		private final int branch;
 
 
@@ -299,7 +313,29 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	}
 
 
-	private static final class NopAction<W extends Walker<?, ?>> extends BaseAction<W> {
+	static final class NoMatchAction<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements MatchAction<Value, Type, C, W> {
+		private final Action<W> action;
+
+
+		NoMatchAction(Action<W> action) {
+			this.action = action;
+		}
+
+
+		@Override
+		public void init(W walker) {
+			action.init(walker);
+		}
+
+
+		@Override
+		public int step(W walker, Environment<C> env) {
+			return action.step(walker);
+		}
+	}
+
+
+	static final class NopAction<W extends Walker<?, ?>> extends BaseAction<W> {
 		@Override
 		public int step(W walker) {
 			return PROCEED;

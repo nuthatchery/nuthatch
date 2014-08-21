@@ -1,5 +1,7 @@
 package nuthatch.library;
 
+import java.util.Comparator;
+
 import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
@@ -95,11 +97,76 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 
 
 	/**
+	 * Create conditional action.
+	 * 
+	 * 
+	 * @param branch
+	 *            The branch number to check form
+	 * @param action
+	 *            Action to be performed
+	 * @return An action that performs 'action' only if we arrived at the
+	 *         current node through 'branch'
+	 */
+	public Action<W> from(int branch, Action<W> action);
+
+
+	/**
 	 * @param b
 	 *            A branch number
 	 * @return An action that override the next step with b.
 	 */
 	public Action<W> go(int b);
+
+
+	/**
+	 * Create conditional action.
+	 * 
+	 * 
+	 * @param arity
+	 *            The desired arity
+	 * @param action
+	 *            Action to be performed
+	 * @return An action that performs 'action' only if the current node has the
+	 *         given arity
+	 */
+	public Action<W> hasArity(int arity, Action<W> action);
+
+
+	/**
+	 * Create conditional action.
+	 * 
+	 * Types are compared using {@link Type#equals(Object)}.
+	 * 
+	 * @param type
+	 *            The desired type
+	 * @param action
+	 *            Action to be performed
+	 * @return An action that performs 'action' only if the current node has the
+	 *         given type
+	 */
+	public Action<W> hasType(Type type, Action<W> action);
+
+
+	/**
+	 * Create conditional action.
+	 * 
+	 * Types are compared using the supplied comparator, and the
+	 * action is only taken if it returns 0. The type of the current node will
+	 * the be the first argument, and the supplied type will be the second.
+	 * 
+	 * E.g., the action will be: if comparator.compare(walker.getType(), type)
+	 * == 0 then perform 'action'.
+	 * 
+	 * @param type
+	 *            The desired type
+	 * @param comparator
+	 *            A comparator to determine if two types are equal
+	 * @param action
+	 *            Action to be performed
+	 * @return An action that performs 'action' only if the current node has the
+	 *         given type
+	 */
+	public Action<W> hasType(Type type, Comparator<Type> comparator, Action<W> action);
 
 
 	/**

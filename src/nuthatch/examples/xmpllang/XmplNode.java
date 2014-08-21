@@ -1,14 +1,15 @@
-package nuthatch.examples.exprlang;
+package nuthatch.examples.xmpllang;
 
 import java.util.Arrays;
 
-public abstract class Expr {
-	private String name;
-	private Expr[] children;
-	private Type type;
+public abstract class XmplNode {
+
+	protected String name;
+	protected XmplNode[] children;
+	protected Type type;
 
 
-	protected Expr(String name, Type type, Expr[] children) {
+	public XmplNode(String name, Type type, XmplNode[] children) {
 		this.name = name;
 		this.type = type;
 		this.children = children.clone();
@@ -31,7 +32,7 @@ public abstract class Expr {
 		if(getClass() != obj.getClass()) {
 			return false;
 		}
-		Expr other = (Expr) obj;
+		XmplNode other = (XmplNode) obj;
 		if(!Arrays.equals(children, other.children)) {
 			return false;
 		}
@@ -55,7 +56,7 @@ public abstract class Expr {
 	}
 
 
-	public Expr getChild(int i) {
+	public XmplNode getChild(int i) {
 		return children[i];
 	}
 
@@ -81,8 +82,8 @@ public abstract class Expr {
 	}
 
 
-	public Expr replace(int i, Expr child) {
-		Expr e = copy();
+	public XmplNode replace(int i, XmplNode child) {
+		XmplNode e = copy();
 		e.children[i] = child;
 		return e;
 	}
@@ -94,7 +95,7 @@ public abstract class Expr {
 		b.append(name);
 		b.append("(");
 		boolean first = true;
-		for(Expr e : children) {
+		for(XmplNode e : children) {
 			if(!first) {
 				b.append(", ");
 			}
@@ -106,5 +107,6 @@ public abstract class Expr {
 	}
 
 
-	protected abstract Expr copy();
+	protected abstract XmplNode copy();
+
 }

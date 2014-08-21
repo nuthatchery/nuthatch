@@ -1,5 +1,7 @@
 package nuthatch.pattern.impl;
 
+import java.util.Comparator;
+
 import nuthatch.pattern.BuildContext;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
@@ -13,12 +15,14 @@ public class NodePattern<Value, Type> extends AbstractPattern<Value, Type> {
 	private final Value data;
 	private final Pattern<Value, Type>[] children;
 	private final boolean subTreeOnly;
+	private final Comparator<Type> comparator;
 
 
-	public NodePattern(String name, Type type, Value data, Pattern<Value, Type>[] children) {
+	public NodePattern(String name, Type type, Value data, Pattern<Value, Type>[] children, Comparator<Type> comparator) {
 		this.name = name;
 		this.type = type;
 		this.data = data;
+		this.comparator = comparator;
 		if(children != null) {
 			this.children = children.clone();
 			boolean tmp = true;
@@ -45,8 +49,14 @@ public class NodePattern<Value, Type> extends AbstractPattern<Value, Type> {
 		if(name != null && !name.equals(tree.getName())) {
 			return false;
 		}
-		if(type != null && !type.equals(tree.getType())) {
-			return false;
+		if(type != null) {
+			Type t = tree.getType();
+			if(comparator == null) {
+				return type.equals(t);
+			}
+			else {
+				return t != null && comparator.compare(t, type) == 0;
+			}
 		}
 		if(data != null && !data.equals(tree.getData())) {
 			return false;
