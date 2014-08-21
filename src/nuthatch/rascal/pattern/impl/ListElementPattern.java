@@ -37,7 +37,7 @@ public class ListElementPattern implements Pattern<IValue, Type> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type, T> context, Environment<T> env) throws NotBuildableException {
 		IList pre = null;
 		if(prefix != null) {
 			pre = (IList) prefix.build(context, env).getData();
@@ -84,7 +84,7 @@ public class ListElementPattern implements Pattern<IValue, Type> {
 				}
 			}
 
-			return (T) context.create(null, listType, null, childValues);
+			return context.create(null, listType, null, (T[]) childValues);
 		}
 	}
 

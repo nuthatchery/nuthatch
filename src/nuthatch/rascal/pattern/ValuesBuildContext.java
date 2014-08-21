@@ -2,7 +2,6 @@ package nuthatch.rascal.pattern;
 
 import nuthatch.pattern.BuildContext;
 import nuthatch.rascal.adapter.PdbCursor;
-import nuthatch.tree.TreeCursor;
 
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
@@ -10,7 +9,7 @@ import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 import org.eclipse.imp.pdb.facts.type.TypeStore;
 
-public class ValuesBuildContext implements BuildContext<IValue, Type> {
+public class ValuesBuildContext implements BuildContext<IValue, Type, PdbCursor> {
 	private final IValueFactory vf;
 	private final TypeFactory tf = TypeFactory.getInstance();
 	private final TypeStore ts;
@@ -24,9 +23,9 @@ public class ValuesBuildContext implements BuildContext<IValue, Type> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends TreeCursor<IValue, Type>> T create(String name, Type type, IValue value, T[] children) {
+	public PdbCursor create(String name, Type type, IValue value, PdbCursor[] children) {
 		if(value != null) {
-			return (T) new PdbCursor(value);
+			return new PdbCursor(value);
 		}
 		else if(children != null) {
 			IValue[] childValues = new IValue[children.length];
@@ -44,16 +43,16 @@ public class ValuesBuildContext implements BuildContext<IValue, Type> {
 					consType = tf.constructor(ts, type, name, childTypes);
 				}
 				// Type consType = tf.constructor(ts, type, name, childTypes);
-				return (T) new PdbCursor(vf.constructor(consType, childValues));
+				return new PdbCursor(vf.constructor(consType, childValues));
 			}
 			else if(type != null && type.isConstructor()) {
-				return (T) new PdbCursor(vf.constructor(type, childValues));
+				return new PdbCursor(vf.constructor(type, childValues));
 			}
 			else if((type != null && type.isList()) || "[]".equals(name)) {
-				return (T) new PdbCursor(vf.list(childValues));
+				return new PdbCursor(vf.list(childValues));
 			}
 			else if((type != null && type.isTuple()) || "()".equals(name)) {
-				return (T) new PdbCursor(vf.tuple(childValues));
+				return new PdbCursor(vf.tuple(childValues));
 			}
 		}
 		throw new IllegalArgumentException();

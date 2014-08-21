@@ -43,7 +43,7 @@ public class TypedConsPattern extends AbstractPattern<IValue, Type> {
 
 
 	@Override
-	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type, T> context, Environment<T> env) throws NotBuildableException {
 		if(consType == null) {
 			throw new NotBuildableException("Constructor pattern must be typed in order to build");
 		}

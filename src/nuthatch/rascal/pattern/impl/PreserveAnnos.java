@@ -25,7 +25,7 @@ public class PreserveAnnos extends MinimalAbstractPattern<IValue, Type> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type, T> context, Environment<T> env) throws NotBuildableException {
 		T patBuild = pat.build(context, env);
 		IValue patValue = patBuild.getData();
 		IValue annoValue = annoSrc.build(context, env).getData();

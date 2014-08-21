@@ -44,7 +44,7 @@ public class ListPattern extends AbstractPattern<IValue, Type> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type, T> context, Environment<T> env) throws NotBuildableException {
 		List<T> childValues = new ArrayList<T>(children.length);
 
 		for(Pattern<IValue, Type> child : children) {

@@ -38,7 +38,7 @@ public class TuplePattern extends AbstractPattern<IValue, Type> {
 
 
 	@Override
-	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type, T> context, Environment<T> env) throws NotBuildableException {
 		@SuppressWarnings("unchecked")
 		T[] childValues = (T[]) new TreeCursor[children.length];
 		for(int i = 0; i < children.length; i++) {

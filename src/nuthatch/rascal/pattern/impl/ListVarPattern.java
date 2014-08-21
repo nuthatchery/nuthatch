@@ -19,7 +19,7 @@ public class ListVarPattern implements Pattern<IValue, Type> {
 
 
 	@Override
-	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type> context, Environment<T> env) throws NotBuildableException {
+	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type, T> context, Environment<T> env) throws NotBuildableException {
 		TreeCursor<IValue, Type> binding = env.get(name);
 		if(binding == null) {
 			throw new NotBuildableException("Variable not bound");
