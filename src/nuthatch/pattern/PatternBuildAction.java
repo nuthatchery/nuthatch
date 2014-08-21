@@ -3,7 +3,7 @@ package nuthatch.pattern;
 import nuthatch.pattern.impl.MinimalAbstractPattern;
 import nuthatch.tree.TreeCursor;
 
-public abstract class PatternBuildAction<Value, Type> extends MinimalAbstractPattern<Value, Type> {
+public abstract class PatternBuildAction<Value, Type, C extends TreeCursor<Value, Type>> extends MinimalAbstractPattern<Value, Type> {
 
 	private final Pattern<Value, Type> pat;
 
@@ -16,11 +16,11 @@ public abstract class PatternBuildAction<Value, Type> extends MinimalAbstractPat
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends TreeCursor<Value, Type>> T build(BuildContext<Value, Type, T> context, Environment<T> env) throws NotBuildableException {
-		return (T) build(pat.build(context, env));
+		return (T) build((C) pat.build(context, env));
 	}
 
 
-	public abstract TreeCursor<Value, Type> build(TreeCursor<Value, Type> tree);
+	public abstract TreeCursor<Value, Type> build(C tree);
 
 
 	@Override
