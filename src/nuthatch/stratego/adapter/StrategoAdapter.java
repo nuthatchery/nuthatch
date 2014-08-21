@@ -58,7 +58,7 @@ public class StrategoAdapter {
 	 *            Path of the input file
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the input file or parse table wasn't found
 	 * @throws IOException
@@ -86,7 +86,7 @@ public class StrategoAdapter {
 	 *            Path of the input file
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the input file or parse table wasn't found
 	 * @throws IOException
@@ -116,7 +116,7 @@ public class StrategoAdapter {
 	 *            The start symbol, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the input file or parse table wasn't found
 	 * @throws IOException
@@ -149,7 +149,7 @@ public class StrategoAdapter {
 	 *            The start symbol, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the input file or parse table wasn't found
 	 * @throws IOException
@@ -182,7 +182,7 @@ public class StrategoAdapter {
 	 *            The start symbol, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the input file or parse table wasn't found
 	 * @throws IOException
@@ -217,7 +217,7 @@ public class StrategoAdapter {
 	 *            The start symbol, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the parse table wasn't found
 	 * @throws IOException
@@ -250,7 +250,7 @@ public class StrategoAdapter {
 	 *            The start symbol, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the parse table wasn't found
 	 * @throws IOException
@@ -281,7 +281,7 @@ public class StrategoAdapter {
 	 *            The file name, for error reporting, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the parse table wasn't found
 	 * @throws IOException
@@ -311,7 +311,7 @@ public class StrategoAdapter {
 	 *            The file name, for error reporting, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the parse table wasn't found
 	 * @throws IOException
@@ -343,7 +343,7 @@ public class StrategoAdapter {
 	 *            The start symbol, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the parse table wasn't found
 	 * @throws IOException
@@ -376,7 +376,7 @@ public class StrategoAdapter {
 	 *            The start symbol, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the parse table wasn't found
 	 * @throws IOException
@@ -409,7 +409,7 @@ public class StrategoAdapter {
 	 *            The start symbol, or null
 	 * @param parseTable
 	 *            Path of the parse table
-	 * @return An imploded XmplNode of the file
+	 * @return An imploded AST of the file
 	 * @throws FileNotFoundException
 	 *             if the parse table wasn't found
 	 * @throws IOException
