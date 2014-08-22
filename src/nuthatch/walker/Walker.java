@@ -48,19 +48,23 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 
 
 	/**
+	 * @return True if the walker is currently walking backwards (i.e., default walk is right-to-left).
+	 */
+	boolean isReversed();
+
+
+	/**
 	 * Check if current node is root.
 	 * 
 	 * @return True if current node has no parent
 	 */
 	boolean isRoot();
 
-
 	/**
 	 * @return True if the walker is currently running (i.e., isAtTop() is
 	 *         false)
 	 */
 	boolean isRunning();
-
 
 	/**
 	 * Uses the local step environment.
@@ -72,8 +76,6 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 * @return True if the pattern matched.
 	 */
 	boolean match(Pattern<Value, Type> pat);
-
-
 	/**
 	 * The environment is untouched if this method returns false.
 	 * 
@@ -136,6 +138,12 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 *             if the replacement tree is of an incompatible type
 	 */
 	void replace(TreeCursor<Value, Type> tree) throws TypeMismatch;
+
+
+	/**
+	 * Toggle direction of default walk (left-to-right vs right-to-left).
+	 */
+	void reverse();
 
 
 	/**

@@ -21,11 +21,10 @@ public class ExprPatterns {
 	public static final Expr Add(Expr e1, Expr e2) {
 		return new Add(e1, e2);
 	}
-
-
 	public static final Pattern<Expr, Type> Add(Expr e1, Pattern<Expr, Type> e2) {
 		return PF.nodeWithChildren("Add", PF.tree(new ExprCursor(e1)), e2);
 	}
+
 
 
 	public static final Pattern<Expr, Type> Add(Pattern<Expr, Type> e1, Expr e2) {
@@ -45,6 +44,11 @@ public class ExprPatterns {
 
 	public static final Pattern<Expr, Type> and(Pattern<Expr, Type> a, Pattern<Expr, Type> b) {
 		return PF.and(a, b);
+	}
+
+
+	public static final Pattern<Expr, Type> descendant(Pattern<Expr, Type> descendant) {
+		return PF.descendant(descendant);
 	}
 
 

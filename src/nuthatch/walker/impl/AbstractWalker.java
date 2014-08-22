@@ -21,6 +21,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
+	protected static int direction = 1;
 
 	private final TreeCursor<Value, Type> rootCursor;
 	/**
@@ -81,7 +82,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 	@Override
 	public boolean from(int i) {
-		if(i == last) {
+		if(i == LAST) {
 			return current.getFromBranch() == current.getArity();
 		}
 		else {
@@ -245,16 +246,20 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
+	public boolean isReversed() {
+		return direction == -1;
+	}
+
+
+	@Override
 	public boolean isRoot() {
 		return current.isAtRoot();
 	}
-
 
 	@Override
 	public boolean isRunning() {
 		return current != null && current.isAtTop();
 	}
-
 
 	@Override
 	public Iterator<TreeCursor<Value, Type>> iterator() {
@@ -311,6 +316,12 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
+	public void reverse() {
+		direction = -direction;
+	}
+
+
+	@Override
 	public void start() {
 		step.init(this);
 		current = rootCursor.copy();
@@ -319,7 +330,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 				localEnv = null;
 				int go = step.step(this);
 				if(go == Action.NEXT) {
-					go = from() + 1;
+					go = from() + direction;
 				}
 				go(go);
 			}
@@ -350,13 +361,11 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 		subWalk(copySubtree(), step).start();
 	}
 
-
 	public void walkSubtreeAndReplace(Walk<E> step) {
 		E walk = subWalk(copySubtree(), step);
 		walk.start();
 		replace(walk);
 	}
-
 
 	private boolean dataInvariant() {
 

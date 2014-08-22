@@ -12,7 +12,7 @@ public class JoinPoints {
 
 
 	public static <W extends Walker<?, ?>> boolean beforeChild(W walker) {
-		return !(walker.isAtLeaf() || walker.from(Action.LAST));
+		return !(walker.isAtLeaf() || (walker.isReversed() ? walker.from(Action.FIRST) : walker.from(Action.LAST)));
 	}
 
 
@@ -42,7 +42,7 @@ public class JoinPoints {
 
 
 	public static <W extends Walker<?, ?>> boolean up(W walker) {
-		return walker.isAtLeaf() || walker.from(Action.LAST);
+		return walker.isAtLeaf() || (walker.isReversed() ? walker.from(Action.FIRST) : walker.from(Action.LAST));
 	}
 
 }

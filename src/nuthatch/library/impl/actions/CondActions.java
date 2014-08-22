@@ -3,6 +3,7 @@ package nuthatch.library.impl.actions;
 import java.util.Comparator;
 
 import nuthatch.library.Action;
+import nuthatch.library.JoinPoints;
 import nuthatch.walker.Walker;
 
 
@@ -16,7 +17,7 @@ final class CondActions {
 
 		@Override
 		public boolean cond(W walker) {
-			return !walker.from(PARENT);
+			return JoinPoints.afterChild(walker);
 		}
 
 	}
@@ -31,7 +32,8 @@ final class CondActions {
 
 		@Override
 		public boolean cond(W walker) {
-			return !walker.isAtLeaf() && !walker.from(LAST);
+			return JoinPoints.beforeChild(walker);
+
 		}
 
 	}
@@ -45,7 +47,7 @@ final class CondActions {
 
 		@Override
 		public boolean cond(W walker) {
-			return walker.from(PARENT);
+			return JoinPoints.down(walker);
 		}
 	}
 
@@ -165,9 +167,8 @@ final class CondActions {
 
 		@Override
 		public boolean cond(W walker) {
-			return walker.isAtLeaf() || walker.from(LAST);
+			return JoinPoints.up(walker);
 		}
 	}
-
 
 }

@@ -104,6 +104,7 @@ public class EvalOrderWalk implements Walk<XmplWalker> {
 			System.out.println(Printer.toTerm(e) + ":");
 			XmplWalker walker = new XmplWalker(e, new EvalOrderWalk(af.seq(printAction, inline)));
 			// run it
+			walker.reverse();
 			walker.start();
 			System.out.println(" => " + Printer.toTerm(walker.getData()));
 			System.out.println();

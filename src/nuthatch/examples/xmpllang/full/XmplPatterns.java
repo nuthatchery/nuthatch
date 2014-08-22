@@ -31,7 +31,6 @@ public class XmplPatterns {
 		return new Add(e1, e2);
 	}
 
-
 	public static final Pattern<XmplNode, Type> Add(Pattern<XmplNode, Type> e1, Pattern<XmplNode, Type> e2) {
 		return PF.nodeWithChildren("Add", e1, e2);
 	}
@@ -74,6 +73,11 @@ public class XmplPatterns {
 
 	public static final Stat Declare(Var x, Expr e, Stat s) {
 		return new Declare(x, e, s);
+	}
+
+
+	public static final Pattern<XmplNode, Type> descendant(Pattern<XmplNode, Type> descendant) {
+		return PF.descendant(descendant);
 	}
 
 

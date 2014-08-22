@@ -30,7 +30,6 @@ public class StaticPatternFactory {
 		return PF.ancestor(ancestor);
 	}
 
-
 	/**
 	 * @see PatternFactory#and(Pattern, Pattern)
 	 */
@@ -42,12 +41,16 @@ public class StaticPatternFactory {
 		return a;
 	}
 
-
 	/**
 	 * @see PatternFactory#children(Pattern[])
 	 */
 	public static final <Value, Type> Pattern<Value, Type> children(Pattern<Value, Type>... children) {
 		return PF.children(children);
+	}
+
+
+	public static final <Value, Type> Pattern<Value, Type> descendant(Pattern<Value, Type> descendant) {
+		return PF.descendant(descendant);
 	}
 
 
