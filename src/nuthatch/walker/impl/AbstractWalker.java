@@ -21,7 +21,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
-	protected static int direction = 1;
+	protected  int direction = 1;
 
 	private final TreeCursor<Value, Type> rootCursor;
 	/**
