@@ -59,7 +59,7 @@ public class ListPattern extends AbstractPattern<IValue, Type> {
 
 		}
 
-		return context.create("[]", type, null, (T[]) childValues.toArray(new TreeCursor[childValues.size()]));
+		return context.create("[]", type, null, (T[]) childValues.toArray(new ValuesCursor[childValues.size()]));
 	}
 
 

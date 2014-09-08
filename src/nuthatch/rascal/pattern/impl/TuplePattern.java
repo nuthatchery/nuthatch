@@ -5,6 +5,7 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.impl.AbstractPattern;
+import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.tree.TreeCursor;
 
 import org.eclipse.imp.pdb.facts.IValue;
@@ -40,7 +41,7 @@ public class TuplePattern extends AbstractPattern<IValue, Type> {
 	@Override
 	public <T extends TreeCursor<IValue, Type>> T build(BuildContext<IValue, Type, T> context, Environment<T> env) throws NotBuildableException {
 		@SuppressWarnings("unchecked")
-		T[] childValues = (T[]) new TreeCursor[children.length];
+		T[] childValues = (T[]) new ValuesCursor[children.length];
 		for(int i = 0; i < children.length; i++) {
 			childValues[i] = children[i].build(context, env);
 		}

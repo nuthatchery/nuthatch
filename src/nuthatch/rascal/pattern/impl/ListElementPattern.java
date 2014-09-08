@@ -68,7 +68,7 @@ public class ListElementPattern implements Pattern<IValue, Type> {
 			if(suf != null) {
 				len += suf.length();
 			}
-			TreeCursor<IValue, Type>[] childValues = new TreeCursor[len];
+			TreeCursor<IValue, Type>[] childValues = new ValuesCursor[len];
 			int i = 0;
 			if(pre != null) {
 				for(IValue v : pre) {

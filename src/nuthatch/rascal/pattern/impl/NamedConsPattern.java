@@ -5,6 +5,7 @@ import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.pattern.impl.AbstractPattern;
+import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.tree.TreeCursor;
 
 import org.eclipse.imp.pdb.facts.IValue;
@@ -45,7 +46,7 @@ public class NamedConsPattern extends AbstractPattern<IValue, Type> {
 			throw new NotBuildableException("Constructor pattern must be typed in order to build");
 		}
 		@SuppressWarnings("unchecked")
-		T[] childValues = (T[]) new TreeCursor[children.length];
+		T[] childValues = (T[]) new ValuesCursor[children.length];
 		for(int i = 0; i < children.length; i++) {
 			childValues[i] = children[i].build(context, env);
 		}
