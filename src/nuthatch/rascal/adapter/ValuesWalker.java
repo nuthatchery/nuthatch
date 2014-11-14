@@ -43,6 +43,11 @@ public class ValuesWalker extends AbstractWalker<IValue, Type, ValuesWalker> {
 	}
 
 
+	public void replace(IValue value) {
+		replace(new ValuesCursor(value));
+	}
+
+
 	@Override
 	protected ValuesWalker subWalk(TreeCursor<IValue, Type> cursor, Walk<ValuesWalker> step) {
 		return new ValuesWalker((ValuesCursor) cursor, step);
