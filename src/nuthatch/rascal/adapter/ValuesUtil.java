@@ -2,8 +2,12 @@ package nuthatch.rascal.adapter;
 
 import nuthatch.library.Action;
 import nuthatch.library.ActionFactory;
+import nuthatch.library.BaseMatchAction;
 import nuthatch.library.FactoryFactory;
 import nuthatch.library.MatchBuilder;
+import nuthatch.library.Walk;
+import nuthatch.pattern.Environment;
+import nuthatch.pattern.Pattern;
 import nuthatch.pattern.StaticPatternFactory;
 import nuthatch.rascal.pattern.ValuesBuildContext;
 
@@ -24,6 +28,46 @@ public class ValuesUtil {
 	}
 
 
+	public boolean contains(IValue tree, IValue pattern) {
+		Walk<ValuesWalker> walk = af.walk(af.down(af.match(StaticPatternFactory.tree(new ValuesCursor(pattern)), new BaseMatchAction<IValue, Type, ValuesCursor, ValuesWalker>() {
+
+			@Override
+			public int step(ValuesWalker walker, Environment<ValuesCursor> env) {
+				throw new Value(null);
+			}
+		})));
+		ValuesWalker valuesWalker = new ValuesWalker(tree, walk);
+
+		try {
+			valuesWalker.start();
+		}
+		catch(Value v) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public IValue findOne(IValue tree, Pattern<IValue, Type> pattern) {
+		Walk<ValuesWalker> walk = af.walk(af.down(af.match(pattern, new BaseMatchAction<IValue, Type, ValuesCursor, ValuesWalker>() {
+
+			@Override
+			public int step(ValuesWalker walker, Environment<ValuesCursor> env) {
+				throw new Value(walker.getData());
+			}
+		})));
+		ValuesWalker valuesWalker = new ValuesWalker(tree, walk);
+
+		try {
+			valuesWalker.start();
+		}
+		catch(Value v) {
+			return v.value;
+		}
+		return null;
+	}
+
+
 	public Action<ValuesWalker> renameAction(IMap renaming) {
 		MatchBuilder<IValue, Type, ValuesCursor, ValuesWalker> matchBuilder = af.matchBuilder(context);
 
@@ -35,7 +79,42 @@ public class ValuesUtil {
 	}
 
 
+	public Action<ValuesWalker> replaceAction(IValue from, IValue to) {
+		return af.match(StaticPatternFactory.tree(new ValuesCursor(from)), af.replace(StaticPatternFactory.tree(new ValuesCursor(to))));
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public Walk<ValuesWalker> replaceWalk(IValue from, IValue to, boolean recursive) {
+		if(recursive) {
+			return af.walk(af.down(replaceAction(from, to)));
+		}
+		else {
+			return af.walk(af.down(af.seq( //
+			af.match(StaticPatternFactory.tree(new ValuesCursor(from)), af.replace(StaticPatternFactory.tree(new ValuesCursor(to)))), af.go(Action.PARENT))));
+		}
+	}
+
+
+	public IValue transform(IValue tree, Walk<ValuesWalker> walk) {
+		ValuesWalker valuesWalker = new ValuesWalker(tree, walk);
+		valuesWalker.start();
+		return valuesWalker.getData();
+	}
+
+
 	public static ActionFactory<IValue, Type, ValuesCursor, ValuesWalker> getActionFactory() {
 		return af;
+	}
+
+
+	@SuppressWarnings("serial")
+	private static class Value extends RuntimeException {
+		final IValue value;
+
+
+		Value(IValue v) {
+			value = v;
+		}
 	}
 }
