@@ -14,6 +14,7 @@ import nuthatch.tree.TreeCursor;
 import nuthatch.tree.TreeHandle;
 import nuthatch.tree.errors.BranchNotFoundError;
 import nuthatch.tree.impl.StandardTreeCursor;
+import nuthatch.tree.util.BranchUtil;
 import nuthatch.walker.Walker;
 import nuthatch.walker.errors.ReachedTop;
 
@@ -54,6 +55,7 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	public TreeCursor<Value, Type> copy() {
 		return current.copy();
 	}
+
 
 
 	@Override
@@ -293,6 +295,21 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
  */	}
 
 
+	@Override
+	public int next(int i) {
+		int r = i;
+		if(i == Action.NEXT || i == Action.PROCEED) {
+			r = from() + direction;
+		}
+		else if(i == Action.LAST) {
+			r = getArity();
+		}
+
+		r = BranchUtil.normalBranch(r, getArity());
+		return r;
+	}
+
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void replace(Pattern<Value, Type> pattern) throws NotBuildableException {
@@ -320,7 +337,6 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 		direction = -direction;
 	}
 
-
 	@Override
 	public void start() {
 		step.init(this);
@@ -338,7 +354,6 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 		catch(ReachedTop e) {
 		}
 	}
-
 
 	@Override
 	public boolean subtreeEquals(TreeHandle<Value, Type> other) {

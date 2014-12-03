@@ -38,7 +38,6 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 */
 	Environment<? extends TreeCursor<Value, Type>> getLocalEnv();
 
-
 	/**
 	 * Check if current node is a leaf.
 	 * 
@@ -60,6 +59,7 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 */
 	boolean isRoot();
 
+
 	/**
 	 * @return True if the walker is currently running (i.e., isAtTop() is
 	 *         false)
@@ -76,6 +76,7 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 * @return True if the pattern matched.
 	 */
 	boolean match(Pattern<Value, Type> pat);
+
 	/**
 	 * The environment is untouched if this method returns false.
 	 * 
@@ -87,13 +88,20 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 * @return True if the pattern matched.
 	 */
 	boolean match(Pattern<Value, Type> pat, Environment<? extends TreeCursor<Value, Type>> env);
-
-
 	/**
 	 * Split execution into one walker per child, operating in parallel.
 	 * 
 	 */
 	void nest();
+
+
+	/**
+	 * Check which branch the walker will follow next.
+	 * 
+	 * @param i The branch number we intend to return at the end of the current step
+	 * @return The branch the walker will walk to, given that i is returned to it
+	 */
+	int next(int i);
 
 
 	/**

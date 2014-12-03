@@ -221,6 +221,31 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 
 	@Override
+	public Action<W> redirect(Action<W> action, int... redirections) {
+		int max = 0;
+
+		assert redirections.length % 2 == 0;
+
+		for(int i = 0; i < redirections.length; i += 2) {
+			max = Math.max(max, redirections[i]);
+		}
+
+		int[] redirects = new int[max+1];
+
+		for(int i = 0; i < redirections.length; i += 2) {
+			redirects[redirections[i]] = redirections[i+1];
+		}
+
+		return new RedirectAction<W>(action, redirects);
+	}
+
+	@Override
+	public Action<W> redirect(int... redirections) {
+		return redirect(null, redirections);
+	}
+
+
+	@Override
 	public MatchAction<Value, Type, C, W> replace(C replacement) {
 		return new ReplaceByTree<Value, Type, C, W>(replacement);
 	}

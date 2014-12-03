@@ -272,6 +272,31 @@ public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W
 	 */
 	Action<W> atNonLeaf(Action<W> action);
 
+	/**
+	 * Redirect the next step according to the list of redirections.
+	 * 
+	 * Redirections should be a list of pairs, from1, to1, from2, to2... so that if
+	 * the next step will go to from1, this action will redirect it to to1 instead.
+	 * 
+	 * If the given action specifies which branch to follow next, this action may
+	 * override that.
+	 * 
+	 * @param action An action to be taken.
+	 * @param redirections A list of from1, to1, from2, to2... redirection
+	 * @return A redirecting action
+	 */
+	Action<W> redirect(Action<W> action, int... redirections);
+
+	/**
+	 * Redirect the next step according to the list of redirections.
+	 * 
+	 * Redirections should be a list of pairs, from1, to1, from2, to2... so that if
+	 * the next step will go to from1, this action will redirect it to to1 instead.
+	 * 
+	 * @param redirections A list of from1, to1, from2, to2... redirection
+	 * @return A redirecting action
+	 */
+	Action<W> redirect(int... redirections);
 
 	MatchAction<Value, Type, C, W> replace(Pattern<Value, Type> replacement);
 }
