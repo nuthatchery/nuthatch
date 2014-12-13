@@ -40,10 +40,14 @@ public class Int extends Expr {
 
 
 	@Override
-	public String toString() {
+	public String toRepr() {
 		return "Int("+ String.valueOf(value) +")";
 	}
 
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
 
 	@Override
 	protected Expr copy() {

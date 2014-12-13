@@ -89,6 +89,11 @@ public abstract class XmplNode {
 	}
 
 
+	public String toRepr() {
+		return toString();
+	}
+
+
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();

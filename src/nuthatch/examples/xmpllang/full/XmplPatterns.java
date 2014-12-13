@@ -187,6 +187,11 @@ public class XmplPatterns {
 	}
 
 
+	public static Pattern<XmplNode, Type> tree(XmplNode node) {
+		return PF.tree(new XmplCursor(node));
+	}
+
+
 	public static final Pattern<XmplNode, Type> type(Type type) {
 		return PF.nodeType(type);
 	}

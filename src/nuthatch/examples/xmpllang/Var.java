@@ -42,10 +42,14 @@ public class Var extends Expr {
 
 
 	@Override
-	public String toString() {
+	public String toRepr() {
 		return "Var(\"" + String.valueOf(name) + "\")";
 	}
 
+	@Override
+	public String toString() {
+		return String.valueOf(name);
+	}
 
 	@Override
 	protected Expr copy() {
