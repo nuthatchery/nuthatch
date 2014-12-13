@@ -22,7 +22,6 @@ import nuthatch.stratego.adapter.SWalker;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.pattern.impl.TermPatternFactory;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walker.Walker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -107,7 +106,7 @@ public class StrategoSignatures {
 				return PROCEED;
 			}
 		})));
-		Walker<IStrategoTerm, Integer> e = new SWalker(tree, walk);
+		SWalker e = new SWalker(tree, walk);
 		e.start();
 
 		String[] array = methods.toArray(new String[methods.size()]);

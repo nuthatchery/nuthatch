@@ -15,7 +15,6 @@ import nuthatch.stratego.adapter.STermCursor;
 import nuthatch.stratego.adapter.SWalker;
 import nuthatch.stratego.adapter.StrategoAdapter;
 import nuthatch.stratego.pattern.impl.TermPatternFactory;
-import nuthatch.walker.Walker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.InvalidParseTableException;
@@ -50,7 +49,7 @@ public class Main {
 					return PROCEED;
 				}
 			}));
-			Walker<IStrategoTerm, Integer> e = new SWalker(tree, walk);
+			SWalker e = new SWalker(tree, walk);
 			e.start();
 
 		}

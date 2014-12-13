@@ -3,11 +3,12 @@ package nuthatch.stratego.adapter;
 import nuthatch.library.Walk;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
+import nuthatch.walker.Walker;
 import nuthatch.walker.impl.AbstractWalker;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 
-public class SWalker extends AbstractWalker<IStrategoTerm, Integer, SWalker> {
+public class SWalker extends AbstractWalker<IStrategoTerm, Integer, SWalker> implements Walker<IStrategoTerm, Integer, SWalker> {
 	public SWalker(IStrategoTerm term, Walk<SWalker> step) {
 		super(StrategoAdapter.termToTree(term), step);
 	}
