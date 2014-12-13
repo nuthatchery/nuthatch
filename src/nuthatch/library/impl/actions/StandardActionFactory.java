@@ -161,7 +161,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 	@Override
 	public Action<W> from(int branch, Action<W> action) {
-		return new CondActions.From(branch, action);
+		return new CondActions.From<W>(branch, action);
 	}
 
 
@@ -214,7 +214,6 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Action<W> nop() {
 		return nopAction;
 	}
@@ -332,8 +331,42 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 
 		@Override
+		public boolean equals(Object obj) {
+			if(this == obj) {
+				return true;
+			}
+			if(obj == null) {
+				return false;
+			}
+			if(getClass() != obj.getClass()) {
+				return false;
+			}
+			GoAction<?> other = (GoAction<?>) obj;
+			if(branch != other.branch) {
+				return false;
+			}
+			return true;
+		}
+
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + branch;
+			return result;
+		}
+
+
+		@Override
 		public int step(W walker) {
 			return branch;
+		}
+
+
+		@Override
+		public String toString() {
+			return "go(" + branch + ")";
 		}
 	}
 
@@ -348,6 +381,39 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 
 
 		@Override
+		public boolean equals(Object obj) {
+			if(this == obj) {
+				return true;
+			}
+			if(obj == null) {
+				return false;
+			}
+			if(getClass() != obj.getClass()) {
+				return false;
+			}
+			NoMatchAction<?,?,?,?> other = (NoMatchAction<?,?,?,?>) obj;
+			if(action == null) {
+				if(other.action != null) {
+					return false;
+				}
+			}
+			else if(!action.equals(other.action)) {
+				return false;
+			}
+			return true;
+		}
+
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((action == null) ? 0 : action.hashCode());
+			return result;
+		}
+
+
+		@Override
 		public void init(W walker) {
 			action.init(walker);
 		}
@@ -357,6 +423,12 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 		public int step(W walker, Environment<C> env) {
 			return action.step(walker);
 		}
+
+		@Override
+		public String toString() {
+			return action.toString();
+		}
+
 	}
 
 
@@ -364,6 +436,10 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 		@Override
 		public int step(W walker) {
 			return PROCEED;
+		}
+		@Override
+		public String toString() {
+			return "nop()";
 		}
 	}
 }

@@ -51,6 +51,43 @@ final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walk
 
 
 	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+		if(obj == null) {
+			return false;
+		}
+		if(getClass() != obj.getClass()) {
+			return false;
+		}
+		Match<?,?,?,?> other = (Match<?,?,?,?>) obj;
+		if(matchOnlyOne != other.matchOnlyOne) {
+			return false;
+		}
+		if(patterns == null) {
+			if(other.patterns != null) {
+				return false;
+			}
+		}
+		else if(!patterns.equals(other.patterns)) {
+			return false;
+		}
+		return true;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (matchOnlyOne ? 1231 : 1237);
+		result = prime * result + ((patterns == null) ? 0 : patterns.hashCode());
+		return result;
+	}
+
+
+	@Override
 	public void init(W walker) {
 		for(Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>> a : patterns) {
 			a.getSecond().init(walker);
@@ -90,5 +127,11 @@ final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walk
 			}
 		}
 		return Action.PROCEED;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Match [patterns=" + patterns + ", matchOnlyOne=" + matchOnlyOne + "]";
 	}
 }

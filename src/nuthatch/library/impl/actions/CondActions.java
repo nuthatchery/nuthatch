@@ -20,6 +20,12 @@ final class CondActions {
 			return JoinPoints.afterChild(walker);
 		}
 
+
+		@Override
+		public String toString() {
+			return "afterChild(" + action + ")";
+		}
+
 	}
 
 
@@ -36,6 +42,10 @@ final class CondActions {
 
 		}
 
+		@Override
+		public String toString() {
+			return "beforeChild(" + action + ")";
+		}
 	}
 
 
@@ -49,6 +59,11 @@ final class CondActions {
 		public boolean cond(W walker) {
 			return JoinPoints.down(walker);
 		}
+		@Override
+		public String toString() {
+			return "down(" + action + ")";
+		}
+
 	}
 
 
@@ -66,6 +81,12 @@ final class CondActions {
 		public boolean cond(W walker) {
 			return walker.from(branch);
 		}
+
+		@Override
+		public String toString() {
+			return "from(" + branch + "," + action + ")";
+		}
+
 	}
 
 
@@ -82,6 +103,10 @@ final class CondActions {
 		@Override
 		public boolean cond(W walker) {
 			return walker.getArity() == arity;
+		}
+		@Override
+		public String toString() {
+			return "arity(" + arity + "," + action + ")";
 		}
 	}
 
@@ -101,6 +126,10 @@ final class CondActions {
 			Type t = walker.getType();
 			return t == type || (t != null && t.equals(type));
 		}
+		@Override
+		public String toString() {
+			return "type(" + type + "," + action + ")";
+		}
 	}
 
 
@@ -119,6 +148,10 @@ final class CondActions {
 		@Override
 		public boolean cond(W walker) {
 			return comp.compare(walker.getType(), type) == 0;
+		}
+		@Override
+		public String toString() {
+			return "type(" + type + "," + action + ")";
 		}
 	}
 
@@ -143,6 +176,10 @@ final class CondActions {
 		public boolean cond(W walker) {
 			return walker.isAtLeaf() ^ not;
 		}
+		@Override
+		public String toString() {
+			return (not ? "notLeaf" : "leaf") + "(" + action + ")";
+		}
 	}
 
 
@@ -156,6 +193,10 @@ final class CondActions {
 		public boolean cond(W walker) {
 			return walker.isAtRoot();
 		}
+		@Override
+		public String toString() {
+			return "root(" + action + ")";
+		}
 	}
 
 
@@ -168,6 +209,10 @@ final class CondActions {
 		@Override
 		public boolean cond(W walker) {
 			return JoinPoints.up(walker);
+		}
+		@Override
+		public String toString() {
+			return "up(" + action + ")";
 		}
 	}
 

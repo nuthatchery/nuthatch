@@ -15,11 +15,9 @@ class ReplaceByTree<Value, Type, C extends TreeCursor<Value, Type>, W extends Wa
 		this.cursor = cursor;
 	}
 
-
 	@Override
 	public void init(W walker) {
 	}
-
 
 	@Override
 	public int step(W walker) {
@@ -32,5 +30,11 @@ class ReplaceByTree<Value, Type, C extends TreeCursor<Value, Type>, W extends Wa
 	public int step(W walker, Environment<C> env) {
 		walker.replace(cursor);
 		return Action.PROCEED;
+	}
+
+
+	@Override
+	public String toString() {
+		return "replace(" + cursor.treeToString() + ")";
 	}
 }

@@ -12,13 +12,19 @@ public interface Action<W extends Walker<?, ?>> {
 	public static final int STAY = Integer.MIN_VALUE + 2;
 
 
+	@Override
+	boolean equals(Object o);
+
+
+	@Override
+	int hashCode();
+
 	/**
 	 * Initialise any internal state
 	 * 
 	 * @param walker
 	 */
 	void init(W walker);
-
 
 	/**
 	 * Visit a new node.
@@ -36,4 +42,6 @@ public interface Action<W extends Walker<?, ?>> {
 	 */
 	int step(W walker);
 
+	@Override
+	String toString();
 }

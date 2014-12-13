@@ -1,5 +1,7 @@
 package nuthatch.library.impl.actions;
 
+import java.util.Arrays;
+
 import nuthatch.library.Action;
 import nuthatch.walker.Walker;
 
@@ -39,6 +41,41 @@ final public class RedirectAction<W extends Walker<?, ?>> implements Action<W> {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+		if(obj == null) {
+			return false;
+		}
+		if(getClass() != obj.getClass()) {
+			return false;
+		}
+		RedirectAction<?> other = (RedirectAction<?>) obj;
+		if(action == null) {
+			if(other.action != null) {
+				return false;
+			}
+		}
+		else if(!action.equals(other.action)) {
+			return false;
+		}
+		if(!Arrays.equals(redirects, other.redirects)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((action == null) ? 0 : action.hashCode());
+		result = prime * result + Arrays.hashCode(redirects);
+		return result;
+	}
+
+	@Override
 	public void init(W walker) {
 		if(action != null) {
 			action.init(walker);
@@ -64,5 +101,10 @@ final public class RedirectAction<W extends Walker<?, ?>> implements Action<W> {
 		else {
 			return r;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "redirect(redirects=" + Arrays.toString(redirects) + ", action=" + action + ")";
 	}
 }

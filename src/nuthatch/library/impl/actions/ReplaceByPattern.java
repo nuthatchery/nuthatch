@@ -27,4 +27,10 @@ class ReplaceByPattern<Value, Type, C extends TreeCursor<Value, Type>, W extends
 		return PROCEED;
 	}
 
+
+	@Override
+	public String toString() {
+		return "replace(" + pattern + ")";
+	}
+
 }
