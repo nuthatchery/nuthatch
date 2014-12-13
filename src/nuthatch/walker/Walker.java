@@ -1,12 +1,13 @@
 package nuthatch.walker;
 
+import nuthatch.library.Walk;
 import nuthatch.pattern.Environment;
 import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.errors.TypeMismatch;
 
-public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
+public interface Walker<Value, Type, W extends Walker<Value, Type, W>> extends TreeCursor<Value, Type> {
 	/**
 	 * Return the depth of the tree at the current position.
 	 * 
@@ -158,4 +159,36 @@ public interface Walker<Value, Type> extends TreeCursor<Value, Type> {
 	 * Start executing the walker.
 	 */
 	void start();
+
+	/**
+	 * Create a subwalker, rooted at the current node.
+	 * 
+	 * @return A new walker, ready to {@link #start()}
+	 */
+	W subWalker();
+
+	/**
+	 * Create a subwalker, rooted at the current node, using a different walk.
+	 * 
+	 * @param step The alternative walk
+	 * @return A new walker, ready to {@link #start()}
+	 */
+	W subWalker(Walk<W> step);
+
+
+	/**
+	 * Walk the subtree rooted at the current node, using a different walk.
+	 * 
+	 * @param step The alternative walk
+	 */
+	void walkSubtree(Walk<W> step);
+
+
+	/**
+	 * Walk the subtree rooted at the current node, using a different walk.
+	 * 
+	 * @param step The alternative walk
+	 */
+	void walkSubtreeAndReplace(Walk<W> step);
+
 }

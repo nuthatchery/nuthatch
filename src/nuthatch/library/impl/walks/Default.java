@@ -4,7 +4,7 @@ import nuthatch.library.Action;
 import nuthatch.library.Walk;
 import nuthatch.walker.Walker;
 
-public class Default<W extends Walker<?, ?>> implements Walk<W> {
+public class Default<W extends Walker<?, ?, W>> implements Walk<W> {
 
 	private Action<W> action;
 

@@ -26,4 +26,7 @@ public final class SimpleWalker<Value, Type> extends AbstractVarWalker<Value, Ty
 		return new SimpleWalker<Value, Type>(cursor, step);
 	}
 
+
+
+
 }

@@ -3,7 +3,7 @@ package nuthatch.library;
 import nuthatch.tree.Tree;
 import nuthatch.walker.Walker;
 
-public interface Action<W extends Walker<?, ?>> {
+public interface Action<W extends Walker<?, ?, W>> {
 	public static final int PARENT = Tree.PARENT;
 	public static final int FIRST = Tree.FIRST;
 	public static final int LAST = Tree.LAST;

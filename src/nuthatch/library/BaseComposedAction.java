@@ -2,7 +2,7 @@ package nuthatch.library;
 
 import nuthatch.walker.Walker;
 
-public abstract class BaseComposedAction<W extends Walker<?, ?>> implements Action<W> {
+public abstract class BaseComposedAction<W extends Walker<?, ?, W>> implements Action<W> {
 
 	protected final Action<W> action;
 

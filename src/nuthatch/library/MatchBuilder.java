@@ -12,7 +12,7 @@ import nuthatch.walker.Walker;
  * @param <C>
  * @param <W>
  */
-public interface MatchBuilder<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> {
+public interface MatchBuilder<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> {
 	/**
 	 * Add a new pattern and action.
 	 * 

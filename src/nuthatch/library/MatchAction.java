@@ -5,7 +5,7 @@ import nuthatch.tree.Tree;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
-public interface MatchAction<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> {
+public interface MatchAction<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> {
 	public static final int PARENT = Tree.PARENT;
 	public static final int FIRST = Tree.FIRST;
 	public static final int LAST = Tree.LAST;

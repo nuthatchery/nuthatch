@@ -13,7 +13,7 @@ import nuthatch.tree.TreeCursor;
 import nuthatch.util.Pair;
 import nuthatch.walker.Walker;
 
-final class MatchActionBuilder<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements MatchBuilder<Value, Type, C, W> {
+final class MatchActionBuilder<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> implements MatchBuilder<Value, Type, C, W> {
 
 	private List<Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>>> patterns = new ArrayList<>();
 	protected BuildContext<Value, Type, C> context;

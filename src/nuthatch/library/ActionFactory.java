@@ -7,7 +7,7 @@ import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
-public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> {
+public interface ActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> {
 	public static final ActionFactory<?, ?, ?, ?> actionFactory = nuthatch.library.impl.actions.StandardActionFactory.getInstance();
 
 

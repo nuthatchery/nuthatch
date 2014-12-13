@@ -2,7 +2,7 @@ package nuthatch.library;
 
 import nuthatch.walker.Walker;
 
-public interface Walk<W extends Walker<?, ?>> extends Action<W> {
+public interface Walk<W extends Walker<?, ?, W>> extends Action<W> {
 	/**
 	 * Visit a new node.
 	 * 

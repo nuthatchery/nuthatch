@@ -10,7 +10,7 @@ import nuthatch.walker.Walker;
  *
  * @param <W>
  */
-final public class RedirectAction<W extends Walker<?, ?>> implements Action<W> {
+final public class RedirectAction<W extends Walker<?, ?, W>> implements Action<W> {
 	private Action<W> action;
 	private int[] redirects;
 

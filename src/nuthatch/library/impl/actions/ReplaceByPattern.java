@@ -6,7 +6,7 @@ import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
-class ReplaceByPattern<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements MatchAction<Value, Type, C, W> {
+class ReplaceByPattern<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> implements MatchAction<Value, Type, C, W> {
 
 	private Pattern<Value, Type> pattern;
 

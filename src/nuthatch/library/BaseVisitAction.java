@@ -2,7 +2,7 @@ package nuthatch.library;
 
 import nuthatch.walker.Walker;
 
-public abstract class BaseVisitAction<W extends Walker<?, ?>> implements Action<W> {
+public abstract class BaseVisitAction<W extends Walker<?, ?, W>> implements Action<W> {
 	/**
 	 * Visit a node.
 	 * 

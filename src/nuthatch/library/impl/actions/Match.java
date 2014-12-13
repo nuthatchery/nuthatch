@@ -19,7 +19,7 @@ import nuthatch.walker.Walker;
  * Because of this, the behaviour of {@link nuthatch.library.MatchBuilder#one()}
  * and {@link nuthatch.library.MatchBuilder#one()} is the same.
  */
-final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements Action<W>, MatchAction<Value, Type, C, W> {
+final class Match<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> implements Action<W>, MatchAction<Value, Type, C, W> {
 
 	private List<Pair<Pattern<Value, Type>, MatchAction<Value, Type, C, W>>> patterns;
 	private boolean matchOnlyOne; // pick the first match

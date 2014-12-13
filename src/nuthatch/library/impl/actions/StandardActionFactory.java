@@ -15,7 +15,7 @@ import nuthatch.pattern.Pattern;
 import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
-public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements nuthatch.library.ActionFactory<Value, Type, C, W> {
+public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> implements nuthatch.library.ActionFactory<Value, Type, C, W> {
 	@SuppressWarnings("rawtypes")
 	private static final StandardActionFactory instance = new StandardActionFactory();
 
@@ -316,12 +316,12 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	}
 
 
-	public static <Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> StandardActionFactory<Value, Type, C, W> getInstance() {
+	public static <Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> StandardActionFactory<Value, Type, C, W> getInstance() {
 		return instance;
 	}
 
 
-	static final class GoAction<W extends Walker<?, ?>> extends BaseAction<W> {
+	static final class GoAction<W extends Walker<?, ?, W>> extends BaseAction<W> {
 		private final int branch;
 
 
@@ -371,7 +371,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	}
 
 
-	static final class NoMatchAction<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> implements MatchAction<Value, Type, C, W> {
+	static final class NoMatchAction<Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> implements MatchAction<Value, Type, C, W> {
 		private final Action<W> action;
 
 
@@ -432,7 +432,7 @@ public class StandardActionFactory<Value, Type, C extends TreeCursor<Value, Type
 	}
 
 
-	static final class NopAction<W extends Walker<?, ?>> extends BaseAction<W> {
+	static final class NopAction<W extends Walker<?, ?, W>> extends BaseAction<W> {
 		@Override
 		public int step(W walker) {
 			return PROCEED;

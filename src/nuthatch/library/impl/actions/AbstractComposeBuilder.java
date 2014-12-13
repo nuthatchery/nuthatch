@@ -7,7 +7,7 @@ import nuthatch.library.Action;
 import nuthatch.library.ActionBuilder;
 import nuthatch.walker.Walker;
 
-abstract class AbstractComposeBuilder<W extends Walker<?, ?>> implements ActionBuilder<W> {
+abstract class AbstractComposeBuilder<W extends Walker<?, ?, W>> implements ActionBuilder<W> {
 	protected final List<Action<W>> actions = new ArrayList<Action<W>>();
 
 

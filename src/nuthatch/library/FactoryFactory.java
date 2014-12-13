@@ -6,12 +6,12 @@ import nuthatch.tree.TreeCursor;
 import nuthatch.walker.Walker;
 
 public class FactoryFactory {
-	public static <Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> ActionFactory<Value, Type, C, W> getActionFactory() {
+	public static <Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> ActionFactory<Value, Type, C, W> getActionFactory() {
 		return StandardActionFactory.getInstance();
 	}
 
 
-	public static <Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type>> ActionFactory<Value, Type, C, W> getActionFactory(Class<Value> valueClass, Class<Type> typeClass, Class<C> cursorClass, Class<W> walkerClass) {
+	public static <Value, Type, C extends TreeCursor<Value, Type>, W extends Walker<Value, Type, W>> ActionFactory<Value, Type, C, W> getActionFactory(Class<Value> valueClass, Class<Type> typeClass, Class<C> cursorClass, Class<W> walkerClass) {
 		return StandardActionFactory.getInstance();
 	}
 

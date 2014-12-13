@@ -18,7 +18,7 @@ import nuthatch.tree.util.BranchUtil;
 import nuthatch.walker.Walker;
 import nuthatch.walker.errors.ReachedTop;
 
-public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value, Type, E>> implements Walker<Value, Type> {
+public abstract class AbstractWalker<Value, Type, W extends AbstractWalker<Value, Type, W>> implements Walker<Value, Type, W> {
 	protected static final int parent = 0;
 	protected static final int first = 1;
 	protected static final int last = -1;
@@ -33,21 +33,21 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 	 * If replaceDepth == -1, then current == original
 	 */
 	private TreeCursor<Value, Type> current;
-	private final Walk<AbstractWalker<Value, Type, E>> step;
+	private final Walk<W> step;
 	private Environment<? extends TreeCursor<Value, Type>> localEnv = null;
 
 
-	public AbstractWalker(Tree<Value, Type> tree, Walk<E> step) {
+	public AbstractWalker(Tree<Value, Type> tree, Walk<W> step) {
 		this.rootCursor = new StandardTreeCursor<>(tree);
 		this.current = null;
-		this.step = (Walk<AbstractWalker<Value, Type, E>>) step;
+		this.step = step;
 	}
 
 
-	public AbstractWalker(TreeCursor<Value, Type> cursor, Walk<E> step) {
+	public AbstractWalker(TreeCursor<Value, Type> cursor, Walk<W> step) {
 		this.rootCursor = cursor;
 		this.current = null;
-		this.step = (Walk<AbstractWalker<Value, Type, E>>) step;
+		this.step = step;
 	}
 
 
@@ -339,12 +339,12 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 	@Override
 	public void start() {
-		step.init(this);
+		step.init((W) this);
 		current = rootCursor.copy();
 		try {
 			while(!current.isAtTop()) {
 				localEnv = null;
-				int go = step.step(this);
+				int go = step.step((W) this);
 				if(go == Action.NEXT) {
 					go = from() + direction;
 				}
@@ -362,6 +362,17 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 
 
 	@Override
+	public W subWalker() {
+		return subWalk(current, step);
+	}
+
+
+	@Override
+	public W subWalker(Walk<W> step) {
+		return subWalk(current, step);
+	}
+
+	@Override
 	public String treeToString() {
 		if(current != null) {
 			return current.treeToString();
@@ -371,22 +382,22 @@ public abstract class AbstractWalker<Value, Type, E extends AbstractWalker<Value
 		}
 	}
 
-
-	public void walkSubtree(Walk<E> step) {
+	@Override
+	public void walkSubtree(Walk<W> step) {
 		subWalk(copySubtree(), step).start();
 	}
-
-	public void walkSubtreeAndReplace(Walk<E> step) {
-		E walk = subWalk(copySubtree(), step);
+	@Override
+	public void walkSubtreeAndReplace(Walk<W> step) {
+		W walk = subWalk(copySubtree(), step);
 		walk.start();
 		replace(walk);
 	}
+
 
 	private boolean dataInvariant() {
 
 		return true;
 	}
 
-
-	protected abstract E subWalk(TreeCursor<Value, Type> cursor, Walk<E> step);
+	protected abstract W subWalk(TreeCursor<Value, Type> cursor, Walk<W> step);
 }

@@ -6,7 +6,7 @@ import java.util.Collection;
 import nuthatch.library.Action;
 import nuthatch.walker.Walker;
 
-final class Combine<W extends Walker<?, ?>> implements Action<W> {
+final class Combine<W extends Walker<?, ?, W>> implements Action<W> {
 
 	private Action<W>[] actions;
 

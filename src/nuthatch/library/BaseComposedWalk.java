@@ -2,7 +2,7 @@ package nuthatch.library;
 
 import nuthatch.walker.Walker;
 
-public abstract class BaseComposedWalk<W extends Walker<?, ?>> implements Walk<W> {
+public abstract class BaseComposedWalk<W extends Walker<?, ?, W>> implements Walk<W> {
 
 	protected final Walk<W> walk;
 

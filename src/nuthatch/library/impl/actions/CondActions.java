@@ -8,7 +8,7 @@ import nuthatch.walker.Walker;
 
 
 final class CondActions {
-	static final class AfterChild<W extends Walker<?, ?>> extends AbstractIfAction<W> {
+	static final class AfterChild<W extends Walker<?, ?, W>> extends AbstractIfAction<W> {
 
 		public AfterChild(Action<W> action) {
 			super(action);
@@ -29,7 +29,7 @@ final class CondActions {
 	}
 
 
-	static final class BeforeChild<W extends Walker<?, ?>> extends AbstractIfAction<W> {
+	static final class BeforeChild<W extends Walker<?, ?, W>> extends AbstractIfAction<W> {
 
 		public BeforeChild(Action<W> action) {
 			super(action);
@@ -49,7 +49,7 @@ final class CondActions {
 	}
 
 
-	static final class Down<W extends Walker<?, ?>> extends AbstractIfAction<W> {
+	static final class Down<W extends Walker<?, ?, W>> extends AbstractIfAction<W> {
 		public Down(Action<W> action) {
 			super(action);
 		}
@@ -67,7 +67,7 @@ final class CondActions {
 	}
 
 
-	static final class From<W extends Walker<?, ?>> extends AbstractIfAction<W> {
+	static final class From<W extends Walker<?, ?, W>> extends AbstractIfAction<W> {
 		private final int branch;
 
 
@@ -90,7 +90,7 @@ final class CondActions {
 	}
 
 
-	static final class HasArity<W extends Walker<?, ?>> extends AbstractIfAction<W> {
+	static final class HasArity<W extends Walker<?, ?, W>> extends AbstractIfAction<W> {
 		private final int arity;
 
 
@@ -111,7 +111,7 @@ final class CondActions {
 	}
 
 
-	static final class HasType<Type, W extends Walker<?, Type>> extends AbstractIfAction<W> {
+	static final class HasType<Type, W extends Walker<?, Type, W>> extends AbstractIfAction<W> {
 		private final Type type;
 
 
@@ -133,7 +133,7 @@ final class CondActions {
 	}
 
 
-	static final class HasTypeComp<Type, W extends Walker<?, Type>> extends AbstractIfAction<W> {
+	static final class HasTypeComp<Type, W extends Walker<?, Type, W>> extends AbstractIfAction<W> {
 		private final Type type;
 		private final Comparator<Type> comp;
 
@@ -156,7 +156,7 @@ final class CondActions {
 	}
 
 
-	static final class Leaf<W extends Walker<?, ?>> extends AbstractIfAction<W> {
+	static final class Leaf<W extends Walker<?, ?, W>> extends AbstractIfAction<W> {
 		private final boolean not;
 
 
@@ -183,7 +183,7 @@ final class CondActions {
 	}
 
 
-	static final class Root<W extends Walker<?, ?>> extends AbstractIfAction<W> {
+	static final class Root<W extends Walker<?, ?, W>> extends AbstractIfAction<W> {
 		public Root(Action<W> action) {
 			super(action);
 		}
@@ -200,7 +200,7 @@ final class CondActions {
 	}
 
 
-	static final class Up<W extends Walker<?, ?>> extends AbstractIfAction<W> {
+	static final class Up<W extends Walker<?, ?, W>> extends AbstractIfAction<W> {
 		public Up(Action<W> action) {
 			super(action);
 		}

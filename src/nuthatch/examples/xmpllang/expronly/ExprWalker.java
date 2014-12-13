@@ -7,9 +7,10 @@ import nuthatch.library.FactoryFactory;
 import nuthatch.library.Walk;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
+import nuthatch.walker.Walker;
 import nuthatch.walker.impl.AbstractWalker;
 
-public class ExprWalker extends AbstractWalker<Expr, Type, ExprWalker> {
+public class ExprWalker extends AbstractWalker<Expr, Type, ExprWalker> implements Walker<Expr, Type, ExprWalker> {
 	public ExprWalker(Expr expr, Walk<ExprWalker> step) {
 		super(new ExprCursor(expr), step);
 	}
