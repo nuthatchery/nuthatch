@@ -8,6 +8,9 @@ Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
 Export-Package: 
  nullness,
  nuthatch.examples,
+ nuthatch.examples.xmpllang,
+ nuthatch.examples.xmpllang.expronly,
+ nuthatch.examples.xmpllang.full,
  nuthatch.library,
  nuthatch.pattern,
  nuthatch.pattern.impl,
