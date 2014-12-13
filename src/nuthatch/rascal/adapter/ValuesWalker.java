@@ -3,12 +3,13 @@ package nuthatch.rascal.adapter;
 import nuthatch.library.Walk;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.errors.BranchNotFoundError;
+import nuthatch.walker.Walker;
 import nuthatch.walker.impl.AbstractWalker;
 
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.type.Type;
 
-public class ValuesWalker extends AbstractWalker<IValue, Type, ValuesWalker> {
+public class ValuesWalker extends AbstractWalker<IValue, Type, ValuesWalker> implements Walker<IValue, Type, ValuesWalker> {
 	public ValuesWalker(IValue term, Walk<ValuesWalker> step) {
 		super(new ValuesCursor(term), step);
 	}

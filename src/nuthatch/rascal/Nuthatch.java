@@ -4,10 +4,9 @@ import nuthatch.library.Action;
 import nuthatch.library.ActionFactory;
 import nuthatch.library.BaseAction;
 import nuthatch.library.FactoryFactory;
-import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.rascal.adapter.UptrCursor;
+import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.tree.TreeCursor;
-import nuthatch.walker.Walker;
 import nuthatch.walker.impl.SimpleWalker;
 
 import org.eclipse.imp.pdb.facts.IConstructor;
@@ -44,7 +43,7 @@ public class Nuthatch {
 			}
 		};
 		Action<SimpleWalker<String, Type>> topDown = uptrAf.down(t);
-		Walker<String, Type> e = new SimpleWalker<String, Type>(new UptrCursor(tree), uptrAf.walk(topDown));
+		SimpleWalker<String, Type> e = new SimpleWalker<String, Type>(new UptrCursor(tree), uptrAf.walk(topDown));
 		e.start();
 
 		ctx.getStdOut().println();
@@ -69,7 +68,7 @@ public class Nuthatch {
 			}
 		};
 		Action<SimpleWalker<IValue, Type>> topDown = pdbAf.down(t);
-		Walker<IValue, Type> e = new SimpleWalker<IValue, Type>(new ValuesCursor(n), pdbAf.walk(topDown));
+		SimpleWalker<IValue, Type> e = new SimpleWalker<IValue, Type>(new ValuesCursor(n), pdbAf.walk(topDown));
 		e.start();
 
 		ctx.getStdOut().println();
