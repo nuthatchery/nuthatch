@@ -11,6 +11,7 @@ import nuthatch.examples.xmpllang.Mul;
 import nuthatch.examples.xmpllang.Nop;
 import nuthatch.examples.xmpllang.Seq;
 import nuthatch.examples.xmpllang.Stat;
+import nuthatch.examples.xmpllang.Sum;
 import nuthatch.examples.xmpllang.Type;
 import nuthatch.examples.xmpllang.Var;
 import nuthatch.examples.xmpllang.While;
@@ -100,8 +101,6 @@ public class XmplPatterns {
 	public static final Pattern<XmplNode, Type> Int(Ellipsis _) {
 		return PF.nodeType(Type.INT);
 	}
-
-
 	public static final Expr Int(int i) {
 		return new Int(i);
 	}
@@ -111,7 +110,6 @@ public class XmplPatterns {
 		return and(PF.nodeType(Type.INT), pat);
 	}
 
-
 	public static final Pattern<XmplNode, Type> isExpr() {
 		return PF.nodeType(Type.EXPR, Type.isSubtype);
 	}
@@ -119,6 +117,7 @@ public class XmplPatterns {
 	public static final Pattern<XmplNode, Type> isStat() {
 		return PF.nodeType(Type.STAT);
 	}
+
 
 	public static final Pattern<XmplNode, Type> Let(Pattern<XmplNode, Type> x, Pattern<XmplNode, Type> e1, Pattern<XmplNode, Type> e2) {
 		return PF.nodeWithChildren("Let", x, e1, e2);
@@ -129,11 +128,9 @@ public class XmplPatterns {
 		return new Let(x, e1, e2);
 	}
 
-
 	public static final Expr Mul(Expr e1, Expr e2) {
 		return new Mul(e1, e2);
 	}
-
 
 	public static final Pattern<XmplNode, Type> Mul(Pattern<XmplNode, Type> e1, Pattern<XmplNode, Type> e2) {
 		return PF.nodeWithChildren("Mul", e1, e2);
@@ -184,6 +181,22 @@ public class XmplPatterns {
 
 	public static final Stat Seq(Stat... ss) {
 		return new Seq(ss);
+	}
+
+
+	public static final Pattern<XmplNode, Type> Sum() {
+		return PF.nodeName("Sum");
+	}
+
+
+	public static final Expr Sum(Expr... es) {
+		return new Sum(es);
+	}
+
+
+	@SafeVarargs
+	public static final Pattern<XmplNode, Type> Sum(Pattern<XmplNode, Type>... es) {
+		return PF.nodeWithChildren("Sum", es);
 	}
 
 

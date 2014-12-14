@@ -5,6 +5,7 @@ import nuthatch.examples.xmpllang.Expr;
 import nuthatch.examples.xmpllang.Int;
 import nuthatch.examples.xmpllang.Let;
 import nuthatch.examples.xmpllang.Mul;
+import nuthatch.examples.xmpllang.Sum;
 import nuthatch.examples.xmpllang.Type;
 import nuthatch.examples.xmpllang.Var;
 import nuthatch.pattern.Pattern;
@@ -36,16 +37,13 @@ public class ExprPatterns {
 		return PF.nodeWithChildren("Add", e1, e2);
 	}
 
-
 	public static final Pattern<Expr, Type> ancestor(Pattern<Expr, Type> ancestor) {
 		return PF.ancestor(ancestor);
 	}
 
-
 	public static final Pattern<Expr, Type> and(Pattern<Expr, Type> a, Pattern<Expr, Type> b) {
 		return PF.and(a, b);
 	}
-
 
 	public static final Pattern<Expr, Type> descendant(Pattern<Expr, Type> descendant) {
 		return PF.descendant(descendant);
@@ -106,6 +104,20 @@ public class ExprPatterns {
 		return PF.parent(parent);
 	}
 
+
+	public static final Pattern<Expr, Type> Sum() {
+		return PF.nodeName("Sum");
+	}
+
+
+	public static final Expr Sum(Expr... es) {
+		return new Sum(es);
+	}
+
+	@SafeVarargs
+	public static final Pattern<Expr, Type> Sum(Pattern<Expr, Type>... es) {
+		return PF.nodeWithChildren("Sum", es);
+	}
 
 	public static final Pattern<Expr, Type> type(Type type) {
 		return PF.nodeType(type);
