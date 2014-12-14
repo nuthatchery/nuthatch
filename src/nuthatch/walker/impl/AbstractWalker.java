@@ -192,6 +192,11 @@ public abstract class AbstractWalker<Value, Type, W extends AbstractWalker<Value
 		return this;
 	}
 
+	@Override
+	public TreeCursor<Value, Type> go(int... path) throws BranchNotFoundError {
+		current.go(path);
+		return this;
+	}
 
 	@Override
 	public boolean hasBranch(int i) {
@@ -368,6 +373,11 @@ public abstract class AbstractWalker<Value, Type, W extends AbstractWalker<Value
 
 
 	@Override
+	public W subWalker(TreeCursor<Value, Type> tree) {
+		return subWalk(tree, step);
+	}
+
+	@Override
 	public W subWalker(Walk<W> step) {
 		return subWalk(current, step);
 	}
@@ -386,6 +396,7 @@ public abstract class AbstractWalker<Value, Type, W extends AbstractWalker<Value
 	public void walkSubtree(Walk<W> step) {
 		subWalk(copySubtree(), step).start();
 	}
+
 	@Override
 	public void walkSubtreeAndReplace(Walk<W> step) {
 		W walk = subWalk(copySubtree(), step);

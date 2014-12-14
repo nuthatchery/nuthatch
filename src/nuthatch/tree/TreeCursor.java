@@ -142,6 +142,17 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	 */
 	TreeCursor<Value, Type> go(int i) throws BranchNotFoundError;
 
+	/**
+	 * Follow the path of branches.
+	 * 
+	 * @param path
+	 *            A list of branches to follow
+	 * @return this, for method chaining
+	 * @throws BranchNotFoundError
+	 *             If no such branch was found
+	 * @see {@link #hasBranch(int)}
+	 */
+	TreeCursor<Value, Type> go(int... path) throws BranchNotFoundError;
 
 	/**
 	 * Check if this node is root.

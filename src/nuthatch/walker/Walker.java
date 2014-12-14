@@ -168,13 +168,20 @@ public interface Walker<Value, Type, W extends Walker<Value, Type, W>> extends T
 	W subWalker();
 
 	/**
+	 * Create a subwalker, rooted at the the given node, using same walk as this walker
+	 * 
+	 * @param tree The new tree
+	 * @return A new walker, ready to {@link #start()}
+	 */
+	W subWalker(TreeCursor<Value, Type> tree);
+
+	/**
 	 * Create a subwalker, rooted at the current node, using a different walk.
 	 * 
 	 * @param step The alternative walk
 	 * @return A new walker, ready to {@link #start()}
 	 */
 	W subWalker(Walk<W> step);
-
 
 	/**
 	 * Walk the subtree rooted at the current node, using a different walk.

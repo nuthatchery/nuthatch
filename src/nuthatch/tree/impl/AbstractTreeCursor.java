@@ -168,6 +168,13 @@ public abstract class AbstractTreeCursor<Value, Type, T> extends AbstractTreeHan
 
 	}
 
+	@Override
+	public TreeCursor<Value, Type> go(int... path) throws BranchNotFoundError {
+		for(int i : path) {
+			go(i);
+		}
+		return this;
+	}
 
 	@Override
 	public boolean isAtRoot() {
