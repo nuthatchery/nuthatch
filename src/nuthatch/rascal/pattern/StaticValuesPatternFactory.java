@@ -25,6 +25,11 @@ public class StaticValuesPatternFactory {
 	}
 
 
+	public static Pattern<IValue, Type> ancestor(Pattern<IValue, Type> ancestor) {
+		return StaticPatternFactory.ancestor(ancestor);
+	}
+
+
 	@SafeVarargs
 	public static Pattern<IValue, Type> and(Pattern<IValue, Type> pat, Pattern<IValue, Type>... pats) {
 		return StaticPatternFactory.and(pat, pats);
@@ -48,6 +53,11 @@ public class StaticValuesPatternFactory {
 
 	public static final Pattern<IValue, Type> cons(Type consType, Pattern<IValue, Type>... children) {
 		return PF.cons(consType, children);
+	}
+
+
+	public static Pattern<IValue, Type> descendant(Pattern<IValue, Type> descendant) {
+		return StaticPatternFactory.descendant(descendant);
 	}
 
 
