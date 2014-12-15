@@ -30,6 +30,7 @@ public abstract class AbstractTreeCursor<Value, Type, T> extends AbstractTreeHan
 			this.stack = new ArrayList<T>();
 			this.stack.add(current);
 			this.path = new StandardPath();
+			this.from = 0;
 		}
 	}
 

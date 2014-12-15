@@ -20,6 +20,8 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	/**
 	 * Make a copy of this cursor, tracking the same tree.
 	 * 
+	 * {@link #getFromBranch()} will stay the same.
+	 * 
 	 * The new cursor will be attached to the same tree, but its own position.
 	 * 
 	 * @return A copy of this cursor
@@ -31,6 +33,8 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	 * Make a copy of this cursor, replacing the subtree rooted at the current
 	 * node
 	 * with the replacement.
+	 * 
+	 * {@link #getFromBranch()} will stay the same.
 	 * 
 	 * The new cursor may or may not share tree data with the old cursor and
 	 * replacement.
@@ -44,6 +48,8 @@ public interface TreeCursor<Value, Type> extends Iterable<TreeCursor<Value, Type
 	 * Make a copy of this cursor rooted at the current node, tracking the same
 	 * tree.
 	 * 
+	 * {@link #getFromBranch()} will be reset to 0.
+
 	 * The new cursor will be attached to the same tree, but its own position
 	 * and root
 	 * 
