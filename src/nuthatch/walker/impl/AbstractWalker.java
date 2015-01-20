@@ -343,9 +343,10 @@ public abstract class AbstractWalker<Value, Type, W extends AbstractWalker<Value
 	}
 
 	@Override
-	public void start() {
-		step.init((W) this);
+	public void start(int... startPath) {
 		current = rootCursor.copy();
+		current.go(startPath);
+		step.init((W) this);
 		try {
 			while(!current.isAtTop()) {
 				localEnv = null;

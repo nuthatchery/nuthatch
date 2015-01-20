@@ -157,8 +157,10 @@ public interface Walker<Value, Type, W extends Walker<Value, Type, W>> extends T
 
 	/**
 	 * Start executing the walker.
+	 * 
+	 * @param startPath directions to the node on which the walker should start (default is root node)
 	 */
-	void start();
+	void start(int[] startPath);
 
 	/**
 	 * Create a subwalker, rooted at the current node.
