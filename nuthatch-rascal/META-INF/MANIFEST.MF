@@ -6,7 +6,7 @@ Bundle-Version: 0.999.0.qualifier
 Require-Bundle: org.eclipse.imp.pdb.values,
  rascal,
  nuthatch;bundle-version="0.999.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
 Export-Package: nuthatch.rascal.adapter,
  nuthatch.rascal.pattern,
