@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Nuthatch/J+Stratego
+Bundle-SymbolicName: nuthatch_stratego
+Bundle-Version: 0.99.2.qualifier
+Require-Bundle: org.spoofax.jsglr;bundle-version="0.3.0";visibility:=reexport,
+ org.spoofax.terms;bundle-version="1.0.0";visibility:=reexport,
+ nuthatch;bundle-version="0.99.0";visibility:=reexport
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
+Export-Package: nuthatch.stratego.actions,
+ nuthatch.stratego.adapter,
+ nuthatch.stratego.pattern,
+ nuthatch.stratego.pattern.impl,
+ nuthatch.stratego.syntax,
+ nuthatch.util

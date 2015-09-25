@@ -1,0 +1,17 @@
+module Stratego-Signatures
+imports Stratego-Core-Constants 
+	Stratego-Core-Identifiers 
+	Stratego-Core-Layout
+	Stratego-Core-Signatures 
+
+exports 
+  sorts Module
+  context-free syntax
+    "module" ModName Decl* 	 -> Module {cons("Module")}
+
+  sorts Decl 
+  context-free syntax
+    "signature" Sdecl*  	-> Decl {cons("Signature")}
+
+hiddens
+  context-free start-symbols Module
