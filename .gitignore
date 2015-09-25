@@ -1,0 +1,12 @@
+bin
+*.class
+*.def
+*.dep
+*.ear
+*.jar
+*.sig
+Sig2Java.cmd
+*.str
+*.tbl
+*.war
+working
