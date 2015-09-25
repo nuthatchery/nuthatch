@@ -3,31 +3,32 @@ package nuthatch.rascal.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.imp.pdb.facts.IConstructor;
+import org.eclipse.imp.pdb.facts.IList;
+import org.eclipse.imp.pdb.facts.IValue;
+import org.eclipse.imp.pdb.facts.type.Type;
+import org.rascalmpl.values.uptr.ITree;
+import org.rascalmpl.values.uptr.ProductionAdapter;
+import org.rascalmpl.values.uptr.RascalValueFactory;
+import org.rascalmpl.values.uptr.TreeAdapter;
+
 import nullness.Nullable;
 import nuthatch.tree.TreeCursor;
 import nuthatch.tree.TreeHandle;
 import nuthatch.tree.impl.AbstractTreeCursor;
 import nuthatch.walker.errors.TypeMismatch;
 
-import org.eclipse.imp.pdb.facts.IConstructor;
-import org.eclipse.imp.pdb.facts.IList;
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.type.Type;
-import org.rascalmpl.values.uptr.Factory;
-import org.rascalmpl.values.uptr.ProductionAdapter;
-import org.rascalmpl.values.uptr.TreeAdapter;
-
-public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
+public class UptrCursor extends AbstractTreeCursor<String, Type, ITree> {
 
 	private String leafValue = null;
 	private IConstructor prod = null;
-	private List<IConstructor> children = null;
+	private List<ITree> children = null;
 	private String name;
 
 
-	public UptrCursor(IConstructor value) {
+	public UptrCursor(ITree value) {
 		super(value);
-		if(!value.getType().equals(Factory.Tree)) {
+		if(!value.getType().equals(RascalValueFactory.Tree)) {
 			throw new IllegalArgumentException("Must be a parse tree!");
 		}
 	}
@@ -38,7 +39,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 	}
 
 
-	protected UptrCursor(UptrCursor src, IConstructor replacement) {
+	protected UptrCursor(UptrCursor src, ITree replacement) {
 		super(src, replacement);
 	}
 
@@ -52,7 +53,7 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 	@Override
 	public TreeCursor<String, Type> copyAndReplaceSubtree(TreeCursor<String, Type> replacement) {
 		if(replacement instanceof UptrCursor) {
-			IConstructor repl = ((UptrCursor) replacement).getCurrent();
+			ITree repl = ((UptrCursor) replacement).getCurrent();
 			if(!repl.getType().isSubtypeOf(getCurrent().getType())) {
 				throw new TypeMismatch();
 			}
@@ -67,6 +68,84 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 	@Override
 	public TreeCursor<String, Type> copySubtree() {
 		return new UptrCursor(this, false);
+	}
+
+
+	private void decodeNode() {
+		ITree tree = getCurrent();
+		assert TreeAdapter.isAppl(tree);
+		prod = TreeAdapter.getProduction(tree);
+		leafValue = null;
+		children = null;
+		name = null;
+		if(ProductionAdapter.isLexical(prod) || ProductionAdapter.isKeyword(prod)) {
+			leafValue = TreeAdapter.yield(tree);
+		}
+		else if(ProductionAdapter.isContextFree(prod)) {
+			children = getChildren(tree);
+			name = ProductionAdapter.getConstructorName(prod);
+			if(name == null) {
+				name = ProductionAdapter.getSortName(prod);
+			}
+		}
+		else if(ProductionAdapter.isList(prod)) {
+			children = getChildren(tree);
+			name = "[]";
+		}
+
+	}
+
+
+	@Override
+	public int getArity() {
+		if(!isDecoded()) {
+			decodeNode();
+		}
+		if(children != null) {
+			return children.size();
+		}
+		else {
+			return 0;
+		}
+	}
+
+
+	@Override
+	protected ITree getChild(int i) {
+		if(!isDecoded()) {
+			decodeNode();
+		}
+
+		return children.get(i);
+	}
+
+
+	private List<ITree> getChildren(ITree t) {
+		IList args = TreeAdapter.getArgs(t);
+		List<ITree> list = new ArrayList<ITree>();
+		for(IValue val : args) {
+			ITree child = (ITree) val;
+			if(TreeAdapter.isAmb(child)) {
+				child = (ITree) TreeAdapter.getAlternatives(child).iterator().next();
+			}
+			if(!(TreeAdapter.isLayout(child) || TreeAdapter.isLiteral(child))) {
+				list.add(child);
+			}
+		}
+		return list;
+	}
+
+
+	@Override
+	protected ITree getCurrent() {
+		ITree tree = super.getCurrent();
+
+		if(tree != null) {
+			while(TreeAdapter.isAmb(tree)) {
+				tree = (ITree) TreeAdapter.getAlternatives(tree).iterator().next();
+			}
+		}
+		return tree;
 	}
 
 
@@ -90,20 +169,6 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 
 
 	@Override
-	public int getArity() {
-		if(!isDecoded()) {
-			decodeNode();
-		}
-		if(children != null) {
-			return children.size();
-		}
-		else {
-			return 0;
-		}
-	}
-
-
-	@Override
 	public Type getType() {
 		return getCurrent().getType();
 	}
@@ -114,9 +179,9 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		super.go(i);
 		prod = null;
 
-		IConstructor tree = getCurrent();
+		ITree tree = getCurrent();
 
-		if(tree != null && tree.getConstructorType().equals(Factory.Tree_Cycle)) {
+		if(tree != null && tree.getConstructorType().equals(RascalValueFactory.Tree_Cycle)) {
 			throw new UnsupportedOperationException("Tree cyclces not supported");
 		}
 
@@ -142,6 +207,17 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 	}
 
 
+	private boolean isDecoded() {
+		return prod != null;
+	}
+
+
+	@Override
+	protected ITree replaceChild(ITree node, ITree child, int i) {
+		return (ITree) node.set(i, child);
+	}
+
+
 	@Override
 	public boolean subtreeEquals(@Nullable TreeHandle<String, Type> other) {
 		if(this == other) {
@@ -156,81 +232,6 @@ public class UptrCursor extends AbstractTreeCursor<String, Type, IConstructor> {
 		else {
 			throw new UnsupportedOperationException("Equality only supported on UptrCursor");
 		}
-	}
-
-
-	private void decodeNode() {
-		IConstructor tree = getCurrent();
-		assert TreeAdapter.isAppl(tree);
-		prod = TreeAdapter.getProduction(tree);
-		leafValue = null;
-		children = null;
-		name = null;
-		if(ProductionAdapter.isLexical(prod) || ProductionAdapter.isKeyword(prod)) {
-			leafValue = TreeAdapter.yield(tree);
-		}
-		else if(ProductionAdapter.isContextFree(prod)) {
-			children = getChildren(tree);
-			name = ProductionAdapter.getConstructorName(prod);
-			if(name == null) {
-				name = ProductionAdapter.getSortName(prod);
-			}
-		}
-		else if(ProductionAdapter.isList(prod)) {
-			children = getChildren(tree);
-			name = "[]";
-		}
-
-	}
-
-
-	private List<IConstructor> getChildren(IConstructor t) {
-		IList args = TreeAdapter.getArgs(t);
-		List<IConstructor> list = new ArrayList<IConstructor>();
-		for(IValue val : args) {
-			IConstructor child = (IConstructor) val;
-			if(TreeAdapter.isAmb(child)) {
-				child = (IConstructor) TreeAdapter.getAlternatives(child).iterator().next();
-			}
-			if(!(TreeAdapter.isLayout(child) || TreeAdapter.isLiteral(child))) {
-				list.add(child);
-			}
-		}
-		return list;
-	}
-
-
-	private boolean isDecoded() {
-		return prod != null;
-	}
-
-
-	@Override
-	protected IConstructor getChild(int i) {
-		if(!isDecoded()) {
-			decodeNode();
-		}
-
-		return children.get(i);
-	}
-
-
-	@Override
-	protected IConstructor getCurrent() {
-		IConstructor tree = super.getCurrent();
-
-		if(tree != null) {
-			while(TreeAdapter.isAmb(tree)) {
-				tree = (IConstructor) TreeAdapter.getAlternatives(tree).iterator().next();
-			}
-		}
-		return tree;
-	}
-
-
-	@Override
-	protected IConstructor replaceChild(IConstructor node, IConstructor child, int i) {
-		return node.set(i, child);
 	}
 
 }
