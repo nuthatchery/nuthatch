@@ -11,9 +11,9 @@ import nuthatch.pattern.impl.AbstractPattern;
 import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.tree.TreeCursor;
 
-import org.eclipse.imp.pdb.facts.IList;
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.type.Type;
+import org.rascalmpl.value.IList;
+import org.rascalmpl.value.IValue;
+import org.rascalmpl.value.type.Type;
 
 public class ListPattern extends AbstractPattern<IValue, Type> {
 

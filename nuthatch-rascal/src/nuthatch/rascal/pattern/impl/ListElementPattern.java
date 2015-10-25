@@ -8,11 +8,11 @@ import nuthatch.rascal.adapter.ValuesCursor;
 import nuthatch.rascal.pattern.ValuesBuildContext;
 import nuthatch.tree.TreeCursor;
 
-import org.eclipse.imp.pdb.facts.IList;
-import org.eclipse.imp.pdb.facts.IListWriter;
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.Type;
+import org.rascalmpl.value.IList;
+import org.rascalmpl.value.IListWriter;
+import org.rascalmpl.value.IValue;
+import org.rascalmpl.value.IValueFactory;
+import org.rascalmpl.value.type.Type;
 
 public class ListElementPattern implements Pattern<IValue, Type> {
 

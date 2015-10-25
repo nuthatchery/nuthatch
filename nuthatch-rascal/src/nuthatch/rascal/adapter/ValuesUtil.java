@@ -11,11 +11,11 @@ import nuthatch.pattern.Pattern;
 import nuthatch.pattern.StaticPatternFactory;
 import nuthatch.rascal.pattern.ValuesBuildContext;
 
-import org.eclipse.imp.pdb.facts.IMap;
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.Type;
-import org.eclipse.imp.pdb.facts.type.TypeStore;
+import org.rascalmpl.value.IMap;
+import org.rascalmpl.value.IValue;
+import org.rascalmpl.value.IValueFactory;
+import org.rascalmpl.value.type.Type;
+import org.rascalmpl.value.type.TypeStore;
 
 public class ValuesUtil {
 	private static ActionFactory<IValue, Type, ValuesCursor, ValuesWalker> af = FactoryFactory.getActionFactory(IValue.class, Type.class, ValuesCursor.class, ValuesWalker.class);
