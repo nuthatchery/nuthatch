@@ -46,6 +46,9 @@ public class NodePattern<Value, Type> extends AbstractPattern<Value, Type> {
 
 	@Override
 	public <T extends TreeCursor<Value, Type>> boolean doMatch(T tree, Environment<T> env) {
+		if(tree == null) {
+			return false;
+		}
 		if(name != null && !name.equals(tree.getName())) {
 			return false;
 		}
