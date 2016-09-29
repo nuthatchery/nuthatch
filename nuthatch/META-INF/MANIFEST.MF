@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nuthatch/J
 Bundle-SymbolicName: nuthatch
-Bundle-Version: 0.99.2.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Version: 0.999.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
 Export-Package: 
  nullness,

@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nuthatch/J+Rascal
 Bundle-SymbolicName: nuthatch_rascal
-Bundle-Version: 0.99.2.qualifier
-Require-Bundle: org.eclipse.imp.pdb.values,
- rascal,
- nuthatch;bundle-version="0.99.2"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Version: 0.999.1.qualifier
+Require-Bundle: rascal;bundle-version="0.8.0",
+ nuthatch;bundle-version="0.999.1"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: The Nuthatchery / Anya Helene Bagge
 Export-Package: nuthatch.rascal.adapter,
  nuthatch.rascal.pattern,

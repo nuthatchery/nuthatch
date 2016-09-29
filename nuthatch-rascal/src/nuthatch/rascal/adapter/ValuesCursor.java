@@ -6,13 +6,13 @@ import nuthatch.tree.TreeHandle;
 import nuthatch.tree.impl.AbstractTreeCursor;
 import nuthatch.walker.errors.TypeMismatch;
 
-import org.eclipse.imp.pdb.facts.IList;
-import org.eclipse.imp.pdb.facts.IMap;
-import org.eclipse.imp.pdb.facts.INode;
-import org.eclipse.imp.pdb.facts.ISet;
-import org.eclipse.imp.pdb.facts.ITuple;
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.type.Type;
+import org.rascalmpl.value.IList;
+import org.rascalmpl.value.IMap;
+import org.rascalmpl.value.INode;
+import org.rascalmpl.value.ISet;
+import org.rascalmpl.value.ITuple;
+import org.rascalmpl.value.IValue;
+import org.rascalmpl.value.type.Type;
 
 public class ValuesCursor extends AbstractTreeCursor<IValue, Type, IValue> {
 

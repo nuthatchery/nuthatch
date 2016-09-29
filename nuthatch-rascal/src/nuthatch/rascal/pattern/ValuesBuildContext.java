@@ -3,11 +3,11 @@ package nuthatch.rascal.pattern;
 import nuthatch.pattern.BuildContext;
 import nuthatch.rascal.adapter.ValuesCursor;
 
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.Type;
-import org.eclipse.imp.pdb.facts.type.TypeFactory;
-import org.eclipse.imp.pdb.facts.type.TypeStore;
+import org.rascalmpl.value.IValue;
+import org.rascalmpl.value.IValueFactory;
+import org.rascalmpl.value.type.Type;
+import org.rascalmpl.value.type.TypeFactory;
+import org.rascalmpl.value.type.TypeStore;
 
 public class ValuesBuildContext implements BuildContext<IValue, Type, ValuesCursor> {
 	private final IValueFactory vf;

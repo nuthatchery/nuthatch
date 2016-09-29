@@ -6,8 +6,8 @@ import nuthatch.pattern.NotBuildableException;
 import nuthatch.pattern.impl.AbstractPattern;
 import nuthatch.tree.TreeCursor;
 
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.type.Type;
+import org.rascalmpl.value.IValue;
+import org.rascalmpl.value.type.Type;
 
 public class PrimitivePattern extends AbstractPattern<IValue, Type> {
 

@@ -2,8 +2,8 @@ package nuthatch.rascal.adapter;
 
 import nuthatch.library.MatchAction;
 
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.type.Type;
+import org.rascalmpl.value.IValue;
+import org.rascalmpl.value.type.Type;
 
 public abstract class ValuesMatchAction implements MatchAction<IValue, Type, ValuesCursor, ValuesWalker> {
 

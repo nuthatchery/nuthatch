@@ -27,9 +27,14 @@ import static nuthatch.stratego.pattern.SPatternFactory.string;
 import static nuthatch.stratego.pattern.SPatternFactory.var;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.jsglr.client.InvalidParseTableException;
+import org.spoofax.jsglr.shared.SGLRException;
 
 import nuthatch.javafront.JavaAdapter;
 import nuthatch.javafront.JavaParser;
@@ -43,48 +48,27 @@ import nuthatch.stratego.actions.SMatchAction;
 import nuthatch.stratego.adapter.STermCursor;
 import nuthatch.stratego.adapter.SWalker;
 
-import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.jsglr.client.InvalidParseTableException;
-import org.spoofax.jsglr.shared.SGLRException;
-
 /**
  * This example transforms Java classes to SQL tables.
- * 
+ *
  */
 public class Class2Table {
-	public static void main(String[] args) throws SGLRException, IOException, InvalidParseTableException {
-		JavaParser.init();
-		STermCursor term = JavaParser.parseStream(Class2Table.class.getResourceAsStream("../examples/Example.java.ex"), "Example.java");
+	static class ColumnType {
+		String typeName;
+		String foreignKey;
 
-		Collection<Table> tables = transform(term);
-		for(Table t : tables) {
-			System.out.println(t.toSQL());
+
+		ColumnType(String typeName, String foreignKey) {
+			this.typeName = typeName;
+			this.foreignKey = foreignKey;
 		}
-	}
-
-
-	/**
-	 * This is the main class2table transformation.
-	 * 
-	 * @return A collection of tables
-	 */
-	public static Collection<Table> transform(STermCursor javaTree) {
-		// we'll accumulate the result here
-		final List<Table> tables = new ArrayList<Table>();
-
-		// we'll do a default walk of the entire tree, doing classDecAction on every step
-		Walk<SWalker> step = walk(classDecAction(tables));
-		SWalker walk = new SWalker(javaTree, step);
-		walk.start();
-
-		return tables;
 	}
 
 
 	/**
 	 * Make an action that will recognize class declaration and transform them
 	 * to tables
-	 * 
+	 *
 	 * @param tables
 	 *            The list where the result will be accumulated when the action
 	 *            is performed
@@ -117,7 +101,7 @@ public class Class2Table {
 	/**
 	 * Make an action that will recognize field declarations and turn them into
 	 * columns
-	 * 
+	 *
 	 * @param table
 	 *            The Table the columns should be added to
 	 * @return an action
@@ -161,6 +145,36 @@ public class Class2Table {
 	}
 
 
+	public static void main(String[] args) throws SGLRException, IOException, InvalidParseTableException {
+		JavaParser.init();
+		InputStream stream = Class2Table.class.getResourceAsStream("../examples/Example.java.ex");
+		STermCursor term = JavaParser.parseStream(stream, "Example.java");
+
+		Collection<Table> tables = transform(term);
+		for(Table t : tables) {
+			System.out.println(t.toSQL());
+		}
+	}
+
+
+	/**
+	 * This is the main class2table transformation.
+	 *
+	 * @return A collection of tables
+	 */
+	public static Collection<Table> transform(STermCursor javaTree) {
+		// we'll accumulate the result here
+		final List<Table> tables = new ArrayList<Table>();
+
+		// we'll do a default walk of the entire tree, doing classDecAction on every step
+		Walk<SWalker> step = walk(classDecAction(tables));
+		SWalker walk = new SWalker(javaTree, step);
+		walk.start();
+
+		return tables;
+	}
+
+
 	private static ColumnType transformTypeName(STermCursor c) {
 		Environment<STermCursor> env = EnvironmentFactory.env();
 		String type = null;
@@ -200,17 +214,5 @@ public class Class2Table {
 
 		// whoops!
 		return new ColumnType(type, foreignKey);
-	}
-
-
-	static class ColumnType {
-		String typeName;
-		String foreignKey;
-
-
-		ColumnType(String typeName, String foreignKey) {
-			this.typeName = typeName;
-			this.foreignKey = foreignKey;
-		}
 	}
 }

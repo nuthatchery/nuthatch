@@ -4,12 +4,12 @@ import nuthatch.pattern.Pattern;
 import nuthatch.pattern.StaticPatternFactory;
 import nuthatch.rascal.pattern.impl.ListVarPattern;
 
-import org.eclipse.imp.pdb.facts.IInteger;
-import org.eclipse.imp.pdb.facts.IRational;
-import org.eclipse.imp.pdb.facts.IReal;
-import org.eclipse.imp.pdb.facts.IString;
-import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.type.Type;
+import org.rascalmpl.value.IInteger;
+import org.rascalmpl.value.IRational;
+import org.rascalmpl.value.IReal;
+import org.rascalmpl.value.IString;
+import org.rascalmpl.value.IValue;
+import org.rascalmpl.value.type.Type;
 
 /**
  * @author anya
@@ -43,7 +43,7 @@ public class StaticValuesPatternFactory {
 	 * @see
 	 *      nuthatch.rascal.pattern.impl.ValuesPatternFactory#cons(java.lang.
 	 *      String
-	 *      , nuthatch.pattern.Pattern<org.eclipse.imp.pdb.facts.IValue,org.
+	 *      , nuthatch.pattern.Pattern<org.rascalmpl.value.IValue,org.
 	 *      eclipse.imp.pdb.facts.type.Type>[])
 	 */
 	public static final Pattern<IValue, Type> cons(String name, Pattern<IValue, Type>... children) {
@@ -73,7 +73,7 @@ public class StaticValuesPatternFactory {
 	/**
 	 * @param i
 	 * @return
-	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#integer(org.eclipse.imp.pdb.facts.IInteger)
+	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#integer(org.rascalmpl.value.IInteger)
 	 */
 	public static Pattern<IValue, Type> integer(IInteger i) {
 		return PF.integer(i);
@@ -92,7 +92,7 @@ public class StaticValuesPatternFactory {
 	/**
 	 * @param listType
 	 * @return
-	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#isList(org.eclipse.imp.pdb.facts.type.Type)
+	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#isList(org.rascalmpl.value.type.Type)
 	 */
 	public static final Pattern<IValue, Type> isList(Type listType) {
 		return PF.isList(listType);
@@ -105,7 +105,7 @@ public class StaticValuesPatternFactory {
 	 * @see
 	 *      nuthatch.rascal.pattern.impl.ValuesPatternFactory#list(nuthatch.
 	 *      pattern
-	 *      .Pattern<org.eclipse.imp.pdb.facts.IValue,org.eclipse.imp.pdb.facts.
+	 *      .Pattern<org.rascalmpl.value.IValue,org.rascalmpl.value.
 	 *      type.Type>[])
 	 */
 	public static final Pattern<IValue, Type> list(Pattern<IValue, Type>... children) {
@@ -121,8 +121,8 @@ public class StaticValuesPatternFactory {
 	 *      nuthatch.rascal.pattern.impl.ValuesPatternFactory#list(org.eclipse.
 	 *      imp
 	 *      .pdb.facts.type.Type,
-	 *      nuthatch.pattern.Pattern<org.eclipse.imp.pdb.facts
-	 *      .IValue,org.eclipse.imp.pdb.facts.type.Type>[])
+	 *      nuthatch.pattern.Pattern<org.rascalmpl.value
+	 *      .IValue,org.rascalmpl.value.type.Type>[])
 	 */
 	@SafeVarargs
 	public static final Pattern<IValue, Type> list(Type listType, Pattern<IValue, Type>... children) {
@@ -207,7 +207,7 @@ public class StaticValuesPatternFactory {
 	/**
 	 * @param r
 	 * @return
-	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#rat(org.eclipse.imp.pdb.facts.IRational)
+	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#rat(org.rascalmpl.value.IRational)
 	 */
 	public static Pattern<IValue, Type> rat(IRational r) {
 		return PF.rat(r);
@@ -226,7 +226,7 @@ public class StaticValuesPatternFactory {
 	/**
 	 * @param r
 	 * @return
-	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#real(org.eclipse.imp.pdb.facts.IReal)
+	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#real(org.rascalmpl.value.IReal)
 	 */
 	public static Pattern<IValue, Type> real(IReal r) {
 		return PF.real(r);
@@ -245,7 +245,7 @@ public class StaticValuesPatternFactory {
 	/**
 	 * @param s
 	 * @return
-	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#string(org.eclipse.imp.pdb.facts.IString)
+	 * @see nuthatch.rascal.pattern.impl.ValuesPatternFactory#string(org.rascalmpl.value.IString)
 	 */
 	public static Pattern<IValue, Type> string(IString s) {
 		return PF.string(s);
@@ -258,7 +258,7 @@ public class StaticValuesPatternFactory {
 	 * @see
 	 *      nuthatch.rascal.pattern.impl.ValuesPatternFactory#tuple(nuthatch.
 	 *      pattern
-	 *      .Pattern<org.eclipse.imp.pdb.facts.IValue,org.eclipse.imp.pdb.facts.
+	 *      .Pattern<org.rascalmpl.value.IValue,org.rascalmpl.value.
 	 *      type.Type>[])
 	 */
 	public static final Pattern<IValue, Type> tuple(Pattern<IValue, Type>... children) {

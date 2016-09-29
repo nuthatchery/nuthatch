@@ -12,29 +12,22 @@ public interface Action<W extends Walker<?, ?, W>> {
 	public static final int STAY = Integer.MIN_VALUE + 2;
 
 
-	@Override
-	boolean equals(Object o);
-
-
-	@Override
-	int hashCode();
-
 	/**
 	 * Initialise any internal state
-	 * 
+	 *
 	 * @param walker
 	 */
-	void init(W walker);
+	default void init(W walker) {}
 
 	/**
 	 * Visit a new node.
-	 * 
+	 *
 	 * This method is called whenever the walker enters a node.
-	 * 
+	 *
 	 * The step should perform the task of visiting the current node only,
 	 * and return the next node that should be visited (rather than trying to
 	 * visit multiple nodes during the same visit call).
-	 * 
+	 *
 	 * @param walker
 	 *            The walker
 	 * @return The direction of the next node to visit, or PROCEED to leave the
@@ -42,6 +35,4 @@ public interface Action<W extends Walker<?, ?, W>> {
 	 */
 	int step(W walker);
 
-	@Override
-	String toString();
 }
